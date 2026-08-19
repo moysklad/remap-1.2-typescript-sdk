@@ -1,0 +1,62 @@
+{
+  "name": "@moysklad/remap-1.2-sdk",
+  "version": "0.21.0",
+  "description": "Официальный TypeScript SDK для МойСклад Remap 1.2",
+  "keywords": [
+    "moysklad",
+    "мойсклад",
+    "remap",
+    "json-api",
+    "api",
+    "sdk",
+    "openapi",
+    "typescript"
+  ],
+  "homepage": "https://github.com/moysklad/remap-1.2-typescript-sdk#readme",
+  "bugs": {
+    "url": "https://github.com/moysklad/remap-1.2-typescript-sdk/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/moysklad/remap-1.2-typescript-sdk.git"
+  },
+  "license": "Apache-2.0",
+  "author": "Lognex Dev Team",
+  "type": "commonjs",
+  "main": "./dist/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/esm/index.d.ts",
+        "default": "./dist/esm/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      }
+    },
+    "./package.json": "./package.json"
+  },
+  "sideEffects": false,
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build": "tsc && tsc -p tsconfig.esm.json && node -e \"require('fs').writeFileSync('dist/esm/package.json', JSON.stringify({ type: 'module' }))\"",
+    "prepare": "npm run build"
+  },
+  "devDependencies": {
+    "typescript": "^5.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  }
+}
