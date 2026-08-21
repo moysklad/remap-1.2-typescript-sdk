@@ -200,7 +200,7 @@ export interface ProductOwn {
      */
     article?: string;
     /**
-     * Описание товара
+     * Описание Товара
      * @type {string}
      * @memberof Product
      */
