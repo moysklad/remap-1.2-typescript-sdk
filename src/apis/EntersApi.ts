@@ -680,7 +680,7 @@ export class EntersApi extends runtime.BaseAPI {
     /**
      * Создать и обновить позицию Оприходования
      */
-    async createEnterPositionRaw(requestParameters: CreateEnterPositionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<EnterPosition>> {
+    async createEnterPositionRaw(requestParameters: CreateEnterPositionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<EnterPosition>>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
@@ -740,13 +740,13 @@ export class EntersApi extends runtime.BaseAPI {
             body: EnterPositionToJSON(requestParameters['enterPosition']),
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => EnterPositionFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(EnterPositionFromJSON));
     }
 
     /**
      * Создать и обновить позицию Оприходования
      */
-    async createEnterPosition(requestParameters: CreateEnterPositionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<EnterPosition> {
+    async createEnterPosition(requestParameters: CreateEnterPositionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<EnterPosition>> {
         const response = await this.createEnterPositionRaw(requestParameters, initOverrides);
         return await response.value();
     }

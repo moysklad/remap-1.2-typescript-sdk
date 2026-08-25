@@ -558,7 +558,7 @@ export class CounterpartiesApi extends runtime.BaseAPI {
      * Создание нового счёта у данного Контрагента.
      * Создать счёт контрагента
      */
-    async createCounterpartyAccountRaw(requestParameters: CreateCounterpartyAccountRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Account>> {
+    async createCounterpartyAccountRaw(requestParameters: CreateCounterpartyAccountRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Account>>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
@@ -614,14 +614,14 @@ export class CounterpartiesApi extends runtime.BaseAPI {
             body: AccountToJSON(requestParameters['account']),
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => AccountFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(AccountFromJSON));
     }
 
     /**
      * Создание нового счёта у данного Контрагента.
      * Создать счёт контрагента
      */
-    async createCounterpartyAccount(requestParameters: CreateCounterpartyAccountRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Account> {
+    async createCounterpartyAccount(requestParameters: CreateCounterpartyAccountRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Account>> {
         const response = await this.createCounterpartyAccountRaw(requestParameters, initOverrides);
         return await response.value();
     }

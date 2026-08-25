@@ -454,7 +454,7 @@ export class SalesReturnsApi extends runtime.BaseAPI {
     /**
      * Создать и обновить позицию Возврата покупателя
      */
-    async createSalesReturnPositionRaw(requestParameters: CreateSalesReturnPositionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<SalesReturnPosition>> {
+    async createSalesReturnPositionRaw(requestParameters: CreateSalesReturnPositionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<SalesReturnPosition>>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
@@ -514,13 +514,13 @@ export class SalesReturnsApi extends runtime.BaseAPI {
             body: SalesReturnPositionToJSON(requestParameters['salesReturnPosition']),
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => SalesReturnPositionFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(SalesReturnPositionFromJSON));
     }
 
     /**
      * Создать и обновить позицию Возврата покупателя
      */
-    async createSalesReturnPosition(requestParameters: CreateSalesReturnPositionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SalesReturnPosition> {
+    async createSalesReturnPosition(requestParameters: CreateSalesReturnPositionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<SalesReturnPosition>> {
         const response = await this.createSalesReturnPositionRaw(requestParameters, initOverrides);
         return await response.value();
     }

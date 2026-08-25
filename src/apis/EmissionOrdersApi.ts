@@ -302,7 +302,7 @@ export class EmissionOrdersApi extends runtime.BaseAPI {
     /**
      * Создать и обновить позицию Заказа кодов маркировки
      */
-    async createEmissionOrderPositionRaw(requestParameters: CreateEmissionOrderPositionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<EmissionOrderPosition>> {
+    async createEmissionOrderPositionRaw(requestParameters: CreateEmissionOrderPositionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<EmissionOrderPosition>>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
@@ -362,13 +362,13 @@ export class EmissionOrdersApi extends runtime.BaseAPI {
             body: EmissionOrderPositionToJSON(requestParameters['emissionOrderPosition']),
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => EmissionOrderPositionFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(EmissionOrderPositionFromJSON));
     }
 
     /**
      * Создать и обновить позицию Заказа кодов маркировки
      */
-    async createEmissionOrderPosition(requestParameters: CreateEmissionOrderPositionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<EmissionOrderPosition> {
+    async createEmissionOrderPosition(requestParameters: CreateEmissionOrderPositionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<EmissionOrderPosition>> {
         const response = await this.createEmissionOrderPositionRaw(requestParameters, initOverrides);
         return await response.value();
     }

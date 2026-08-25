@@ -683,7 +683,7 @@ export class ProcessingOrdersApi extends runtime.BaseAPI {
     /**
      * Обновить позицию ProcessingOrder
      */
-    async createProcessingOrderPositionRaw(requestParameters: CreateProcessingOrderPositionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ProcessingOrderPosition>> {
+    async createProcessingOrderPositionRaw(requestParameters: CreateProcessingOrderPositionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<ProcessingOrderPosition>>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
@@ -743,13 +743,13 @@ export class ProcessingOrdersApi extends runtime.BaseAPI {
             body: ProcessingOrderPositionToJSON(requestParameters['processingOrderPosition']),
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ProcessingOrderPositionFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(ProcessingOrderPositionFromJSON));
     }
 
     /**
      * Обновить позицию ProcessingOrder
      */
-    async createProcessingOrderPosition(requestParameters: CreateProcessingOrderPositionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProcessingOrderPosition> {
+    async createProcessingOrderPosition(requestParameters: CreateProcessingOrderPositionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ProcessingOrderPosition>> {
         const response = await this.createProcessingOrderPositionRaw(requestParameters, initOverrides);
         return await response.value();
     }

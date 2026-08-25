@@ -444,7 +444,7 @@ export class LossesApi extends runtime.BaseAPI {
     /**
      * Создать и обновить позицию Списания
      */
-    async createLossPositionRaw(requestParameters: CreateLossPositionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LossPosition>> {
+    async createLossPositionRaw(requestParameters: CreateLossPositionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<LossPosition>>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
@@ -504,13 +504,13 @@ export class LossesApi extends runtime.BaseAPI {
             body: LossPositionToJSON(requestParameters['lossPosition']),
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => LossPositionFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(LossPositionFromJSON));
     }
 
     /**
      * Создать и обновить позицию Списания
      */
-    async createLossPosition(requestParameters: CreateLossPositionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LossPosition> {
+    async createLossPosition(requestParameters: CreateLossPositionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<LossPosition>> {
         const response = await this.createLossPositionRaw(requestParameters, initOverrides);
         return await response.value();
     }

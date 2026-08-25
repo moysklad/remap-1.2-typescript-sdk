@@ -436,7 +436,7 @@ export class ProcessingPlansApi extends runtime.BaseAPI {
      * Запрос на создание нового материала в Техкарте
      * Создать материал Техкарты
      */
-    async createProcessingPlanMaterialsRaw(requestParameters: CreateProcessingPlanMaterialsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ProcessingPlanMaterial>> {
+    async createProcessingPlanMaterialsRaw(requestParameters: CreateProcessingPlanMaterialsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<ProcessingPlanMaterial>>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
@@ -496,14 +496,14 @@ export class ProcessingPlansApi extends runtime.BaseAPI {
             body: ProcessingPlanMaterialToJSON(requestParameters['processingPlanMaterial']),
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ProcessingPlanMaterialFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(ProcessingPlanMaterialFromJSON));
     }
 
     /**
      * Запрос на создание нового материала в Техкарте
      * Создать материал Техкарты
      */
-    async createProcessingPlanMaterials(requestParameters: CreateProcessingPlanMaterialsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProcessingPlanMaterial> {
+    async createProcessingPlanMaterials(requestParameters: CreateProcessingPlanMaterialsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ProcessingPlanMaterial>> {
         const response = await this.createProcessingPlanMaterialsRaw(requestParameters, initOverrides);
         return await response.value();
     }

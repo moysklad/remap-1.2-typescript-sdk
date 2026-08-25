@@ -810,7 +810,7 @@ export class SuppliesApi extends runtime.BaseAPI {
     /**
      * Создать и обновить позицию Приемки
      */
-    async createSupplyPositionRaw(requestParameters: CreateSupplyPositionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<SupplyPosition>> {
+    async createSupplyPositionRaw(requestParameters: CreateSupplyPositionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<SupplyPosition>>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
@@ -870,13 +870,13 @@ export class SuppliesApi extends runtime.BaseAPI {
             body: SupplyPositionToJSON(requestParameters['supplyPosition']),
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => SupplyPositionFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(SupplyPositionFromJSON));
     }
 
     /**
      * Создать и обновить позицию Приемки
      */
-    async createSupplyPosition(requestParameters: CreateSupplyPositionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SupplyPosition> {
+    async createSupplyPosition(requestParameters: CreateSupplyPositionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<SupplyPosition>> {
         const response = await this.createSupplyPositionRaw(requestParameters, initOverrides);
         return await response.value();
     }

@@ -806,7 +806,7 @@ export class PurchaseReturnsApi extends runtime.BaseAPI {
     /**
      * Создать и обновить позицию Возврата поставщику
      */
-    async createPurchaseReturnPositionRaw(requestParameters: CreatePurchaseReturnPositionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PurchaseReturnPosition>> {
+    async createPurchaseReturnPositionRaw(requestParameters: CreatePurchaseReturnPositionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<PurchaseReturnPosition>>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
@@ -866,13 +866,13 @@ export class PurchaseReturnsApi extends runtime.BaseAPI {
             body: PurchaseReturnPositionToJSON(requestParameters['purchaseReturnPosition']),
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PurchaseReturnPositionFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(PurchaseReturnPositionFromJSON));
     }
 
     /**
      * Создать и обновить позицию Возврата поставщику
      */
-    async createPurchaseReturnPosition(requestParameters: CreatePurchaseReturnPositionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PurchaseReturnPosition> {
+    async createPurchaseReturnPosition(requestParameters: CreatePurchaseReturnPositionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<PurchaseReturnPosition>> {
         const response = await this.createPurchaseReturnPositionRaw(requestParameters, initOverrides);
         return await response.value();
     }

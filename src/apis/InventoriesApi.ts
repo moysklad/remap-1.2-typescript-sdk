@@ -687,7 +687,7 @@ export class InventoriesApi extends runtime.BaseAPI {
     /**
      * Создать и обновить позицию Инвентаризации
      */
-    async createInventoryPositionRaw(requestParameters: CreateInventoryPositionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<InventoryPosition>> {
+    async createInventoryPositionRaw(requestParameters: CreateInventoryPositionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<InventoryPosition>>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
@@ -747,13 +747,13 @@ export class InventoriesApi extends runtime.BaseAPI {
             body: InventoryPositionToJSON(requestParameters['inventoryPosition']),
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => InventoryPositionFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(InventoryPositionFromJSON));
     }
 
     /**
      * Создать и обновить позицию Инвентаризации
      */
-    async createInventoryPosition(requestParameters: CreateInventoryPositionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<InventoryPosition> {
+    async createInventoryPosition(requestParameters: CreateInventoryPositionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<InventoryPosition>> {
         const response = await this.createInventoryPositionRaw(requestParameters, initOverrides);
         return await response.value();
     }

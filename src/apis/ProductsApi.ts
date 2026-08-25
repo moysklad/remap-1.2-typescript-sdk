@@ -551,7 +551,7 @@ export class ProductsApi extends runtime.BaseAPI {
      * Создание нового Неснижаемого остатка Товара для склада.
      * Создать НСО товара для склада
      */
-    async createProductStoreBalanceRaw(requestParameters: CreateProductStoreBalanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StoreBalance>> {
+    async createProductStoreBalanceRaw(requestParameters: CreateProductStoreBalanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<StoreBalance>>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
@@ -607,14 +607,14 @@ export class ProductsApi extends runtime.BaseAPI {
             body: StoreBalanceToJSON(requestParameters['storeBalance']),
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => StoreBalanceFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(StoreBalanceFromJSON));
     }
 
     /**
      * Создание нового Неснижаемого остатка Товара для склада.
      * Создать НСО товара для склада
      */
-    async createProductStoreBalance(requestParameters: CreateProductStoreBalanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StoreBalance> {
+    async createProductStoreBalance(requestParameters: CreateProductStoreBalanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<StoreBalance>> {
         const response = await this.createProductStoreBalanceRaw(requestParameters, initOverrides);
         return await response.value();
     }

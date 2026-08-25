@@ -1318,7 +1318,7 @@ export class OrganizationsApi extends runtime.BaseAPI {
      * Создание нового счёта у данного юрлица
      * Изменить счета юрлица
      */
-    async updateOrganizationAccountsRaw(requestParameters: UpdateOrganizationAccountsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Account>> {
+    async updateOrganizationAccountsRaw(requestParameters: UpdateOrganizationAccountsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Account>>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
@@ -1374,14 +1374,14 @@ export class OrganizationsApi extends runtime.BaseAPI {
             body: AccountToJSON(requestParameters['account']),
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => AccountFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(AccountFromJSON));
     }
 
     /**
      * Создание нового счёта у данного юрлица
      * Изменить счета юрлица
      */
-    async updateOrganizationAccounts(requestParameters: UpdateOrganizationAccountsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Account> {
+    async updateOrganizationAccounts(requestParameters: UpdateOrganizationAccountsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Account>> {
         const response = await this.updateOrganizationAccountsRaw(requestParameters, initOverrides);
         return await response.value();
     }

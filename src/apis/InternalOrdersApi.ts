@@ -590,7 +590,7 @@ export class InternalOrdersApi extends runtime.BaseAPI {
     /**
      * Создать и обновить позицию Внутреннего заказа
      */
-    async createInternalOrderPositionRaw(requestParameters: CreateInternalOrderPositionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<InternalOrderPosition>> {
+    async createInternalOrderPositionRaw(requestParameters: CreateInternalOrderPositionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<InternalOrderPosition>>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
@@ -650,13 +650,13 @@ export class InternalOrdersApi extends runtime.BaseAPI {
             body: InternalOrderPositionToJSON(requestParameters['internalOrderPosition']),
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => InternalOrderPositionFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(InternalOrderPositionFromJSON));
     }
 
     /**
      * Создать и обновить позицию Внутреннего заказа
      */
-    async createInternalOrderPosition(requestParameters: CreateInternalOrderPositionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<InternalOrderPosition> {
+    async createInternalOrderPosition(requestParameters: CreateInternalOrderPositionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<InternalOrderPosition>> {
         const response = await this.createInternalOrderPositionRaw(requestParameters, initOverrides);
         return await response.value();
     }

@@ -797,7 +797,7 @@ export class CommissionReportOutsApi extends runtime.BaseAPI {
     /**
      * Создать и обновить позицию Выданного отчета комиссионера
      */
-    async createCommissionReportOutPositionRaw(requestParameters: CreateCommissionReportOutPositionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CommissionReportOutPosition>> {
+    async createCommissionReportOutPositionRaw(requestParameters: CreateCommissionReportOutPositionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<CommissionReportOutPosition>>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
@@ -857,13 +857,13 @@ export class CommissionReportOutsApi extends runtime.BaseAPI {
             body: CommissionReportOutPositionToJSON(requestParameters['commissionReportOutPosition']),
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => CommissionReportOutPositionFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(CommissionReportOutPositionFromJSON));
     }
 
     /**
      * Создать и обновить позицию Выданного отчета комиссионера
      */
-    async createCommissionReportOutPosition(requestParameters: CreateCommissionReportOutPositionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CommissionReportOutPosition> {
+    async createCommissionReportOutPosition(requestParameters: CreateCommissionReportOutPositionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<CommissionReportOutPosition>> {
         const response = await this.createCommissionReportOutPositionRaw(requestParameters, initOverrides);
         return await response.value();
     }

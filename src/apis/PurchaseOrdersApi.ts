@@ -714,7 +714,7 @@ export class PurchaseOrdersApi extends runtime.BaseAPI {
     /**
      * Создать и обновить позицию Заказа поставщику
      */
-    async createPurchaseOrderPositionRaw(requestParameters: CreatePurchaseOrderPositionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PurchaseOrderPosition>> {
+    async createPurchaseOrderPositionRaw(requestParameters: CreatePurchaseOrderPositionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<PurchaseOrderPosition>>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
@@ -774,13 +774,13 @@ export class PurchaseOrdersApi extends runtime.BaseAPI {
             body: PurchaseOrderPositionToJSON(requestParameters['purchaseOrderPosition']),
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PurchaseOrderPositionFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(PurchaseOrderPositionFromJSON));
     }
 
     /**
      * Создать и обновить позицию Заказа поставщику
      */
-    async createPurchaseOrderPosition(requestParameters: CreatePurchaseOrderPositionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PurchaseOrderPosition> {
+    async createPurchaseOrderPosition(requestParameters: CreatePurchaseOrderPositionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<PurchaseOrderPosition>> {
         const response = await this.createPurchaseOrderPositionRaw(requestParameters, initOverrides);
         return await response.value();
     }

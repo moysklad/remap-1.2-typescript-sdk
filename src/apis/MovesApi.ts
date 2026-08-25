@@ -554,7 +554,7 @@ export class MovesApi extends runtime.BaseAPI {
     /**
      * Создать и обновить позицию Перемещения
      */
-    async createMovePositionRaw(requestParameters: CreateMovePositionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<MovePosition>> {
+    async createMovePositionRaw(requestParameters: CreateMovePositionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<MovePosition>>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
@@ -614,13 +614,13 @@ export class MovesApi extends runtime.BaseAPI {
             body: MovePositionToJSON(requestParameters['movePosition']),
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => MovePositionFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(MovePositionFromJSON));
     }
 
     /**
      * Создать и обновить позицию Перемещения
      */
-    async createMovePosition(requestParameters: CreateMovePositionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<MovePosition> {
+    async createMovePosition(requestParameters: CreateMovePositionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<MovePosition>> {
         const response = await this.createMovePositionRaw(requestParameters, initOverrides);
         return await response.value();
     }
