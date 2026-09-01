@@ -74,7 +74,7 @@ export interface SalesReturnPositionOwn {
      * @type {string}
      * @memberof SalesReturnPosition
      */
-    readonly id?: string;
+    id?: string;
     /**
      * ID учетной записи
      * @type {string}
@@ -196,13 +196,14 @@ export function SalesReturnPositionToJSON(json: any): SalesReturnPosition {
     return SalesReturnPositionToJSONTyped(json, false);
 }
 
-export function SalesReturnPositionToJSONTyped(value?: Omit<SalesReturnPosition, 'id'|'accountId'> | null, ignoreDiscriminator: boolean = false): any {
+export function SalesReturnPositionToJSONTyped(value?: Omit<SalesReturnPosition, 'accountId'> | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
     return {
         ...SalesReturnPositionPolymorphicParent.EntityWithMetaToJSONTyped(value as any, true),
         'meta': MetaToJSON(value['meta']),
+        'id': value['id'],
         'assortment': ProductMarkerToJSON(value['assortment']),
         'cost': value['cost'],
         'country': CountryToJSON(value['country']),

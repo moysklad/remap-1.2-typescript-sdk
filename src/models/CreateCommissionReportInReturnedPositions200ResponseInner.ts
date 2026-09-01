@@ -19,20 +19,20 @@ import {
     CommissionReportInReturnedPositionFromJSONTyped,
     CommissionReportInReturnedPositionToJSON,
 } from './CommissionReportInReturnedPosition.js';
-import type { ModelError } from './ModelError.js';
+import type { Errors } from './Errors.js';
 import {
-    instanceOfModelError,
-    ModelErrorFromJSON,
-    ModelErrorFromJSONTyped,
-    ModelErrorToJSON,
-} from './ModelError.js';
+    instanceOfErrors,
+    ErrorsFromJSON,
+    ErrorsFromJSONTyped,
+    ErrorsToJSON,
+} from './Errors.js';
 
 /**
  * @type CreateCommissionReportInReturnedPositions200ResponseInner
  * 
  * @export
  */
-export type CreateCommissionReportInReturnedPositions200ResponseInner = CommissionReportInReturnedPosition | ModelError;
+export type CreateCommissionReportInReturnedPositions200ResponseInner = CommissionReportInReturnedPosition | Errors;
 
 export function CreateCommissionReportInReturnedPositions200ResponseInnerFromJSON(json: any): CreateCommissionReportInReturnedPositions200ResponseInner {
     return CreateCommissionReportInReturnedPositions200ResponseInnerFromJSONTyped(json, false);
@@ -48,8 +48,8 @@ export function CreateCommissionReportInReturnedPositions200ResponseInnerFromJSO
     if (instanceOfCommissionReportInReturnedPosition(json)) {
         return CommissionReportInReturnedPositionFromJSONTyped(json, true);
     }
-    if (instanceOfModelError(json)) {
-        return ModelErrorFromJSONTyped(json, true);
+    if (instanceOfErrors(json)) {
+        return ErrorsFromJSONTyped(json, true);
     }
 
     return {} as any;
@@ -69,8 +69,8 @@ export function CreateCommissionReportInReturnedPositions200ResponseInnerToJSONT
     if (instanceOfCommissionReportInReturnedPosition(value)) {
         return CommissionReportInReturnedPositionToJSON(value as CommissionReportInReturnedPosition);
     }
-    if (instanceOfModelError(value)) {
-        return ModelErrorToJSON(value as ModelError);
+    if (instanceOfErrors(value)) {
+        return ErrorsToJSON(value as Errors);
     }
 
     return {};

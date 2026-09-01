@@ -15,13 +15,13 @@
 
 import * as runtime from '../runtime.js';
 import type {
-  ErrorOrArray,
+  Errors,
   GetVariantCharacteristics200Response,
   VariantCharacteristic,
 } from '../models/index.js';
 import {
-    ErrorOrArrayFromJSON,
-    ErrorOrArrayToJSON,
+    ErrorsFromJSON,
+    ErrorsToJSON,
     GetVariantCharacteristics200ResponseFromJSON,
     GetVariantCharacteristics200ResponseToJSON,
     VariantCharacteristicFromJSON,

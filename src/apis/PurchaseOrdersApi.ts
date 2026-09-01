@@ -21,7 +21,7 @@ import type {
   CreatePurchaseOrderPositions200ResponseInner,
   DeleteRowResult,
   DocumentMetadata,
-  ErrorOrArray,
+  Errors,
   EventNote,
   EventNoteList,
   PurchaseOrder,
@@ -44,8 +44,8 @@ import {
     DeleteRowResultToJSON,
     DocumentMetadataFromJSON,
     DocumentMetadataToJSON,
-    ErrorOrArrayFromJSON,
-    ErrorOrArrayToJSON,
+    ErrorsFromJSON,
+    ErrorsToJSON,
     EventNoteFromJSON,
     EventNoteToJSON,
     EventNoteListFromJSON,
@@ -111,7 +111,7 @@ export interface CreatePurchaseOrderNoteRequest {
 
 export interface CreatePurchaseOrderPositionRequest {
     id: string;
-    purchaseOrderPosition: Omit<PurchaseOrderPosition, 'id'|'accountId'|'shipped'|'inTransit'>;
+    purchaseOrderPosition: Omit<PurchaseOrderPosition, 'accountId'|'shipped'|'inTransit'>;
     expand?: string;
     accept?: CreatePurchaseOrderPositionAcceptEnum;
     acceptEncoding?: string;
@@ -308,7 +308,7 @@ export interface UpdatePurchaseOrderNoteRequest {
 export interface UpdatePurchaseOrderPositionRequest {
     id: string;
     positionId: string;
-    purchaseOrderPosition: Omit<PurchaseOrderPosition, 'id'|'accountId'|'shipped'|'inTransit'>;
+    purchaseOrderPosition: Omit<PurchaseOrderPosition, 'accountId'|'shipped'|'inTransit'>;
     expand?: string;
     fields?: UpdatePurchaseOrderPositionFieldsEnum;
     accept?: UpdatePurchaseOrderPositionAcceptEnum;

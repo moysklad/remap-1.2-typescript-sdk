@@ -20,7 +20,7 @@ import type {
   AttributeMetaInfoList,
   BatchResponseEntity,
   DeleteRowResult,
-  ErrorOrArray,
+  Errors,
   GetOrganizationAccounts200Response,
   Metadata,
   Organization,
@@ -37,8 +37,8 @@ import {
     BatchResponseEntityToJSON,
     DeleteRowResultFromJSON,
     DeleteRowResultToJSON,
-    ErrorOrArrayFromJSON,
-    ErrorOrArrayToJSON,
+    ErrorsFromJSON,
+    ErrorsToJSON,
     GetOrganizationAccounts200ResponseFromJSON,
     GetOrganizationAccounts200ResponseToJSON,
     MetadataFromJSON,
@@ -50,7 +50,7 @@ import {
 } from '../models/index.js';
 
 export interface CreateOrganizationRequest {
-    organization: Omit<Organization, 'id'|'accountId'|'created'|'updated'|'bonusPoints'>;
+    organization: Omit<Organization, 'accountId'|'created'|'updated'|'bonusPoints'>;
     expand?: string;
     accept?: CreateOrganizationAcceptEnum;
     acceptEncoding?: string;
@@ -161,7 +161,7 @@ export interface GetOrganizationsRequest {
 
 export interface UpdateOrganizationRequest {
     id: string;
-    organization: Omit<Organization, 'id'|'accountId'|'created'|'updated'|'bonusPoints'>;
+    organization: Omit<Organization, 'accountId'|'created'|'updated'|'bonusPoints'>;
     expand?: string;
     accept?: UpdateOrganizationAcceptEnum;
     acceptEncoding?: string;

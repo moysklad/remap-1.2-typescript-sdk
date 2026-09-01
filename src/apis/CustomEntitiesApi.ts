@@ -19,7 +19,7 @@ import type {
   CustomEntityElement,
   CustomEntityElementList,
   CustomEntityMetadata,
-  ErrorOrArray,
+  Errors,
 } from '../models/index.js';
 import {
     CustomEntityFromJSON,
@@ -30,8 +30,8 @@ import {
     CustomEntityElementListToJSON,
     CustomEntityMetadataFromJSON,
     CustomEntityMetadataToJSON,
-    ErrorOrArrayFromJSON,
-    ErrorOrArrayToJSON,
+    ErrorsFromJSON,
+    ErrorsToJSON,
 } from '../models/index.js';
 
 export interface CreateCustomEntityRequest {

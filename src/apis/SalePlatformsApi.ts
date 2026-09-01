@@ -15,13 +15,13 @@
 
 import * as runtime from '../runtime.js';
 import type {
-  ErrorOrArray,
+  Errors,
   SalePlatform,
   SalePlatformList,
 } from '../models/index.js';
 import {
-    ErrorOrArrayFromJSON,
-    ErrorOrArrayToJSON,
+    ErrorsFromJSON,
+    ErrorsToJSON,
     SalePlatformFromJSON,
     SalePlatformToJSON,
     SalePlatformListFromJSON,

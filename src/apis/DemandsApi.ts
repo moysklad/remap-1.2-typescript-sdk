@@ -25,8 +25,9 @@ import type {
   DemandPosition,
   DemandPositionList,
   DocumentMetadata,
-  ErrorOrArray,
+  Errors,
   State,
+  StateRowResult,
 } from '../models/index.js';
 import {
     AttributeMetaInfoFromJSON,
@@ -49,10 +50,12 @@ import {
     DemandPositionListToJSON,
     DocumentMetadataFromJSON,
     DocumentMetadataToJSON,
-    ErrorOrArrayFromJSON,
-    ErrorOrArrayToJSON,
+    ErrorsFromJSON,
+    ErrorsToJSON,
     StateFromJSON,
     StateToJSON,
+    StateRowResultFromJSON,
+    StateRowResultToJSON,
 } from '../models/index.js';
 
 export interface CreateDemandRequest {
@@ -78,9 +81,23 @@ export interface CreateDemandMetadataAttributeRequest {
     contentType?: CreateDemandMetadataAttributeContentTypeEnum;
 }
 
+export interface CreateDemandMetadataStateRequest {
+    state: Omit<State, 'id'|'accountId'|'entityType'>;
+    accept?: CreateDemandMetadataStateAcceptEnum;
+    acceptEncoding?: string;
+    contentType?: CreateDemandMetadataStateContentTypeEnum;
+}
+
+export interface CreateDemandMetadataStatesBatchRequest {
+    state: Array<State>;
+    accept?: CreateDemandMetadataStatesBatchAcceptEnum;
+    acceptEncoding?: string;
+    contentType?: CreateDemandMetadataStatesBatchContentTypeEnum;
+}
+
 export interface CreateDemandPositionRequest {
     id: string;
-    demandPosition: Omit<DemandPosition, 'id'|'accountId'|'declaration'|'overhead'>;
+    demandPosition: Omit<DemandPosition, 'accountId'|'declaration'|'overhead'>;
     expand?: string;
     accept?: CreateDemandPositionAcceptEnum;
     acceptEncoding?: string;
@@ -245,7 +262,7 @@ export interface UpdateDemandMetadataStateByIdRequest {
 export interface UpdateDemandPositionRequest {
     id: string;
     positionId: string;
-    demandPosition: Omit<DemandPosition, 'id'|'accountId'|'declaration'|'overhead'>;
+    demandPosition: Omit<DemandPosition, 'accountId'|'declaration'|'overhead'>;
     expand?: string;
     fields?: UpdateDemandPositionFieldsEnum;
     accept?: UpdateDemandPositionAcceptEnum;
@@ -449,6 +466,130 @@ export class DemandsApi extends runtime.BaseAPI {
      */
     async createDemandMetadataAttribute(requestParameters: CreateDemandMetadataAttributeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AttributeMetaInfo> {
         const response = await this.createDemandMetadataAttributeRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Создать статус Отгрузки
+     */
+    async createDemandMetadataStateRaw(requestParameters: CreateDemandMetadataStateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<State>> {
+        if (requestParameters['state'] == null) {
+            throw new runtime.RequiredError(
+                'state',
+                'Required parameter "state" was null or undefined when calling createDemandMetadataState().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (requestParameters['accept'] != null) {
+            headerParameters['accept'] = String(requestParameters['accept']);
+        }
+
+        if (requestParameters['acceptEncoding'] != null) {
+            headerParameters['Accept-Encoding'] = String(requestParameters['acceptEncoding']);
+        }
+
+        if (requestParameters['contentType'] != null) {
+            headerParameters['Content-Type'] = String(requestParameters['contentType']);
+        }
+
+        if (this.configuration && (this.configuration.username !== undefined || this.configuration.password !== undefined)) {
+            headerParameters["Authorization"] = "Basic " + btoa(this.configuration.username + ":" + this.configuration.password);
+        }
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearerAuth", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/entity/demand/metadata/states`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: StateToJSON(requestParameters['state']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => StateFromJSON(jsonValue));
+    }
+
+    /**
+     * Создать статус Отгрузки
+     */
+    async createDemandMetadataState(requestParameters: CreateDemandMetadataStateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<State> {
+        const response = await this.createDemandMetadataStateRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Массовое создание и обновление статусов Отгрузки
+     */
+    async createDemandMetadataStatesBatchRaw(requestParameters: CreateDemandMetadataStatesBatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<StateRowResult>>> {
+        if (requestParameters['state'] == null) {
+            throw new runtime.RequiredError(
+                'state',
+                'Required parameter "state" was null or undefined when calling createDemandMetadataStatesBatch().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (requestParameters['accept'] != null) {
+            headerParameters['accept'] = String(requestParameters['accept']);
+        }
+
+        if (requestParameters['acceptEncoding'] != null) {
+            headerParameters['Accept-Encoding'] = String(requestParameters['acceptEncoding']);
+        }
+
+        if (requestParameters['contentType'] != null) {
+            headerParameters['Content-Type'] = String(requestParameters['contentType']);
+        }
+
+        if (this.configuration && (this.configuration.username !== undefined || this.configuration.password !== undefined)) {
+            headerParameters["Authorization"] = "Basic " + btoa(this.configuration.username + ":" + this.configuration.password);
+        }
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearerAuth", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/entity/demand/metadata/states/batch`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['state']!.map(StateToJSON),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(StateRowResultFromJSON));
+    }
+
+    /**
+     * Массовое создание и обновление статусов Отгрузки
+     */
+    async createDemandMetadataStatesBatch(requestParameters: CreateDemandMetadataStatesBatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<StateRowResult>> {
+        const response = await this.createDemandMetadataStatesBatchRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -1908,6 +2049,36 @@ export const CreateDemandMetadataAttributeContentTypeEnum = {
     ApplicationJson: 'application/json'
 } as const;
 export type CreateDemandMetadataAttributeContentTypeEnum = typeof CreateDemandMetadataAttributeContentTypeEnum[keyof typeof CreateDemandMetadataAttributeContentTypeEnum];
+/**
+ * @export
+ */
+export const CreateDemandMetadataStateAcceptEnum = {
+    ApplicationJson: 'application/json',
+    ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
+} as const;
+export type CreateDemandMetadataStateAcceptEnum = typeof CreateDemandMetadataStateAcceptEnum[keyof typeof CreateDemandMetadataStateAcceptEnum];
+/**
+ * @export
+ */
+export const CreateDemandMetadataStateContentTypeEnum = {
+    ApplicationJson: 'application/json'
+} as const;
+export type CreateDemandMetadataStateContentTypeEnum = typeof CreateDemandMetadataStateContentTypeEnum[keyof typeof CreateDemandMetadataStateContentTypeEnum];
+/**
+ * @export
+ */
+export const CreateDemandMetadataStatesBatchAcceptEnum = {
+    ApplicationJson: 'application/json',
+    ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
+} as const;
+export type CreateDemandMetadataStatesBatchAcceptEnum = typeof CreateDemandMetadataStatesBatchAcceptEnum[keyof typeof CreateDemandMetadataStatesBatchAcceptEnum];
+/**
+ * @export
+ */
+export const CreateDemandMetadataStatesBatchContentTypeEnum = {
+    ApplicationJson: 'application/json'
+} as const;
+export type CreateDemandMetadataStatesBatchContentTypeEnum = typeof CreateDemandMetadataStatesBatchContentTypeEnum[keyof typeof CreateDemandMetadataStatesBatchContentTypeEnum];
 /**
  * @export
  */

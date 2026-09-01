@@ -13,36 +13,82 @@
  */
 
 import { mapValues } from '../runtime.js';
-import type { ErrorErrorsInner } from './ErrorErrorsInner.js';
+import type { Meta } from './Meta.js';
 import {
-    ErrorErrorsInnerFromJSON,
-    ErrorErrorsInnerFromJSONTyped,
-    ErrorErrorsInnerToJSON,
-    ErrorErrorsInnerToJSONTyped,
-} from './ErrorErrorsInner.js';
+    MetaFromJSON,
+    MetaFromJSONTyped,
+    MetaToJSON,
+    MetaToJSONTyped,
+} from './Meta.js';
 
-import * as ModelErrorPolymorphicParent from './BatchResponseEntity.js';
 /**
  * 
  * @export
  * @interface ModelError
  */
-export interface ModelErrorOwn {
+export interface ModelError {
     /**
-     * 
-     * @type {Array<ErrorErrorsInner>}
+     * Заголовок ошибки
+     * @type {string}
      * @memberof ModelError
      */
-    errors: Array<ErrorErrorsInner>;
+    error: string;
+    /**
+     * Параметр, на котором произошла ошибка
+     * @type {string}
+     * @memberof ModelError
+     */
+    parameter?: string;
+    /**
+     * Код ошибки
+     * @type {number}
+     * @memberof ModelError
+     */
+    code?: number;
+    /**
+     * Сообщение, прилагаемое к ошибке
+     * @type {string}
+     * @memberof ModelError
+     */
+    errorMessage?: string;
+    /**
+     * Ссылка на документацию с описанием ошибки
+     * @type {string}
+     * @memberof ModelError
+     */
+    moreInfo?: string;
+    /**
+     * Строка JSON, на которой произошла ошибка
+     * @type {number}
+     * @memberof ModelError
+     */
+    line?: number;
+    /**
+     * Координата элемента в строке, на котором произошла ошибка
+     * @type {number}
+     * @memberof ModelError
+     */
+    column?: number;
+    /**
+     * Список метаданных зависимых сущностей
+     * @type {Array<Meta>}
+     * @memberof ModelError
+     */
+    dependencies?: Array<Meta>;
+    /**
+     * 
+     * @type {Meta}
+     * @memberof ModelError
+     */
+    meta?: Meta;
 }
-export type ModelError = ModelErrorOwn & ModelErrorPolymorphicParent.BatchResponseEntity;
 
 
 /**
  * Check if a given object implements the ModelError interface.
  */
 export function instanceOfModelError(value: object): value is ModelError {
-    if (!('errors' in value) || value['errors'] === undefined) return false;
+    if (!('error' in value) || value['error'] === undefined) return false;
     return true;
 }
 
@@ -55,8 +101,15 @@ export function ModelErrorFromJSONTyped(json: any, ignoreDiscriminator: boolean)
         return json;
     }
     return {
-        ...ModelErrorPolymorphicParent.BatchResponseEntityFromJSONTyped(json, true),
-        'errors': ((json['errors'] as Array<any>).map(ErrorErrorsInnerFromJSON)),
+        'error': json['error'],
+        'parameter': json['parameter'] == null ? undefined : json['parameter'],
+        'code': json['code'] == null ? undefined : json['code'],
+        'errorMessage': json['error_message'] == null ? undefined : json['error_message'],
+        'moreInfo': json['moreInfo'] == null ? undefined : json['moreInfo'],
+        'line': json['line'] == null ? undefined : json['line'],
+        'column': json['column'] == null ? undefined : json['column'],
+        'dependencies': json['dependencies'] == null ? undefined : ((json['dependencies'] as Array<any>).map(MetaFromJSON)),
+        'meta': json['meta'] == null ? undefined : MetaFromJSON(json['meta']),
     };
 }
 
@@ -69,8 +122,15 @@ export function ModelErrorToJSONTyped(value?: ModelError | null, ignoreDiscrimin
         return value;
     }
     return {
-        ...ModelErrorPolymorphicParent.BatchResponseEntityToJSONTyped(value as any, true),
-        'errors': ((value['errors'] as Array<any>).map(ErrorErrorsInnerToJSON)),
+        'error': value['error'],
+        'parameter': value['parameter'],
+        'code': value['code'],
+        'error_message': value['errorMessage'],
+        'moreInfo': value['moreInfo'],
+        'line': value['line'],
+        'column': value['column'],
+        'dependencies': value['dependencies'] == null ? undefined : ((value['dependencies'] as Array<any>).map(MetaToJSON)),
+        'meta': MetaToJSON(value['meta']),
     };
 }
 

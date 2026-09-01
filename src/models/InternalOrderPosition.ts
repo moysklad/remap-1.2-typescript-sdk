@@ -53,7 +53,7 @@ export interface InternalOrderPositionOwn {
      * @type {string}
      * @memberof InternalOrderPosition
      */
-    readonly id?: string;
+    id?: string;
     /**
      * ID учетной записи
      * @type {string}
@@ -133,13 +133,14 @@ export function InternalOrderPositionToJSON(json: any): InternalOrderPosition {
     return InternalOrderPositionToJSONTyped(json, false);
 }
 
-export function InternalOrderPositionToJSONTyped(value?: Omit<InternalOrderPosition, 'id'|'accountId'> | null, ignoreDiscriminator: boolean = false): any {
+export function InternalOrderPositionToJSONTyped(value?: Omit<InternalOrderPosition, 'accountId'> | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
     return {
         ...InternalOrderPositionPolymorphicParent.EntityWithMetaToJSONTyped(value as any, true),
         'meta': MetaToJSON(value['meta']),
+        'id': value['id'],
         'quantity': value['quantity'],
         'price': value['price'],
         'vat': value['vat'],

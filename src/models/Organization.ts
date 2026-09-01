@@ -88,7 +88,7 @@ export interface OrganizationOwn {
      * @type {string}
      * @memberof Organization
      */
-    readonly id?: string;
+    id?: string;
     /**
      * ID синхронизации
      * @type {string}
@@ -434,13 +434,14 @@ export function OrganizationToJSON(json: any): Organization {
     return OrganizationToJSONTyped(json, false);
 }
 
-export function OrganizationToJSONTyped(value?: Omit<Organization, 'id'|'accountId'|'created'|'updated'|'bonusPoints'> | null, ignoreDiscriminator: boolean = false): any {
+export function OrganizationToJSONTyped(value?: Omit<Organization, 'accountId'|'created'|'updated'|'bonusPoints'> | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
     return {
         ...OrganizationPolymorphicParent.AgentToJSONTyped(value as any, true),
         'meta': MetaToJSON(value['meta']),
+        'id': value['id'],
         'syncId': value['syncId'],
         'name': value['name'],
         'code': value['code'],

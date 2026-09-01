@@ -21,7 +21,7 @@ import type {
   Consignment,
   ConsignmentList,
   DeleteRowResult,
-  ErrorOrArray,
+  Errors,
   Metadata,
 } from '../models/index.js';
 import {
@@ -37,8 +37,8 @@ import {
     ConsignmentListToJSON,
     DeleteRowResultFromJSON,
     DeleteRowResultToJSON,
-    ErrorOrArrayFromJSON,
-    ErrorOrArrayToJSON,
+    ErrorsFromJSON,
+    ErrorsToJSON,
     MetadataFromJSON,
     MetadataToJSON,
 } from '../models/index.js';

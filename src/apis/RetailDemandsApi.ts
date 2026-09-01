@@ -22,7 +22,7 @@ import type {
   CreateRetailDemandPositions200ResponseInner,
   DeleteRowResult,
   DocumentMetadata,
-  ErrorOrArray,
+  Errors,
   RetailDemand,
   RetailDemandList,
   RetailDemandPosition,
@@ -44,8 +44,8 @@ import {
     DeleteRowResultToJSON,
     DocumentMetadataFromJSON,
     DocumentMetadataToJSON,
-    ErrorOrArrayFromJSON,
-    ErrorOrArrayToJSON,
+    ErrorsFromJSON,
+    ErrorsToJSON,
     RetailDemandFromJSON,
     RetailDemandToJSON,
     RetailDemandListFromJSON,
@@ -90,7 +90,7 @@ export interface CreateRetailDemandMetadataStateOperationRequest {
 
 export interface CreateRetailDemandPositionRequest {
     id: string;
-    retailDemandPosition: Omit<RetailDemandPosition, 'id'|'accountId'|'declaration'>;
+    retailDemandPosition: Omit<RetailDemandPosition, 'accountId'|'declaration'>;
     expand?: string;
     accept?: CreateRetailDemandPositionAcceptEnum;
     acceptEncoding?: string;
@@ -254,7 +254,7 @@ export interface UpdateRetailDemandMetadataStateByIdRequest {
 export interface UpdateRetailDemandPositionRequest {
     id: string;
     positionId: string;
-    retailDemandPosition: Omit<RetailDemandPosition, 'id'|'accountId'|'declaration'>;
+    retailDemandPosition: Omit<RetailDemandPosition, 'accountId'|'declaration'>;
     expand?: string;
     fields?: UpdateRetailDemandPositionFieldsEnum;
     accept?: UpdateRetailDemandPositionAcceptEnum;

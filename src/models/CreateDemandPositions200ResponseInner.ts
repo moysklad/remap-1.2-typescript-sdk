@@ -19,20 +19,20 @@ import {
     DemandPositionFromJSONTyped,
     DemandPositionToJSON,
 } from './DemandPosition.js';
-import type { ModelError } from './ModelError.js';
+import type { Errors } from './Errors.js';
 import {
-    instanceOfModelError,
-    ModelErrorFromJSON,
-    ModelErrorFromJSONTyped,
-    ModelErrorToJSON,
-} from './ModelError.js';
+    instanceOfErrors,
+    ErrorsFromJSON,
+    ErrorsFromJSONTyped,
+    ErrorsToJSON,
+} from './Errors.js';
 
 /**
  * @type CreateDemandPositions200ResponseInner
  * 
  * @export
  */
-export type CreateDemandPositions200ResponseInner = DemandPosition | ModelError;
+export type CreateDemandPositions200ResponseInner = DemandPosition | Errors;
 
 export function CreateDemandPositions200ResponseInnerFromJSON(json: any): CreateDemandPositions200ResponseInner {
     return CreateDemandPositions200ResponseInnerFromJSONTyped(json, false);
@@ -48,8 +48,8 @@ export function CreateDemandPositions200ResponseInnerFromJSONTyped(json: any, ig
     if (instanceOfDemandPosition(json)) {
         return DemandPositionFromJSONTyped(json, true);
     }
-    if (instanceOfModelError(json)) {
-        return ModelErrorFromJSONTyped(json, true);
+    if (instanceOfErrors(json)) {
+        return ErrorsFromJSONTyped(json, true);
     }
 
     return {} as any;
@@ -69,8 +69,8 @@ export function CreateDemandPositions200ResponseInnerToJSONTyped(value?: CreateD
     if (instanceOfDemandPosition(value)) {
         return DemandPositionToJSON(value as DemandPosition);
     }
-    if (instanceOfModelError(value)) {
-        return ModelErrorToJSON(value as ModelError);
+    if (instanceOfErrors(value)) {
+        return ErrorsToJSON(value as Errors);
     }
 
     return {};

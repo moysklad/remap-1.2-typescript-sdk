@@ -12,13 +12,13 @@
  * Do not edit the class manually.
  */
 
-import type { ModelError } from './ModelError.js';
+import type { Errors } from './Errors.js';
 import {
-    instanceOfModelError,
-    ModelErrorFromJSON,
-    ModelErrorFromJSONTyped,
-    ModelErrorToJSON,
-} from './ModelError.js';
+    instanceOfErrors,
+    ErrorsFromJSON,
+    ErrorsFromJSONTyped,
+    ErrorsToJSON,
+} from './Errors.js';
 import type { RetailDemandPosition } from './RetailDemandPosition.js';
 import {
     instanceOfRetailDemandPosition,
@@ -32,7 +32,7 @@ import {
  * 
  * @export
  */
-export type CreateRetailDemandPositions200ResponseInner = ModelError | RetailDemandPosition;
+export type CreateRetailDemandPositions200ResponseInner = Errors | RetailDemandPosition;
 
 export function CreateRetailDemandPositions200ResponseInnerFromJSON(json: any): CreateRetailDemandPositions200ResponseInner {
     return CreateRetailDemandPositions200ResponseInnerFromJSONTyped(json, false);
@@ -45,8 +45,8 @@ export function CreateRetailDemandPositions200ResponseInnerFromJSONTyped(json: a
     if (typeof json !== 'object') {
         return json;
     }
-    if (instanceOfModelError(json)) {
-        return ModelErrorFromJSONTyped(json, true);
+    if (instanceOfErrors(json)) {
+        return ErrorsFromJSONTyped(json, true);
     }
     if (instanceOfRetailDemandPosition(json)) {
         return RetailDemandPositionFromJSONTyped(json, true);
@@ -66,8 +66,8 @@ export function CreateRetailDemandPositions200ResponseInnerToJSONTyped(value?: C
     if (typeof value !== 'object') {
         return value;
     }
-    if (instanceOfModelError(value)) {
-        return ModelErrorToJSON(value as ModelError);
+    if (instanceOfErrors(value)) {
+        return ErrorsToJSON(value as Errors);
     }
     if (instanceOfRetailDemandPosition(value)) {
         return RetailDemandPositionToJSON(value as RetailDemandPosition);

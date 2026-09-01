@@ -19,20 +19,20 @@ import {
     DeleteInfoFromJSONTyped,
     DeleteInfoToJSON,
 } from './DeleteInfo.js';
-import type { ModelError } from './ModelError.js';
+import type { Errors } from './Errors.js';
 import {
-    instanceOfModelError,
-    ModelErrorFromJSON,
-    ModelErrorFromJSONTyped,
-    ModelErrorToJSON,
-} from './ModelError.js';
+    instanceOfErrors,
+    ErrorsFromJSON,
+    ErrorsFromJSONTyped,
+    ErrorsToJSON,
+} from './Errors.js';
 
 /**
  * @type DeleteRowResult
  * 
  * @export
  */
-export type DeleteRowResult = DeleteInfo | ModelError;
+export type DeleteRowResult = DeleteInfo | Errors;
 
 export function DeleteRowResultFromJSON(json: any): DeleteRowResult {
     return DeleteRowResultFromJSONTyped(json, false);
@@ -48,8 +48,8 @@ export function DeleteRowResultFromJSONTyped(json: any, ignoreDiscriminator: boo
     if (instanceOfDeleteInfo(json)) {
         return DeleteInfoFromJSONTyped(json, true);
     }
-    if (instanceOfModelError(json)) {
-        return ModelErrorFromJSONTyped(json, true);
+    if (instanceOfErrors(json)) {
+        return ErrorsFromJSONTyped(json, true);
     }
 
     return {} as any;
@@ -69,8 +69,8 @@ export function DeleteRowResultToJSONTyped(value?: DeleteRowResult | null, ignor
     if (instanceOfDeleteInfo(value)) {
         return DeleteInfoToJSON(value as DeleteInfo);
     }
-    if (instanceOfModelError(value)) {
-        return ModelErrorToJSON(value as ModelError);
+    if (instanceOfErrors(value)) {
+        return ErrorsToJSON(value as Errors);
     }
 
     return {};

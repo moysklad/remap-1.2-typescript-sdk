@@ -27,13 +27,13 @@ import {
     AttributeAbstractToJSON,
     AttributeAbstractToJSONTyped,
 } from './AttributeAbstract.js';
-import type { ProductMarker } from './ProductMarker.js';
+import type { EntityWithMeta } from './EntityWithMeta.js';
 import {
-    ProductMarkerFromJSON,
-    ProductMarkerFromJSONTyped,
-    ProductMarkerToJSON,
-    ProductMarkerToJSONTyped,
-} from './ProductMarker.js';
+    EntityWithMetaFromJSON,
+    EntityWithMetaFromJSONTyped,
+    EntityWithMetaToJSON,
+    EntityWithMetaToJSONTyped,
+} from './EntityWithMeta.js';
 
 /**
  * 
@@ -49,10 +49,10 @@ export interface AttributeProductEntity extends AttributeAbstract {
     type: AttributeProductEntityTypeEnum;
     /**
      * 
-     * @type {ProductMarker}
+     * @type {EntityWithMeta}
      * @memberof AttributeProductEntity
      */
-    value?: ProductMarker;
+    value?: EntityWithMeta;
 }
 
 
@@ -85,7 +85,7 @@ export function AttributeProductEntityFromJSONTyped(json: any, ignoreDiscriminat
     return {
         ...AttributeAbstractFromJSONTyped(json, true),
         'type': json['type'] == null ? undefined : json['type'],
-        'value': json['value'] == null ? undefined : ProductMarkerFromJSON(json['value']),
+        'value': json['value'] == null ? undefined : EntityWithMetaFromJSON(json['value']),
     };
 }
 
@@ -106,7 +106,7 @@ export function AttributeProductEntityToJSONTyped(value?: AttributeProductEntity
     return {
         ...AttributeAbstractToJSONTyped(value, true),
         'type': value['type'],
-        'value': ProductMarkerToJSON(value['value']),
+        'value': EntityWithMetaToJSON(value['value']),
     };
 }
 

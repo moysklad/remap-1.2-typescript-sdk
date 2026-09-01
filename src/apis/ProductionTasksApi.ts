@@ -17,15 +17,15 @@ import * as runtime from '../runtime.js';
 import type {
   AttributeMetaInfo,
   AttributeMetaInfoList,
-  ErrorOrArray,
+  Errors,
 } from '../models/index.js';
 import {
     AttributeMetaInfoFromJSON,
     AttributeMetaInfoToJSON,
     AttributeMetaInfoListFromJSON,
     AttributeMetaInfoListToJSON,
-    ErrorOrArrayFromJSON,
-    ErrorOrArrayToJSON,
+    ErrorsFromJSON,
+    ErrorsToJSON,
 } from '../models/index.js';
 
 export interface CreateProductionTaskMetadataAttributeRequest {

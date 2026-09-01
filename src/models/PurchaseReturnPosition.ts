@@ -60,7 +60,7 @@ export interface PurchaseReturnPositionOwn {
      * @type {string}
      * @memberof PurchaseReturnPosition
      */
-    readonly id?: string;
+    id?: string;
     /**
      * ID учетной записи
      * @type {string}
@@ -165,13 +165,14 @@ export function PurchaseReturnPositionToJSON(json: any): PurchaseReturnPosition 
     return PurchaseReturnPositionToJSONTyped(json, false);
 }
 
-export function PurchaseReturnPositionToJSONTyped(value?: Omit<PurchaseReturnPosition, 'id'|'accountId'|'discount'> | null, ignoreDiscriminator: boolean = false): any {
+export function PurchaseReturnPositionToJSONTyped(value?: Omit<PurchaseReturnPosition, 'accountId'|'discount'> | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
     return {
         ...PurchaseReturnPositionPolymorphicParent.EntityWithMetaToJSONTyped(value as any, true),
         'meta': MetaToJSON(value['meta']),
+        'id': value['id'],
         'assortment': ProductMarkerToJSON(value['assortment']),
         'pack': PackToJSON(value['pack']),
         'price': value['price'],

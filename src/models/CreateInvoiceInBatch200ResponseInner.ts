@@ -12,6 +12,13 @@
  * Do not edit the class manually.
  */
 
+import type { Errors } from './Errors.js';
+import {
+    instanceOfErrors,
+    ErrorsFromJSON,
+    ErrorsFromJSONTyped,
+    ErrorsToJSON,
+} from './Errors.js';
 import type { InvoiceIn } from './InvoiceIn.js';
 import {
     instanceOfInvoiceIn,
@@ -19,20 +26,13 @@ import {
     InvoiceInFromJSONTyped,
     InvoiceInToJSON,
 } from './InvoiceIn.js';
-import type { ModelError } from './ModelError.js';
-import {
-    instanceOfModelError,
-    ModelErrorFromJSON,
-    ModelErrorFromJSONTyped,
-    ModelErrorToJSON,
-} from './ModelError.js';
 
 /**
  * @type CreateInvoiceInBatch200ResponseInner
  * 
  * @export
  */
-export type CreateInvoiceInBatch200ResponseInner = InvoiceIn | ModelError;
+export type CreateInvoiceInBatch200ResponseInner = Errors | InvoiceIn;
 
 export function CreateInvoiceInBatch200ResponseInnerFromJSON(json: any): CreateInvoiceInBatch200ResponseInner {
     return CreateInvoiceInBatch200ResponseInnerFromJSONTyped(json, false);
@@ -45,11 +45,11 @@ export function CreateInvoiceInBatch200ResponseInnerFromJSONTyped(json: any, ign
     if (typeof json !== 'object') {
         return json;
     }
+    if (instanceOfErrors(json)) {
+        return ErrorsFromJSONTyped(json, true);
+    }
     if (instanceOfInvoiceIn(json)) {
         return InvoiceInFromJSONTyped(json, true);
-    }
-    if (instanceOfModelError(json)) {
-        return ModelErrorFromJSONTyped(json, true);
     }
 
     return {} as any;
@@ -66,11 +66,11 @@ export function CreateInvoiceInBatch200ResponseInnerToJSONTyped(value?: CreateIn
     if (typeof value !== 'object') {
         return value;
     }
+    if (instanceOfErrors(value)) {
+        return ErrorsToJSON(value as Errors);
+    }
     if (instanceOfInvoiceIn(value)) {
         return InvoiceInToJSON(value as InvoiceIn);
-    }
-    if (instanceOfModelError(value)) {
-        return ModelErrorToJSON(value as ModelError);
     }
 
     return {};

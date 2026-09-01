@@ -53,7 +53,7 @@ export interface InventoryPositionOwn {
      * @type {string}
      * @memberof InventoryPosition
      */
-    readonly id?: string;
+    id?: string;
     /**
      * ID учетной записи
      * @type {string}
@@ -152,13 +152,14 @@ export function InventoryPositionToJSON(json: any): InventoryPosition {
     return InventoryPositionToJSONTyped(json, false);
 }
 
-export function InventoryPositionToJSONTyped(value?: Omit<InventoryPosition, 'id'|'accountId'|'correctionAmount'|'correctionSum'> | null, ignoreDiscriminator: boolean = false): any {
+export function InventoryPositionToJSONTyped(value?: Omit<InventoryPosition, 'accountId'|'correctionAmount'|'correctionSum'> | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
     return {
         ...InventoryPositionPolymorphicParent.EntityWithMetaToJSONTyped(value as any, true),
         'meta': MetaToJSON(value['meta']),
+        'id': value['id'],
         'assortment': ProductMarkerToJSON(value['assortment']),
         'calculatedQuantity': value['calculatedQuantity'],
         'pack': PackToJSON(value['pack']),

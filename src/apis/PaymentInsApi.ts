@@ -20,7 +20,7 @@ import type {
   BatchResponseEntity,
   DeleteRowResult,
   DocumentMetadata,
-  ErrorOrArray,
+  Errors,
   FileUpload,
   GetProductFiles200Response,
   PaymentIn,
@@ -39,8 +39,8 @@ import {
     DeleteRowResultToJSON,
     DocumentMetadataFromJSON,
     DocumentMetadataToJSON,
-    ErrorOrArrayFromJSON,
-    ErrorOrArrayToJSON,
+    ErrorsFromJSON,
+    ErrorsToJSON,
     FileUploadFromJSON,
     FileUploadToJSON,
     GetProductFiles200ResponseFromJSON,
@@ -64,7 +64,7 @@ export interface AddPaymentInFilesRequest {
 }
 
 export interface CreatePaymentInRequest {
-    paymentIn: Omit<PaymentIn, 'id'|'accountId'|'created'|'deleted'|'updated'|'printed'|'published'|'shared'|'sum'>;
+    paymentIn: Omit<PaymentIn, 'id'|'accountId'|'created'|'deleted'|'updated'|'printed'|'published'|'shared'>;
     expand?: string;
     accept?: CreatePaymentInAcceptEnum;
     acceptEncoding?: string;
@@ -195,7 +195,7 @@ export interface GetPaymentInTemplateRequest {
 
 export interface UpdatePaymentInRequest {
     id: string;
-    paymentIn: Omit<PaymentIn, 'id'|'accountId'|'created'|'deleted'|'updated'|'printed'|'published'|'shared'|'sum'>;
+    paymentIn: Omit<PaymentIn, 'id'|'accountId'|'created'|'deleted'|'updated'|'printed'|'published'|'shared'>;
     expand?: string;
     accept?: UpdatePaymentInAcceptEnum;
     acceptEncoding?: string;

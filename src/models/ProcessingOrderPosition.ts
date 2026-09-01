@@ -53,7 +53,7 @@ export interface ProcessingOrderPositionOwn {
      * @type {string}
      * @memberof ProcessingOrderPosition
      */
-    readonly id?: string;
+    id?: string;
     /**
      * ID учетной записи
      * @type {string}
@@ -119,13 +119,14 @@ export function ProcessingOrderPositionToJSON(json: any): ProcessingOrderPositio
     return ProcessingOrderPositionToJSONTyped(json, false);
 }
 
-export function ProcessingOrderPositionToJSONTyped(value?: Omit<ProcessingOrderPosition, 'id'|'accountId'> | null, ignoreDiscriminator: boolean = false): any {
+export function ProcessingOrderPositionToJSONTyped(value?: Omit<ProcessingOrderPosition, 'accountId'> | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
     return {
         ...ProcessingOrderPositionPolymorphicParent.EntityWithMetaToJSONTyped(value as any, true),
         'meta': MetaToJSON(value['meta']),
+        'id': value['id'],
         'quantity': value['quantity'],
         'reserve': value['reserve'],
         'assortment': ProductMarkerToJSON(value['assortment']),

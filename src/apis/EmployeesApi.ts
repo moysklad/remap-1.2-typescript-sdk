@@ -17,21 +17,26 @@ import * as runtime from '../runtime.js';
 import type {
   ActivateEmployee200Response,
   ActivateEmployeeRequest,
+  AttributeMetaInfo,
+  AttributeMetaInfoList,
   BatchResponseEntity,
   DeleteRowResult,
   Employee,
   EmployeeList,
   EmployeeRole,
   EmployeeSecurity,
-  ErrorOrArray,
+  Errors,
   Metadata,
-  ModelError,
 } from '../models/index.js';
 import {
     ActivateEmployee200ResponseFromJSON,
     ActivateEmployee200ResponseToJSON,
     ActivateEmployeeRequestFromJSON,
     ActivateEmployeeRequestToJSON,
+    AttributeMetaInfoFromJSON,
+    AttributeMetaInfoToJSON,
+    AttributeMetaInfoListFromJSON,
+    AttributeMetaInfoListToJSON,
     BatchResponseEntityFromJSON,
     BatchResponseEntityToJSON,
     DeleteRowResultFromJSON,
@@ -44,12 +49,10 @@ import {
     EmployeeRoleToJSON,
     EmployeeSecurityFromJSON,
     EmployeeSecurityToJSON,
-    ErrorOrArrayFromJSON,
-    ErrorOrArrayToJSON,
+    ErrorsFromJSON,
+    ErrorsToJSON,
     MetadataFromJSON,
     MetadataToJSON,
-    ModelErrorFromJSON,
-    ModelErrorToJSON,
 } from '../models/index.js';
 
 export interface ActivateEmployeeOperationRequest {
@@ -66,6 +69,13 @@ export interface CreateEmployeeRequest {
     accept?: CreateEmployeeAcceptEnum;
     acceptEncoding?: string;
     contentType?: CreateEmployeeContentTypeEnum;
+}
+
+export interface CreateEmployeeMetadataAttributeRequest {
+    attributeMetaInfo: AttributeMetaInfo;
+    accept?: CreateEmployeeMetadataAttributeAcceptEnum;
+    acceptEncoding?: string;
+    contentType?: CreateEmployeeMetadataAttributeContentTypeEnum;
 }
 
 export interface CreateEmployeesBatchRequest {
@@ -88,6 +98,12 @@ export interface DeleteEmployeeRequest {
     acceptEncoding?: string;
 }
 
+export interface DeleteEmployeeMetadataAttributeRequest {
+    id: string;
+    accept?: DeleteEmployeeMetadataAttributeAcceptEnum;
+    acceptEncoding?: string;
+}
+
 export interface DeleteEmployeesBatchRequest {
     employee: Array<Employee>;
     accept?: DeleteEmployeesBatchAcceptEnum;
@@ -103,7 +119,19 @@ export interface GetEmployeeByIdRequest {
 }
 
 export interface GetEmployeeMetadataRequest {
+    expand?: string;
     accept?: GetEmployeeMetadataAcceptEnum;
+    acceptEncoding?: string;
+}
+
+export interface GetEmployeeMetadataAttributeByIdRequest {
+    id: string;
+    accept?: GetEmployeeMetadataAttributeByIdAcceptEnum;
+    acceptEncoding?: string;
+}
+
+export interface GetEmployeeMetadataAttributesRequest {
+    accept?: GetEmployeeMetadataAttributesAcceptEnum;
     acceptEncoding?: string;
 }
 
@@ -162,6 +190,14 @@ export interface UpdateEmployeeRequest {
     accept?: UpdateEmployeeAcceptEnum;
     acceptEncoding?: string;
     contentType?: UpdateEmployeeContentTypeEnum;
+}
+
+export interface UpdateEmployeeMetadataAttributeRequest {
+    id: string;
+    attributeMetaInfo: AttributeMetaInfo;
+    accept?: UpdateEmployeeMetadataAttributeAcceptEnum;
+    acceptEncoding?: string;
+    contentType?: UpdateEmployeeMetadataAttributeContentTypeEnum;
 }
 
 export interface UpdateEmployeeSecurityRequest {
@@ -307,6 +343,70 @@ export class EmployeesApi extends runtime.BaseAPI {
      */
     async createEmployee(requestParameters: CreateEmployeeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Employee> {
         const response = await this.createEmployeeRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Создание нового доп. поля для сотрудников
+     * Создать доп. поле сотрудника
+     */
+    async createEmployeeMetadataAttributeRaw(requestParameters: CreateEmployeeMetadataAttributeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AttributeMetaInfo>> {
+        if (requestParameters['attributeMetaInfo'] == null) {
+            throw new runtime.RequiredError(
+                'attributeMetaInfo',
+                'Required parameter "attributeMetaInfo" was null or undefined when calling createEmployeeMetadataAttribute().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (requestParameters['accept'] != null) {
+            headerParameters['accept'] = String(requestParameters['accept']);
+        }
+
+        if (requestParameters['acceptEncoding'] != null) {
+            headerParameters['Accept-Encoding'] = String(requestParameters['acceptEncoding']);
+        }
+
+        if (requestParameters['contentType'] != null) {
+            headerParameters['Content-Type'] = String(requestParameters['contentType']);
+        }
+
+        if (this.configuration && (this.configuration.username !== undefined || this.configuration.password !== undefined)) {
+            headerParameters["Authorization"] = "Basic " + btoa(this.configuration.username + ":" + this.configuration.password);
+        }
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearerAuth", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/entity/employee/metadata/attributes`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: AttributeMetaInfoToJSON(requestParameters['attributeMetaInfo']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => AttributeMetaInfoFromJSON(jsonValue));
+    }
+
+    /**
+     * Создание нового доп. поля для сотрудников
+     * Создать доп. поле сотрудника
+     */
+    async createEmployeeMetadataAttribute(requestParameters: CreateEmployeeMetadataAttributeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AttributeMetaInfo> {
+        const response = await this.createEmployeeMetadataAttributeRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -493,6 +593,63 @@ export class EmployeesApi extends runtime.BaseAPI {
     }
 
     /**
+     * Удаление доп. поля
+     * Удалить доп. поле сотрудника
+     */
+    async deleteEmployeeMetadataAttributeRaw(requestParameters: DeleteEmployeeMetadataAttributeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling deleteEmployeeMetadataAttribute().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (requestParameters['accept'] != null) {
+            headerParameters['accept'] = String(requestParameters['accept']);
+        }
+
+        if (requestParameters['acceptEncoding'] != null) {
+            headerParameters['Accept-Encoding'] = String(requestParameters['acceptEncoding']);
+        }
+
+        if (this.configuration && (this.configuration.username !== undefined || this.configuration.password !== undefined)) {
+            headerParameters["Authorization"] = "Basic " + btoa(this.configuration.username + ":" + this.configuration.password);
+        }
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearerAuth", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/entity/employee/metadata/attributes/{id}`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Удаление доп. поля
+     * Удалить доп. поле сотрудника
+     */
+    async deleteEmployeeMetadataAttribute(requestParameters: DeleteEmployeeMetadataAttributeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.deleteEmployeeMetadataAttributeRaw(requestParameters, initOverrides);
+    }
+
+    /**
      * Массовое удаление сотрудников по их мета-объектам.
      * Удалить сотрудников
      */
@@ -619,11 +776,15 @@ export class EmployeesApi extends runtime.BaseAPI {
     }
 
     /**
-     * Запрос на получение метаданных товаров
-     * Получить метаданные товаров
+     * Запрос на получение метаданных сотрудников.
+     * Получить метаданные сотрудников
      */
     async getEmployeeMetadataRaw(requestParameters: GetEmployeeMetadataRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Metadata>> {
         const queryParameters: any = {};
+
+        if (requestParameters['expand'] != null) {
+            queryParameters['expand'] = requestParameters['expand'];
+        }
 
         const headerParameters: runtime.HTTPHeaders = {};
 
@@ -660,11 +821,119 @@ export class EmployeesApi extends runtime.BaseAPI {
     }
 
     /**
-     * Запрос на получение метаданных товаров
-     * Получить метаданные товаров
+     * Запрос на получение метаданных сотрудников.
+     * Получить метаданные сотрудников
      */
     async getEmployeeMetadata(requestParameters: GetEmployeeMetadataRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Metadata> {
         const response = await this.getEmployeeMetadataRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Запрос на получение отдельного доп. поля
+     * Получить доп. поле сотрудника по ID
+     */
+    async getEmployeeMetadataAttributeByIdRaw(requestParameters: GetEmployeeMetadataAttributeByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AttributeMetaInfo>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling getEmployeeMetadataAttributeById().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (requestParameters['accept'] != null) {
+            headerParameters['accept'] = String(requestParameters['accept']);
+        }
+
+        if (requestParameters['acceptEncoding'] != null) {
+            headerParameters['Accept-Encoding'] = String(requestParameters['acceptEncoding']);
+        }
+
+        if (this.configuration && (this.configuration.username !== undefined || this.configuration.password !== undefined)) {
+            headerParameters["Authorization"] = "Basic " + btoa(this.configuration.username + ":" + this.configuration.password);
+        }
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearerAuth", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/entity/employee/metadata/attributes/{id}`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => AttributeMetaInfoFromJSON(jsonValue));
+    }
+
+    /**
+     * Запрос на получение отдельного доп. поля
+     * Получить доп. поле сотрудника по ID
+     */
+    async getEmployeeMetadataAttributeById(requestParameters: GetEmployeeMetadataAttributeByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AttributeMetaInfo> {
+        const response = await this.getEmployeeMetadataAttributeByIdRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Запрос на получение всех доп. полей для сотрудников
+     * Получить доп. поля сотрудников
+     */
+    async getEmployeeMetadataAttributesRaw(requestParameters: GetEmployeeMetadataAttributesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AttributeMetaInfoList>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (requestParameters['accept'] != null) {
+            headerParameters['accept'] = String(requestParameters['accept']);
+        }
+
+        if (requestParameters['acceptEncoding'] != null) {
+            headerParameters['Accept-Encoding'] = String(requestParameters['acceptEncoding']);
+        }
+
+        if (this.configuration && (this.configuration.username !== undefined || this.configuration.password !== undefined)) {
+            headerParameters["Authorization"] = "Basic " + btoa(this.configuration.username + ":" + this.configuration.password);
+        }
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearerAuth", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/entity/employee/metadata/attributes`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => AttributeMetaInfoListFromJSON(jsonValue));
+    }
+
+    /**
+     * Запрос на получение всех доп. полей для сотрудников
+     * Получить доп. поля сотрудников
+     */
+    async getEmployeeMetadataAttributes(requestParameters: GetEmployeeMetadataAttributesRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AttributeMetaInfoList> {
+        const response = await this.getEmployeeMetadataAttributesRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -1184,6 +1453,78 @@ export class EmployeesApi extends runtime.BaseAPI {
     }
 
     /**
+     * Обновление доп. поля для сотрудников
+     * Обновить доп. поле сотрудника
+     */
+    async updateEmployeeMetadataAttributeRaw(requestParameters: UpdateEmployeeMetadataAttributeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AttributeMetaInfo>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling updateEmployeeMetadataAttribute().'
+            );
+        }
+
+        if (requestParameters['attributeMetaInfo'] == null) {
+            throw new runtime.RequiredError(
+                'attributeMetaInfo',
+                'Required parameter "attributeMetaInfo" was null or undefined when calling updateEmployeeMetadataAttribute().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (requestParameters['accept'] != null) {
+            headerParameters['accept'] = String(requestParameters['accept']);
+        }
+
+        if (requestParameters['acceptEncoding'] != null) {
+            headerParameters['Accept-Encoding'] = String(requestParameters['acceptEncoding']);
+        }
+
+        if (requestParameters['contentType'] != null) {
+            headerParameters['Content-Type'] = String(requestParameters['contentType']);
+        }
+
+        if (this.configuration && (this.configuration.username !== undefined || this.configuration.password !== undefined)) {
+            headerParameters["Authorization"] = "Basic " + btoa(this.configuration.username + ":" + this.configuration.password);
+        }
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearerAuth", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/entity/employee/metadata/attributes/{id}`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: AttributeMetaInfoToJSON(requestParameters['attributeMetaInfo']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => AttributeMetaInfoFromJSON(jsonValue));
+    }
+
+    /**
+     * Обновление доп. поля для сотрудников
+     * Обновить доп. поле сотрудника
+     */
+    async updateEmployeeMetadataAttribute(requestParameters: UpdateEmployeeMetadataAttributeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AttributeMetaInfo> {
+        const response = await this.updateEmployeeMetadataAttributeRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Запрос на изменение информации о правах Сотрудника. Изменять права может только сотрудник с правами Системный администратор.
      * Изменить права сотрудника
      */
@@ -1290,6 +1631,21 @@ export type CreateEmployeeContentTypeEnum = typeof CreateEmployeeContentTypeEnum
 /**
  * @export
  */
+export const CreateEmployeeMetadataAttributeAcceptEnum = {
+    ApplicationJson: 'application/json',
+    ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
+} as const;
+export type CreateEmployeeMetadataAttributeAcceptEnum = typeof CreateEmployeeMetadataAttributeAcceptEnum[keyof typeof CreateEmployeeMetadataAttributeAcceptEnum];
+/**
+ * @export
+ */
+export const CreateEmployeeMetadataAttributeContentTypeEnum = {
+    ApplicationJson: 'application/json'
+} as const;
+export type CreateEmployeeMetadataAttributeContentTypeEnum = typeof CreateEmployeeMetadataAttributeContentTypeEnum[keyof typeof CreateEmployeeMetadataAttributeContentTypeEnum];
+/**
+ * @export
+ */
 export const CreateEmployeesBatchAcceptEnum = {
     ApplicationJson: 'application/json',
     ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
@@ -1321,6 +1677,14 @@ export type DeleteEmployeeAcceptEnum = typeof DeleteEmployeeAcceptEnum[keyof typ
 /**
  * @export
  */
+export const DeleteEmployeeMetadataAttributeAcceptEnum = {
+    ApplicationJson: 'application/json',
+    ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
+} as const;
+export type DeleteEmployeeMetadataAttributeAcceptEnum = typeof DeleteEmployeeMetadataAttributeAcceptEnum[keyof typeof DeleteEmployeeMetadataAttributeAcceptEnum];
+/**
+ * @export
+ */
 export const DeleteEmployeesBatchAcceptEnum = {
     ApplicationJson: 'application/json',
     ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
@@ -1349,6 +1713,22 @@ export const GetEmployeeMetadataAcceptEnum = {
     ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
 } as const;
 export type GetEmployeeMetadataAcceptEnum = typeof GetEmployeeMetadataAcceptEnum[keyof typeof GetEmployeeMetadataAcceptEnum];
+/**
+ * @export
+ */
+export const GetEmployeeMetadataAttributeByIdAcceptEnum = {
+    ApplicationJson: 'application/json',
+    ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
+} as const;
+export type GetEmployeeMetadataAttributeByIdAcceptEnum = typeof GetEmployeeMetadataAttributeByIdAcceptEnum[keyof typeof GetEmployeeMetadataAttributeByIdAcceptEnum];
+/**
+ * @export
+ */
+export const GetEmployeeMetadataAttributesAcceptEnum = {
+    ApplicationJson: 'application/json',
+    ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
+} as const;
+export type GetEmployeeMetadataAttributesAcceptEnum = typeof GetEmployeeMetadataAttributesAcceptEnum[keyof typeof GetEmployeeMetadataAttributesAcceptEnum];
 /**
  * @export
  */
@@ -1428,6 +1808,21 @@ export const UpdateEmployeeContentTypeEnum = {
     ApplicationJson: 'application/json'
 } as const;
 export type UpdateEmployeeContentTypeEnum = typeof UpdateEmployeeContentTypeEnum[keyof typeof UpdateEmployeeContentTypeEnum];
+/**
+ * @export
+ */
+export const UpdateEmployeeMetadataAttributeAcceptEnum = {
+    ApplicationJson: 'application/json',
+    ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
+} as const;
+export type UpdateEmployeeMetadataAttributeAcceptEnum = typeof UpdateEmployeeMetadataAttributeAcceptEnum[keyof typeof UpdateEmployeeMetadataAttributeAcceptEnum];
+/**
+ * @export
+ */
+export const UpdateEmployeeMetadataAttributeContentTypeEnum = {
+    ApplicationJson: 'application/json'
+} as const;
+export type UpdateEmployeeMetadataAttributeContentTypeEnum = typeof UpdateEmployeeMetadataAttributeContentTypeEnum[keyof typeof UpdateEmployeeMetadataAttributeContentTypeEnum];
 /**
  * @export
  */

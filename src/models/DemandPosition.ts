@@ -81,7 +81,7 @@ export interface DemandPositionOwn {
      * @type {string}
      * @memberof DemandPosition
      */
-    readonly id?: string;
+    id?: string;
     /**
      * ID учетной записи
      * @type {string}
@@ -230,13 +230,14 @@ export function DemandPositionToJSON(json: any): DemandPosition {
     return DemandPositionToJSONTyped(json, false);
 }
 
-export function DemandPositionToJSONTyped(value?: Omit<DemandPosition, 'id'|'accountId'|'declaration'|'overhead'> | null, ignoreDiscriminator: boolean = false): any {
+export function DemandPositionToJSONTyped(value?: Omit<DemandPosition, 'accountId'|'declaration'|'overhead'> | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
     return {
         ...DemandPositionPolymorphicParent.EntityWithMetaToJSONTyped(value as any, true),
         'meta': MetaToJSON(value['meta']),
+        'id': value['id'],
         'assortment': ProductMarkerToJSON(value['assortment']),
         'cost': value['cost'],
         'discount': value['discount'],

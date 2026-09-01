@@ -123,7 +123,7 @@ export interface CounterpartyOwn {
      * @type {string}
      * @memberof Counterparty
      */
-    readonly id?: string;
+    id?: string;
     /**
      * ID синхронизации
      * @type {string}
@@ -476,13 +476,14 @@ export function CounterpartyToJSON(json: any): Counterparty {
     return CounterpartyToJSONTyped(json, false);
 }
 
-export function CounterpartyToJSONTyped(value?: Omit<Counterparty, 'id'|'accountId'|'created'|'updated'|'salesAmount'|'bonusPoints'> | null, ignoreDiscriminator: boolean = false): any {
+export function CounterpartyToJSONTyped(value?: Omit<Counterparty, 'accountId'|'created'|'updated'|'salesAmount'|'bonusPoints'> | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
     return {
         ...CounterpartyPolymorphicParent.AgentToJSONTyped(value as any, true),
         'meta': MetaToJSON(value['meta']),
+        'id': value['id'],
         'syncId': value['syncId'],
         'name': value['name'],
         'code': value['code'],

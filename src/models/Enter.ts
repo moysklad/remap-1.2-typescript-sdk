@@ -212,7 +212,7 @@ export interface EnterOwn {
      * @type {EnterPositionList}
      * @memberof Enter
      */
-    positions?: EnterPositionList | null;
+    positions?: EnterPositionList;
     /**
      * Напечатан ли документ
      * @type {boolean}

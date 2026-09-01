@@ -23,7 +23,7 @@ import type {
   CommissionReportOutPosition,
   DeleteRowResult,
   DocumentMetadata,
-  ErrorOrArray,
+  Errors,
   EventNote,
   EventNoteList,
   FileUpload,
@@ -48,8 +48,8 @@ import {
     DeleteRowResultToJSON,
     DocumentMetadataFromJSON,
     DocumentMetadataToJSON,
-    ErrorOrArrayFromJSON,
-    ErrorOrArrayToJSON,
+    ErrorsFromJSON,
+    ErrorsToJSON,
     EventNoteFromJSON,
     EventNoteToJSON,
     EventNoteListFromJSON,
@@ -119,7 +119,7 @@ export interface CreateCommissionReportOutNoteRequest {
 
 export interface CreateCommissionReportOutPositionRequest {
     id: string;
-    commissionReportOutPosition: Omit<CommissionReportOutPosition, 'id'|'accountId'>;
+    commissionReportOutPosition: Omit<CommissionReportOutPosition, 'accountId'>;
     expand?: string;
     accept?: CreateCommissionReportOutPositionAcceptEnum;
     acceptEncoding?: string;
@@ -320,7 +320,7 @@ export interface UpdateCommissionReportOutNoteRequest {
 export interface UpdateCommissionReportOutPositionRequest {
     id: string;
     positionId: string;
-    commissionReportOutPosition: Omit<CommissionReportOutPosition, 'id'|'accountId'>;
+    commissionReportOutPosition: Omit<CommissionReportOutPosition, 'accountId'>;
     expand?: string;
     accept?: UpdateCommissionReportOutPositionAcceptEnum;
     acceptEncoding?: string;

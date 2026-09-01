@@ -18,7 +18,7 @@ import type {
   BonusProgram,
   BonusProgramList,
   DeleteRowResult,
-  ErrorOrArray,
+  Errors,
 } from '../models/index.js';
 import {
     BonusProgramFromJSON,
@@ -27,8 +27,8 @@ import {
     BonusProgramListToJSON,
     DeleteRowResultFromJSON,
     DeleteRowResultToJSON,
-    ErrorOrArrayFromJSON,
-    ErrorOrArrayToJSON,
+    ErrorsFromJSON,
+    ErrorsToJSON,
 } from '../models/index.js';
 
 export interface CreateBonusProgramRequest {

@@ -12,6 +12,13 @@
  * Do not edit the class manually.
  */
 
+import type { Errors } from './Errors.js';
+import {
+    instanceOfErrors,
+    ErrorsFromJSON,
+    ErrorsFromJSONTyped,
+    ErrorsToJSON,
+} from './Errors.js';
 import type { FactureIn } from './FactureIn.js';
 import {
     instanceOfFactureIn,
@@ -19,20 +26,13 @@ import {
     FactureInFromJSONTyped,
     FactureInToJSON,
 } from './FactureIn.js';
-import type { ModelError } from './ModelError.js';
-import {
-    instanceOfModelError,
-    ModelErrorFromJSON,
-    ModelErrorFromJSONTyped,
-    ModelErrorToJSON,
-} from './ModelError.js';
 
 /**
  * @type CreateFactureInsBatch200ResponseInner
  * 
  * @export
  */
-export type CreateFactureInsBatch200ResponseInner = FactureIn | ModelError;
+export type CreateFactureInsBatch200ResponseInner = Errors | FactureIn;
 
 export function CreateFactureInsBatch200ResponseInnerFromJSON(json: any): CreateFactureInsBatch200ResponseInner {
     return CreateFactureInsBatch200ResponseInnerFromJSONTyped(json, false);
@@ -45,11 +45,11 @@ export function CreateFactureInsBatch200ResponseInnerFromJSONTyped(json: any, ig
     if (typeof json !== 'object') {
         return json;
     }
+    if (instanceOfErrors(json)) {
+        return ErrorsFromJSONTyped(json, true);
+    }
     if (instanceOfFactureIn(json)) {
         return FactureInFromJSONTyped(json, true);
-    }
-    if (instanceOfModelError(json)) {
-        return ModelErrorFromJSONTyped(json, true);
     }
 
     return {} as any;
@@ -66,11 +66,11 @@ export function CreateFactureInsBatch200ResponseInnerToJSONTyped(value?: CreateF
     if (typeof value !== 'object') {
         return value;
     }
+    if (instanceOfErrors(value)) {
+        return ErrorsToJSON(value as Errors);
+    }
     if (instanceOfFactureIn(value)) {
         return FactureInToJSON(value as FactureIn);
-    }
-    if (instanceOfModelError(value)) {
-        return ModelErrorToJSON(value as ModelError);
     }
 
     return {};

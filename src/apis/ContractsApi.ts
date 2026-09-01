@@ -22,7 +22,7 @@ import type {
   ContractList,
   DeleteRowResult,
   DocumentMetadata,
-  ErrorOrArray,
+  Errors,
   State,
 } from '../models/index.js';
 import {
@@ -40,8 +40,8 @@ import {
     DeleteRowResultToJSON,
     DocumentMetadataFromJSON,
     DocumentMetadataToJSON,
-    ErrorOrArrayFromJSON,
-    ErrorOrArrayToJSON,
+    ErrorsFromJSON,
+    ErrorsToJSON,
     StateFromJSON,
     StateToJSON,
 } from '../models/index.js';

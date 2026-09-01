@@ -19,20 +19,20 @@ import {
     EnterPositionFromJSONTyped,
     EnterPositionToJSON,
 } from './EnterPosition.js';
-import type { ModelError } from './ModelError.js';
+import type { Errors } from './Errors.js';
 import {
-    instanceOfModelError,
-    ModelErrorFromJSON,
-    ModelErrorFromJSONTyped,
-    ModelErrorToJSON,
-} from './ModelError.js';
+    instanceOfErrors,
+    ErrorsFromJSON,
+    ErrorsFromJSONTyped,
+    ErrorsToJSON,
+} from './Errors.js';
 
 /**
  * @type CreateEnterPositions200ResponseInner
  * 
  * @export
  */
-export type CreateEnterPositions200ResponseInner = EnterPosition | ModelError;
+export type CreateEnterPositions200ResponseInner = EnterPosition | Errors;
 
 export function CreateEnterPositions200ResponseInnerFromJSON(json: any): CreateEnterPositions200ResponseInner {
     return CreateEnterPositions200ResponseInnerFromJSONTyped(json, false);
@@ -48,8 +48,8 @@ export function CreateEnterPositions200ResponseInnerFromJSONTyped(json: any, ign
     if (instanceOfEnterPosition(json)) {
         return EnterPositionFromJSONTyped(json, true);
     }
-    if (instanceOfModelError(json)) {
-        return ModelErrorFromJSONTyped(json, true);
+    if (instanceOfErrors(json)) {
+        return ErrorsFromJSONTyped(json, true);
     }
 
     return {} as any;
@@ -69,8 +69,8 @@ export function CreateEnterPositions200ResponseInnerToJSONTyped(value?: CreateEn
     if (instanceOfEnterPosition(value)) {
         return EnterPositionToJSON(value as EnterPosition);
     }
-    if (instanceOfModelError(value)) {
-        return ModelErrorToJSON(value as ModelError);
+    if (instanceOfErrors(value)) {
+        return ErrorsToJSON(value as Errors);
     }
 
     return {};

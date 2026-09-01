@@ -17,21 +17,24 @@ import * as runtime from '../runtime.js';
 import type {
   BatchResponseEntity,
   DeleteRowResult,
-  ErrorOrArray,
+  Errors,
   RetailStore,
   RetailStoreList,
+  RetailStoreUpsert,
 } from '../models/index.js';
 import {
     BatchResponseEntityFromJSON,
     BatchResponseEntityToJSON,
     DeleteRowResultFromJSON,
     DeleteRowResultToJSON,
-    ErrorOrArrayFromJSON,
-    ErrorOrArrayToJSON,
+    ErrorsFromJSON,
+    ErrorsToJSON,
     RetailStoreFromJSON,
     RetailStoreToJSON,
     RetailStoreListFromJSON,
     RetailStoreListToJSON,
+    RetailStoreUpsertFromJSON,
+    RetailStoreUpsertToJSON,
 } from '../models/index.js';
 
 export interface AddMasterRetailStoreRequest {
@@ -44,7 +47,7 @@ export interface AddMasterRetailStoreRequest {
 }
 
 export interface CreateRetailStoreRequest {
-    retailStore: Omit<RetailStore, 'id'|'accountId'|'externalCode'|'updated'|'authTokenAttached'|'ofdEnabled'>;
+    retailStoreUpsert: Omit<RetailStoreUpsert, 'accountId'|'externalCode'|'updated'|'authTokenAttached'|'ofdEnabled'>;
     accept?: CreateRetailStoreAcceptEnum;
     acceptEncoding?: string;
     expand?: string;
@@ -52,7 +55,7 @@ export interface CreateRetailStoreRequest {
 }
 
 export interface CreateRetailStoresBatchRequest {
-    retailStore: Array<RetailStore>;
+    retailStoreUpsert: Array<RetailStoreUpsert>;
     accept?: CreateRetailStoresBatchAcceptEnum;
     acceptEncoding?: string;
     expand?: string;
@@ -104,7 +107,7 @@ export interface GetRetailStoresRequest {
 
 export interface UpdateRetailStoreRequest {
     id: string;
-    retailStore: Omit<RetailStore, 'id'|'accountId'|'externalCode'|'updated'|'authTokenAttached'|'ofdEnabled'>;
+    retailStoreUpsert: Omit<RetailStoreUpsert, 'accountId'|'externalCode'|'updated'|'authTokenAttached'|'ofdEnabled'>;
     expand?: string;
     accept?: UpdateRetailStoreAcceptEnum;
     acceptEncoding?: string;
@@ -194,10 +197,10 @@ export class RetailStoresApi extends runtime.BaseAPI {
      * Создать точку продаж
      */
     async createRetailStoreRaw(requestParameters: CreateRetailStoreRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<RetailStore>> {
-        if (requestParameters['retailStore'] == null) {
+        if (requestParameters['retailStoreUpsert'] == null) {
             throw new runtime.RequiredError(
-                'retailStore',
-                'Required parameter "retailStore" was null or undefined when calling createRetailStore().'
+                'retailStoreUpsert',
+                'Required parameter "retailStoreUpsert" was null or undefined when calling createRetailStore().'
             );
         }
 
@@ -242,7 +245,7 @@ export class RetailStoresApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: RetailStoreToJSON(requestParameters['retailStore']),
+            body: RetailStoreUpsertToJSON(requestParameters['retailStoreUpsert']),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => RetailStoreFromJSON(jsonValue));
@@ -260,10 +263,10 @@ export class RetailStoresApi extends runtime.BaseAPI {
      * Массовое создание и обновление точек продаж
      */
     async createRetailStoresBatchRaw(requestParameters: CreateRetailStoresBatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<BatchResponseEntity>>> {
-        if (requestParameters['retailStore'] == null) {
+        if (requestParameters['retailStoreUpsert'] == null) {
             throw new runtime.RequiredError(
-                'retailStore',
-                'Required parameter "retailStore" was null or undefined when calling createRetailStoresBatch().'
+                'retailStoreUpsert',
+                'Required parameter "retailStoreUpsert" was null or undefined when calling createRetailStoresBatch().'
             );
         }
 
@@ -308,7 +311,7 @@ export class RetailStoresApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['retailStore']!.map(RetailStoreToJSON),
+            body: requestParameters['retailStoreUpsert']!.map(RetailStoreUpsertToJSON),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(BatchResponseEntityFromJSON));
@@ -662,10 +665,10 @@ export class RetailStoresApi extends runtime.BaseAPI {
             );
         }
 
-        if (requestParameters['retailStore'] == null) {
+        if (requestParameters['retailStoreUpsert'] == null) {
             throw new runtime.RequiredError(
-                'retailStore',
-                'Required parameter "retailStore" was null or undefined when calling updateRetailStore().'
+                'retailStoreUpsert',
+                'Required parameter "retailStoreUpsert" was null or undefined when calling updateRetailStore().'
             );
         }
 
@@ -711,7 +714,7 @@ export class RetailStoresApi extends runtime.BaseAPI {
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: RetailStoreToJSON(requestParameters['retailStore']),
+            body: RetailStoreUpsertToJSON(requestParameters['retailStoreUpsert']),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => RetailStoreFromJSON(jsonValue));

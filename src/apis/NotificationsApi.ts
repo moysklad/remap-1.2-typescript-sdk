@@ -15,18 +15,54 @@
 
 import * as runtime from '../runtime.js';
 import type {
-  ErrorOrArray,
+  Errors,
+  NotificationAbstract,
+  NotificationList,
   NotificationSettings,
 } from '../models/index.js';
 import {
-    ErrorOrArrayFromJSON,
-    ErrorOrArrayToJSON,
+    ErrorsFromJSON,
+    ErrorsToJSON,
+    NotificationAbstractFromJSON,
+    NotificationAbstractToJSON,
+    NotificationListFromJSON,
+    NotificationListToJSON,
     NotificationSettingsFromJSON,
     NotificationSettingsToJSON,
 } from '../models/index.js';
 
+export interface DeleteNotificationRequest {
+    id: string;
+    accept?: DeleteNotificationAcceptEnum;
+    acceptEncoding?: string;
+}
+
+export interface GetNotificationByIdRequest {
+    id: string;
+    accept?: GetNotificationByIdAcceptEnum;
+    acceptEncoding?: string;
+}
+
 export interface GetNotificationSettingsRequest {
     accept?: GetNotificationSettingsAcceptEnum;
+    acceptEncoding?: string;
+}
+
+export interface GetNotificationsRequest {
+    limit?: number;
+    offset?: number;
+    accept?: GetNotificationsAcceptEnum;
+    acceptEncoding?: string;
+}
+
+export interface MarkAllNotificationsAsReadRequest {
+    accept?: MarkAllNotificationsAsReadAcceptEnum;
+    acceptEncoding?: string;
+}
+
+export interface MarkNotificationAsReadRequest {
+    id: string;
+    accept?: MarkNotificationAsReadAcceptEnum;
     acceptEncoding?: string;
 }
 
@@ -41,6 +77,121 @@ export interface UpdateNotificationSettingsRequest {
  * 
  */
 export class NotificationsApi extends runtime.BaseAPI {
+
+    /**
+     * Удаление уведомления текущего пользователя с указанным id
+     * Удалить уведомление
+     */
+    async deleteNotificationRaw(requestParameters: DeleteNotificationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling deleteNotification().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (requestParameters['accept'] != null) {
+            headerParameters['accept'] = String(requestParameters['accept']);
+        }
+
+        if (requestParameters['acceptEncoding'] != null) {
+            headerParameters['Accept-Encoding'] = String(requestParameters['acceptEncoding']);
+        }
+
+        if (this.configuration && (this.configuration.username !== undefined || this.configuration.password !== undefined)) {
+            headerParameters["Authorization"] = "Basic " + btoa(this.configuration.username + ":" + this.configuration.password);
+        }
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearerAuth", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/notification/{id}`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Удаление уведомления текущего пользователя с указанным id
+     * Удалить уведомление
+     */
+    async deleteNotification(requestParameters: DeleteNotificationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.deleteNotificationRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Запрос на получение уведомления с указанным id
+     * Получить уведомление
+     */
+    async getNotificationByIdRaw(requestParameters: GetNotificationByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<NotificationAbstract>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling getNotificationById().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (requestParameters['accept'] != null) {
+            headerParameters['accept'] = String(requestParameters['accept']);
+        }
+
+        if (requestParameters['acceptEncoding'] != null) {
+            headerParameters['Accept-Encoding'] = String(requestParameters['acceptEncoding']);
+        }
+
+        if (this.configuration && (this.configuration.username !== undefined || this.configuration.password !== undefined)) {
+            headerParameters["Authorization"] = "Basic " + btoa(this.configuration.username + ":" + this.configuration.password);
+        }
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearerAuth", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/notification/{id}`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => NotificationAbstractFromJSON(jsonValue));
+    }
+
+    /**
+     * Запрос на получение уведомления с указанным id
+     * Получить уведомление
+     */
+    async getNotificationById(requestParameters: GetNotificationByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<NotificationAbstract> {
+        const response = await this.getNotificationByIdRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
 
     /**
      * Запрос на получение настроек уведомлений текущего пользователя
@@ -90,6 +241,170 @@ export class NotificationsApi extends runtime.BaseAPI {
     async getNotificationSettings(requestParameters: GetNotificationSettingsRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<NotificationSettings> {
         const response = await this.getNotificationSettingsRaw(requestParameters, initOverrides);
         return await response.value();
+    }
+
+    /**
+     * Запрос на получение ленты уведомлений текущего пользователя
+     * Получить ленту уведомлений
+     */
+    async getNotificationsRaw(requestParameters: GetNotificationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<NotificationList>> {
+        const queryParameters: any = {};
+
+        if (requestParameters['limit'] != null) {
+            queryParameters['limit'] = requestParameters['limit'];
+        }
+
+        if (requestParameters['offset'] != null) {
+            queryParameters['offset'] = requestParameters['offset'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (requestParameters['accept'] != null) {
+            headerParameters['accept'] = String(requestParameters['accept']);
+        }
+
+        if (requestParameters['acceptEncoding'] != null) {
+            headerParameters['Accept-Encoding'] = String(requestParameters['acceptEncoding']);
+        }
+
+        if (this.configuration && (this.configuration.username !== undefined || this.configuration.password !== undefined)) {
+            headerParameters["Authorization"] = "Basic " + btoa(this.configuration.username + ":" + this.configuration.password);
+        }
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearerAuth", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/notification`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => NotificationListFromJSON(jsonValue));
+    }
+
+    /**
+     * Запрос на получение ленты уведомлений текущего пользователя
+     * Получить ленту уведомлений
+     */
+    async getNotifications(requestParameters: GetNotificationsRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<NotificationList> {
+        const response = await this.getNotificationsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Отметить все уведомления текущего пользователя как прочитанные
+     * Отметить все уведомления как прочитанные
+     */
+    async markAllNotificationsAsReadRaw(requestParameters: MarkAllNotificationsAsReadRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (requestParameters['accept'] != null) {
+            headerParameters['accept'] = String(requestParameters['accept']);
+        }
+
+        if (requestParameters['acceptEncoding'] != null) {
+            headerParameters['Accept-Encoding'] = String(requestParameters['acceptEncoding']);
+        }
+
+        if (this.configuration && (this.configuration.username !== undefined || this.configuration.password !== undefined)) {
+            headerParameters["Authorization"] = "Basic " + btoa(this.configuration.username + ":" + this.configuration.password);
+        }
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearerAuth", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/notification/markasreadall`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Отметить все уведомления текущего пользователя как прочитанные
+     * Отметить все уведомления как прочитанные
+     */
+    async markAllNotificationsAsRead(requestParameters: MarkAllNotificationsAsReadRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.markAllNotificationsAsReadRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Отметить уведомление текущего пользователя с указанным id как прочитанное
+     * Отметить уведомление как прочитанное
+     */
+    async markNotificationAsReadRaw(requestParameters: MarkNotificationAsReadRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling markNotificationAsRead().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (requestParameters['accept'] != null) {
+            headerParameters['accept'] = String(requestParameters['accept']);
+        }
+
+        if (requestParameters['acceptEncoding'] != null) {
+            headerParameters['Accept-Encoding'] = String(requestParameters['acceptEncoding']);
+        }
+
+        if (this.configuration && (this.configuration.username !== undefined || this.configuration.password !== undefined)) {
+            headerParameters["Authorization"] = "Basic " + btoa(this.configuration.username + ":" + this.configuration.password);
+        }
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearerAuth", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/notification/{id}/markasread`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Отметить уведомление текущего пользователя с указанным id как прочитанное
+     * Отметить уведомление как прочитанное
+     */
+    async markNotificationAsRead(requestParameters: MarkNotificationAsReadRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.markNotificationAsReadRaw(requestParameters, initOverrides);
     }
 
     /**
@@ -161,11 +476,51 @@ export class NotificationsApi extends runtime.BaseAPI {
 /**
  * @export
  */
+export const DeleteNotificationAcceptEnum = {
+    ApplicationJson: 'application/json',
+    ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
+} as const;
+export type DeleteNotificationAcceptEnum = typeof DeleteNotificationAcceptEnum[keyof typeof DeleteNotificationAcceptEnum];
+/**
+ * @export
+ */
+export const GetNotificationByIdAcceptEnum = {
+    ApplicationJson: 'application/json',
+    ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
+} as const;
+export type GetNotificationByIdAcceptEnum = typeof GetNotificationByIdAcceptEnum[keyof typeof GetNotificationByIdAcceptEnum];
+/**
+ * @export
+ */
 export const GetNotificationSettingsAcceptEnum = {
     ApplicationJson: 'application/json',
     ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
 } as const;
 export type GetNotificationSettingsAcceptEnum = typeof GetNotificationSettingsAcceptEnum[keyof typeof GetNotificationSettingsAcceptEnum];
+/**
+ * @export
+ */
+export const GetNotificationsAcceptEnum = {
+    ApplicationJson: 'application/json',
+    ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
+} as const;
+export type GetNotificationsAcceptEnum = typeof GetNotificationsAcceptEnum[keyof typeof GetNotificationsAcceptEnum];
+/**
+ * @export
+ */
+export const MarkAllNotificationsAsReadAcceptEnum = {
+    ApplicationJson: 'application/json',
+    ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
+} as const;
+export type MarkAllNotificationsAsReadAcceptEnum = typeof MarkAllNotificationsAsReadAcceptEnum[keyof typeof MarkAllNotificationsAsReadAcceptEnum];
+/**
+ * @export
+ */
+export const MarkNotificationAsReadAcceptEnum = {
+    ApplicationJson: 'application/json',
+    ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
+} as const;
+export type MarkNotificationAsReadAcceptEnum = typeof MarkNotificationAsReadAcceptEnum[keyof typeof MarkNotificationAsReadAcceptEnum];
 /**
  * @export
  */

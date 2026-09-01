@@ -21,7 +21,7 @@ import type {
   CreateInternalOrderPositions200ResponseInner,
   DeleteRowResult,
   DocumentMetadata,
-  ErrorOrArray,
+  Errors,
   InternalOrder,
   InternalOrderList,
   InternalOrderPosition,
@@ -42,8 +42,8 @@ import {
     DeleteRowResultToJSON,
     DocumentMetadataFromJSON,
     DocumentMetadataToJSON,
-    ErrorOrArrayFromJSON,
-    ErrorOrArrayToJSON,
+    ErrorsFromJSON,
+    ErrorsToJSON,
     InternalOrderFromJSON,
     InternalOrderToJSON,
     InternalOrderListFromJSON,
@@ -97,7 +97,7 @@ export interface CreateInternalOrderMetadataStatesBatchRequest {
 
 export interface CreateInternalOrderPositionRequest {
     id: string;
-    internalOrderPosition: Omit<InternalOrderPosition, 'id'|'accountId'>;
+    internalOrderPosition: Omit<InternalOrderPosition, 'accountId'>;
     expand?: string;
     accept?: CreateInternalOrderPositionAcceptEnum;
     acceptEncoding?: string;
@@ -257,7 +257,7 @@ export interface UpdateInternalOrderMetadataStateByIdRequest {
 export interface UpdateInternalOrderPositionRequest {
     id: string;
     positionId: string;
-    internalOrderPosition: Omit<InternalOrderPosition, 'id'|'accountId'>;
+    internalOrderPosition: Omit<InternalOrderPosition, 'accountId'>;
     expand?: string;
     accept?: UpdateInternalOrderPositionAcceptEnum;
     acceptEncoding?: string;

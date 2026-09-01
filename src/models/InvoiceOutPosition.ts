@@ -53,7 +53,7 @@ export interface InvoiceOutPositionOwn {
      * @type {string}
      * @memberof InvoiceOutPosition
      */
-    readonly id?: string;
+    id?: string;
     /**
      * ID учетной записи
      * @type {string}
@@ -140,13 +140,14 @@ export function InvoiceOutPositionToJSON(json: any): InvoiceOutPosition {
     return InvoiceOutPositionToJSONTyped(json, false);
 }
 
-export function InvoiceOutPositionToJSONTyped(value?: Omit<InvoiceOutPosition, 'id'|'accountId'> | null, ignoreDiscriminator: boolean = false): any {
+export function InvoiceOutPositionToJSONTyped(value?: Omit<InvoiceOutPosition, 'accountId'> | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
     return {
         ...InvoiceOutPositionPolymorphicParent.EntityWithMetaToJSONTyped(value as any, true),
         'meta': MetaToJSON(value['meta']),
+        'id': value['id'],
         'quantity': value['quantity'],
         'price': value['price'],
         'discount': value['discount'],

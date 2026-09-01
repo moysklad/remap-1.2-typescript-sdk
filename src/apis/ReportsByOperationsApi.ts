@@ -18,7 +18,7 @@ import type {
   ByOperationsInTransitList,
   ByOperationsReserveList,
   ByOperationsStockList,
-  ErrorOrArray,
+  Errors,
 } from '../models/index.js';
 import {
     ByOperationsInTransitListFromJSON,
@@ -27,8 +27,8 @@ import {
     ByOperationsReserveListToJSON,
     ByOperationsStockListFromJSON,
     ByOperationsStockListToJSON,
-    ErrorOrArrayFromJSON,
-    ErrorOrArrayToJSON,
+    ErrorsFromJSON,
+    ErrorsToJSON,
 } from '../models/index.js';
 
 export interface GetByOperationsInTransitRequest {

@@ -18,7 +18,7 @@ import type {
   BatchResponseEntity,
   BonusTransaction,
   DeleteRowResult,
-  ErrorOrArray,
+  Errors,
 } from '../models/index.js';
 import {
     BatchResponseEntityFromJSON,
@@ -27,8 +27,8 @@ import {
     BonusTransactionToJSON,
     DeleteRowResultFromJSON,
     DeleteRowResultToJSON,
-    ErrorOrArrayFromJSON,
-    ErrorOrArrayToJSON,
+    ErrorsFromJSON,
+    ErrorsToJSON,
 } from '../models/index.js';
 
 export interface CreateBonusTransactionRequest {

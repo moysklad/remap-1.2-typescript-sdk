@@ -81,7 +81,7 @@ export interface SupplyPositionOwn {
      * @type {string}
      * @memberof SupplyPosition
      */
-    readonly id?: string;
+    id?: string;
     /**
      * ID учетной записи
      * @type {string}
@@ -220,13 +220,14 @@ export function SupplyPositionToJSON(json: any): SupplyPosition {
     return SupplyPositionToJSONTyped(json, false);
 }
 
-export function SupplyPositionToJSONTyped(value?: Omit<SupplyPosition, 'id'|'accountId'|'overhead'> | null, ignoreDiscriminator: boolean = false): any {
+export function SupplyPositionToJSONTyped(value?: Omit<SupplyPosition, 'accountId'|'overhead'> | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
     return {
         ...SupplyPositionPolymorphicParent.EntityWithMetaToJSONTyped(value as any, true),
         'meta': MetaToJSON(value['meta']),
+        'id': value['id'],
         'assortment': ProductMarkerToJSON(value['assortment']),
         'country': CountryToJSON(value['country']),
         'discount': value['discount'],

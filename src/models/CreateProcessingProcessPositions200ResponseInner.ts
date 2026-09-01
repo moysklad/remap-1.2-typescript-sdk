@@ -12,13 +12,13 @@
  * Do not edit the class manually.
  */
 
-import type { ModelError } from './ModelError.js';
+import type { Errors } from './Errors.js';
 import {
-    instanceOfModelError,
-    ModelErrorFromJSON,
-    ModelErrorFromJSONTyped,
-    ModelErrorToJSON,
-} from './ModelError.js';
+    instanceOfErrors,
+    ErrorsFromJSON,
+    ErrorsFromJSONTyped,
+    ErrorsToJSON,
+} from './Errors.js';
 import type { ProcessingProcessPosition } from './ProcessingProcessPosition.js';
 import {
     instanceOfProcessingProcessPosition,
@@ -32,7 +32,7 @@ import {
  * 
  * @export
  */
-export type CreateProcessingProcessPositions200ResponseInner = ModelError | ProcessingProcessPosition;
+export type CreateProcessingProcessPositions200ResponseInner = Errors | ProcessingProcessPosition;
 
 export function CreateProcessingProcessPositions200ResponseInnerFromJSON(json: any): CreateProcessingProcessPositions200ResponseInner {
     return CreateProcessingProcessPositions200ResponseInnerFromJSONTyped(json, false);
@@ -45,8 +45,8 @@ export function CreateProcessingProcessPositions200ResponseInnerFromJSONTyped(js
     if (typeof json !== 'object') {
         return json;
     }
-    if (instanceOfModelError(json)) {
-        return ModelErrorFromJSONTyped(json, true);
+    if (instanceOfErrors(json)) {
+        return ErrorsFromJSONTyped(json, true);
     }
     if (instanceOfProcessingProcessPosition(json)) {
         return ProcessingProcessPositionFromJSONTyped(json, true);
@@ -66,8 +66,8 @@ export function CreateProcessingProcessPositions200ResponseInnerToJSONTyped(valu
     if (typeof value !== 'object') {
         return value;
     }
-    if (instanceOfModelError(value)) {
-        return ModelErrorToJSON(value as ModelError);
+    if (instanceOfErrors(value)) {
+        return ErrorsToJSON(value as Errors);
     }
     if (instanceOfProcessingProcessPosition(value)) {
         return ProcessingProcessPositionToJSON(value as ProcessingProcessPosition);

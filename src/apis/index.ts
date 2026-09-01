@@ -33,6 +33,7 @@ export * from './InvoiceInsApi.js';
 export * from './InvoiceOutsApi.js';
 export * from './LabelsApi.js';
 export * from './LossesApi.js';
+export * from './MetadataApi.js';
 export * from './MovesApi.js';
 export * from './NotificationsApi.js';
 export * from './OrganizationsApi.js';

@@ -19,20 +19,20 @@ import {
     CommissionReportInPositionFromJSONTyped,
     CommissionReportInPositionToJSON,
 } from './CommissionReportInPosition.js';
-import type { ModelError } from './ModelError.js';
+import type { Errors } from './Errors.js';
 import {
-    instanceOfModelError,
-    ModelErrorFromJSON,
-    ModelErrorFromJSONTyped,
-    ModelErrorToJSON,
-} from './ModelError.js';
+    instanceOfErrors,
+    ErrorsFromJSON,
+    ErrorsFromJSONTyped,
+    ErrorsToJSON,
+} from './Errors.js';
 
 /**
  * @type CreateCommissionReportInPositions200ResponseInner
  * 
  * @export
  */
-export type CreateCommissionReportInPositions200ResponseInner = CommissionReportInPosition | ModelError;
+export type CreateCommissionReportInPositions200ResponseInner = CommissionReportInPosition | Errors;
 
 export function CreateCommissionReportInPositions200ResponseInnerFromJSON(json: any): CreateCommissionReportInPositions200ResponseInner {
     return CreateCommissionReportInPositions200ResponseInnerFromJSONTyped(json, false);
@@ -48,8 +48,8 @@ export function CreateCommissionReportInPositions200ResponseInnerFromJSONTyped(j
     if (instanceOfCommissionReportInPosition(json)) {
         return CommissionReportInPositionFromJSONTyped(json, true);
     }
-    if (instanceOfModelError(json)) {
-        return ModelErrorFromJSONTyped(json, true);
+    if (instanceOfErrors(json)) {
+        return ErrorsFromJSONTyped(json, true);
     }
 
     return {} as any;
@@ -69,8 +69,8 @@ export function CreateCommissionReportInPositions200ResponseInnerToJSONTyped(val
     if (instanceOfCommissionReportInPosition(value)) {
         return CommissionReportInPositionToJSON(value as CommissionReportInPosition);
     }
-    if (instanceOfModelError(value)) {
-        return ModelErrorToJSON(value as ModelError);
+    if (instanceOfErrors(value)) {
+        return ErrorsToJSON(value as Errors);
     }
 
     return {};

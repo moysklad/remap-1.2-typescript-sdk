@@ -21,8 +21,9 @@ import type {
   EmissionOrderList,
   EmissionOrderPosition,
   EmissionOrderPositionList,
-  ErrorOrArray,
+  Errors,
   State,
+  StateRowResult,
 } from '../models/index.js';
 import {
     BatchResponseEntityFromJSON,
@@ -37,10 +38,12 @@ import {
     EmissionOrderPositionToJSON,
     EmissionOrderPositionListFromJSON,
     EmissionOrderPositionListToJSON,
-    ErrorOrArrayFromJSON,
-    ErrorOrArrayToJSON,
+    ErrorsFromJSON,
+    ErrorsToJSON,
     StateFromJSON,
     StateToJSON,
+    StateRowResultFromJSON,
+    StateRowResultToJSON,
 } from '../models/index.js';
 
 export interface CreateEmissionOrderRequest {
@@ -57,6 +60,20 @@ export interface CreateEmissionOrderBatchRequest {
     accept?: CreateEmissionOrderBatchAcceptEnum;
     acceptEncoding?: string;
     contentType?: CreateEmissionOrderBatchContentTypeEnum;
+}
+
+export interface CreateEmissionOrderMetadataStateRequest {
+    state: Omit<State, 'id'|'accountId'|'entityType'>;
+    accept?: CreateEmissionOrderMetadataStateAcceptEnum;
+    acceptEncoding?: string;
+    contentType?: CreateEmissionOrderMetadataStateContentTypeEnum;
+}
+
+export interface CreateEmissionOrderMetadataStatesBatchRequest {
+    state: Array<State>;
+    accept?: CreateEmissionOrderMetadataStatesBatchAcceptEnum;
+    acceptEncoding?: string;
+    contentType?: CreateEmissionOrderMetadataStatesBatchContentTypeEnum;
 }
 
 export interface CreateEmissionOrderPositionRequest {
@@ -296,6 +313,130 @@ export class EmissionOrdersApi extends runtime.BaseAPI {
      */
     async createEmissionOrderBatch(requestParameters: CreateEmissionOrderBatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<BatchResponseEntity>> {
         const response = await this.createEmissionOrderBatchRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Создать статус Заказа кодов маркировки
+     */
+    async createEmissionOrderMetadataStateRaw(requestParameters: CreateEmissionOrderMetadataStateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<State>> {
+        if (requestParameters['state'] == null) {
+            throw new runtime.RequiredError(
+                'state',
+                'Required parameter "state" was null or undefined when calling createEmissionOrderMetadataState().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (requestParameters['accept'] != null) {
+            headerParameters['accept'] = String(requestParameters['accept']);
+        }
+
+        if (requestParameters['acceptEncoding'] != null) {
+            headerParameters['Accept-Encoding'] = String(requestParameters['acceptEncoding']);
+        }
+
+        if (requestParameters['contentType'] != null) {
+            headerParameters['Content-Type'] = String(requestParameters['contentType']);
+        }
+
+        if (this.configuration && (this.configuration.username !== undefined || this.configuration.password !== undefined)) {
+            headerParameters["Authorization"] = "Basic " + btoa(this.configuration.username + ":" + this.configuration.password);
+        }
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearerAuth", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/entity/emissionorder/metadata/states`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: StateToJSON(requestParameters['state']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => StateFromJSON(jsonValue));
+    }
+
+    /**
+     * Создать статус Заказа кодов маркировки
+     */
+    async createEmissionOrderMetadataState(requestParameters: CreateEmissionOrderMetadataStateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<State> {
+        const response = await this.createEmissionOrderMetadataStateRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Массовое создание и обновление статусов Заказа кодов маркировки
+     */
+    async createEmissionOrderMetadataStatesBatchRaw(requestParameters: CreateEmissionOrderMetadataStatesBatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<StateRowResult>>> {
+        if (requestParameters['state'] == null) {
+            throw new runtime.RequiredError(
+                'state',
+                'Required parameter "state" was null or undefined when calling createEmissionOrderMetadataStatesBatch().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (requestParameters['accept'] != null) {
+            headerParameters['accept'] = String(requestParameters['accept']);
+        }
+
+        if (requestParameters['acceptEncoding'] != null) {
+            headerParameters['Accept-Encoding'] = String(requestParameters['acceptEncoding']);
+        }
+
+        if (requestParameters['contentType'] != null) {
+            headerParameters['Content-Type'] = String(requestParameters['contentType']);
+        }
+
+        if (this.configuration && (this.configuration.username !== undefined || this.configuration.password !== undefined)) {
+            headerParameters["Authorization"] = "Basic " + btoa(this.configuration.username + ":" + this.configuration.password);
+        }
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearerAuth", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/entity/emissionorder/metadata/states/batch`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['state']!.map(StateToJSON),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(StateRowResultFromJSON));
+    }
+
+    /**
+     * Массовое создание и обновление статусов Заказа кодов маркировки
+     */
+    async createEmissionOrderMetadataStatesBatch(requestParameters: CreateEmissionOrderMetadataStatesBatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<StateRowResult>> {
+        const response = await this.createEmissionOrderMetadataStatesBatchRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -1156,6 +1297,36 @@ export const CreateEmissionOrderBatchContentTypeEnum = {
     ApplicationJson: 'application/json'
 } as const;
 export type CreateEmissionOrderBatchContentTypeEnum = typeof CreateEmissionOrderBatchContentTypeEnum[keyof typeof CreateEmissionOrderBatchContentTypeEnum];
+/**
+ * @export
+ */
+export const CreateEmissionOrderMetadataStateAcceptEnum = {
+    ApplicationJson: 'application/json',
+    ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
+} as const;
+export type CreateEmissionOrderMetadataStateAcceptEnum = typeof CreateEmissionOrderMetadataStateAcceptEnum[keyof typeof CreateEmissionOrderMetadataStateAcceptEnum];
+/**
+ * @export
+ */
+export const CreateEmissionOrderMetadataStateContentTypeEnum = {
+    ApplicationJson: 'application/json'
+} as const;
+export type CreateEmissionOrderMetadataStateContentTypeEnum = typeof CreateEmissionOrderMetadataStateContentTypeEnum[keyof typeof CreateEmissionOrderMetadataStateContentTypeEnum];
+/**
+ * @export
+ */
+export const CreateEmissionOrderMetadataStatesBatchAcceptEnum = {
+    ApplicationJson: 'application/json',
+    ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
+} as const;
+export type CreateEmissionOrderMetadataStatesBatchAcceptEnum = typeof CreateEmissionOrderMetadataStatesBatchAcceptEnum[keyof typeof CreateEmissionOrderMetadataStatesBatchAcceptEnum];
+/**
+ * @export
+ */
+export const CreateEmissionOrderMetadataStatesBatchContentTypeEnum = {
+    ApplicationJson: 'application/json'
+} as const;
+export type CreateEmissionOrderMetadataStatesBatchContentTypeEnum = typeof CreateEmissionOrderMetadataStatesBatchContentTypeEnum[keyof typeof CreateEmissionOrderMetadataStatesBatchContentTypeEnum];
 /**
  * @export
  */

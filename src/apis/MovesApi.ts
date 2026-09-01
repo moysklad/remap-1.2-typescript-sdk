@@ -20,7 +20,7 @@ import type {
   BatchResponseEntity,
   DeleteRowResult,
   DocumentMetadata,
-  ErrorOrArray,
+  Errors,
   FileUpload,
   GetProductFiles200Response,
   Move,
@@ -28,6 +28,7 @@ import type {
   MovePosition,
   MovePositionList,
   State,
+  StateRowResult,
 } from '../models/index.js';
 import {
     AttributeMetaInfoFromJSON,
@@ -40,8 +41,8 @@ import {
     DeleteRowResultToJSON,
     DocumentMetadataFromJSON,
     DocumentMetadataToJSON,
-    ErrorOrArrayFromJSON,
-    ErrorOrArrayToJSON,
+    ErrorsFromJSON,
+    ErrorsToJSON,
     FileUploadFromJSON,
     FileUploadToJSON,
     GetProductFiles200ResponseFromJSON,
@@ -56,6 +57,8 @@ import {
     MovePositionListToJSON,
     StateFromJSON,
     StateToJSON,
+    StateRowResultFromJSON,
+    StateRowResultToJSON,
 } from '../models/index.js';
 
 export interface AddMoveFilesRequest {
@@ -89,9 +92,23 @@ export interface CreateMoveMetadataAttributeRequest {
     contentType?: CreateMoveMetadataAttributeContentTypeEnum;
 }
 
+export interface CreateMoveMetadataStateRequest {
+    state: Omit<State, 'id'|'accountId'|'entityType'>;
+    accept?: CreateMoveMetadataStateAcceptEnum;
+    acceptEncoding?: string;
+    contentType?: CreateMoveMetadataStateContentTypeEnum;
+}
+
+export interface CreateMoveMetadataStatesBatchRequest {
+    state: Array<State>;
+    accept?: CreateMoveMetadataStatesBatchAcceptEnum;
+    acceptEncoding?: string;
+    contentType?: CreateMoveMetadataStatesBatchContentTypeEnum;
+}
+
 export interface CreateMovePositionRequest {
     id: string;
-    movePosition: Omit<MovePosition, 'id'|'accountId'|'overhead'>;
+    movePosition: Omit<MovePosition, 'accountId'|'overhead'>;
     expand?: string;
     accept?: CreateMovePositionAcceptEnum;
     acceptEncoding?: string;
@@ -272,7 +289,7 @@ export interface UpdateMoveMetadataStateByIdRequest {
 export interface UpdateMovePositionRequest {
     id: string;
     positionId: string;
-    movePosition: Omit<MovePosition, 'id'|'accountId'|'overhead'>;
+    movePosition: Omit<MovePosition, 'accountId'|'overhead'>;
     expand?: string;
     fields?: UpdateMovePositionFieldsEnum;
     accept?: UpdateMovePositionAcceptEnum;
@@ -548,6 +565,130 @@ export class MovesApi extends runtime.BaseAPI {
      */
     async createMoveMetadataAttribute(requestParameters: CreateMoveMetadataAttributeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AttributeMetaInfo> {
         const response = await this.createMoveMetadataAttributeRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Создать статус Перемещения
+     */
+    async createMoveMetadataStateRaw(requestParameters: CreateMoveMetadataStateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<State>> {
+        if (requestParameters['state'] == null) {
+            throw new runtime.RequiredError(
+                'state',
+                'Required parameter "state" was null or undefined when calling createMoveMetadataState().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (requestParameters['accept'] != null) {
+            headerParameters['accept'] = String(requestParameters['accept']);
+        }
+
+        if (requestParameters['acceptEncoding'] != null) {
+            headerParameters['Accept-Encoding'] = String(requestParameters['acceptEncoding']);
+        }
+
+        if (requestParameters['contentType'] != null) {
+            headerParameters['Content-Type'] = String(requestParameters['contentType']);
+        }
+
+        if (this.configuration && (this.configuration.username !== undefined || this.configuration.password !== undefined)) {
+            headerParameters["Authorization"] = "Basic " + btoa(this.configuration.username + ":" + this.configuration.password);
+        }
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearerAuth", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/entity/move/metadata/states`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: StateToJSON(requestParameters['state']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => StateFromJSON(jsonValue));
+    }
+
+    /**
+     * Создать статус Перемещения
+     */
+    async createMoveMetadataState(requestParameters: CreateMoveMetadataStateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<State> {
+        const response = await this.createMoveMetadataStateRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Массовое создание и обновление статусов Перемещения
+     */
+    async createMoveMetadataStatesBatchRaw(requestParameters: CreateMoveMetadataStatesBatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<StateRowResult>>> {
+        if (requestParameters['state'] == null) {
+            throw new runtime.RequiredError(
+                'state',
+                'Required parameter "state" was null or undefined when calling createMoveMetadataStatesBatch().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (requestParameters['accept'] != null) {
+            headerParameters['accept'] = String(requestParameters['accept']);
+        }
+
+        if (requestParameters['acceptEncoding'] != null) {
+            headerParameters['Accept-Encoding'] = String(requestParameters['acceptEncoding']);
+        }
+
+        if (requestParameters['contentType'] != null) {
+            headerParameters['Content-Type'] = String(requestParameters['contentType']);
+        }
+
+        if (this.configuration && (this.configuration.username !== undefined || this.configuration.password !== undefined)) {
+            headerParameters["Authorization"] = "Basic " + btoa(this.configuration.username + ":" + this.configuration.password);
+        }
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearerAuth", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/entity/move/metadata/states/batch`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['state']!.map(StateToJSON),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(StateRowResultFromJSON));
+    }
+
+    /**
+     * Массовое создание и обновление статусов Перемещения
+     */
+    async createMoveMetadataStatesBatch(requestParameters: CreateMoveMetadataStatesBatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<StateRowResult>> {
+        const response = await this.createMoveMetadataStatesBatchRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -2157,6 +2298,36 @@ export const CreateMoveMetadataAttributeContentTypeEnum = {
     ApplicationJson: 'application/json'
 } as const;
 export type CreateMoveMetadataAttributeContentTypeEnum = typeof CreateMoveMetadataAttributeContentTypeEnum[keyof typeof CreateMoveMetadataAttributeContentTypeEnum];
+/**
+ * @export
+ */
+export const CreateMoveMetadataStateAcceptEnum = {
+    ApplicationJson: 'application/json',
+    ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
+} as const;
+export type CreateMoveMetadataStateAcceptEnum = typeof CreateMoveMetadataStateAcceptEnum[keyof typeof CreateMoveMetadataStateAcceptEnum];
+/**
+ * @export
+ */
+export const CreateMoveMetadataStateContentTypeEnum = {
+    ApplicationJson: 'application/json'
+} as const;
+export type CreateMoveMetadataStateContentTypeEnum = typeof CreateMoveMetadataStateContentTypeEnum[keyof typeof CreateMoveMetadataStateContentTypeEnum];
+/**
+ * @export
+ */
+export const CreateMoveMetadataStatesBatchAcceptEnum = {
+    ApplicationJson: 'application/json',
+    ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
+} as const;
+export type CreateMoveMetadataStatesBatchAcceptEnum = typeof CreateMoveMetadataStatesBatchAcceptEnum[keyof typeof CreateMoveMetadataStatesBatchAcceptEnum];
+/**
+ * @export
+ */
+export const CreateMoveMetadataStatesBatchContentTypeEnum = {
+    ApplicationJson: 'application/json'
+} as const;
+export type CreateMoveMetadataStatesBatchContentTypeEnum = typeof CreateMoveMetadataStatesBatchContentTypeEnum[keyof typeof CreateMoveMetadataStatesBatchContentTypeEnum];
 /**
  * @export
  */

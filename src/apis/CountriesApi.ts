@@ -19,7 +19,7 @@ import type {
   Country,
   CountryList,
   DeleteRowResult,
-  ErrorOrArray,
+  Errors,
 } from '../models/index.js';
 import {
     BatchResponseEntityFromJSON,
@@ -30,8 +30,8 @@ import {
     CountryListToJSON,
     DeleteRowResultFromJSON,
     DeleteRowResultToJSON,
-    ErrorOrArrayFromJSON,
-    ErrorOrArrayToJSON,
+    ErrorsFromJSON,
+    ErrorsToJSON,
 } from '../models/index.js';
 
 export interface CreateCountriesBatchRequest {

@@ -12,6 +12,13 @@
  * Do not edit the class manually.
  */
 
+import type { Errors } from './Errors.js';
+import {
+    instanceOfErrors,
+    ErrorsFromJSON,
+    ErrorsFromJSONTyped,
+    ErrorsToJSON,
+} from './Errors.js';
 import type { LossPosition } from './LossPosition.js';
 import {
     instanceOfLossPosition,
@@ -19,20 +26,13 @@ import {
     LossPositionFromJSONTyped,
     LossPositionToJSON,
 } from './LossPosition.js';
-import type { ModelError } from './ModelError.js';
-import {
-    instanceOfModelError,
-    ModelErrorFromJSON,
-    ModelErrorFromJSONTyped,
-    ModelErrorToJSON,
-} from './ModelError.js';
 
 /**
  * @type CreateLossPositions200ResponseInner
  * 
  * @export
  */
-export type CreateLossPositions200ResponseInner = LossPosition | ModelError;
+export type CreateLossPositions200ResponseInner = Errors | LossPosition;
 
 export function CreateLossPositions200ResponseInnerFromJSON(json: any): CreateLossPositions200ResponseInner {
     return CreateLossPositions200ResponseInnerFromJSONTyped(json, false);
@@ -45,11 +45,11 @@ export function CreateLossPositions200ResponseInnerFromJSONTyped(json: any, igno
     if (typeof json !== 'object') {
         return json;
     }
+    if (instanceOfErrors(json)) {
+        return ErrorsFromJSONTyped(json, true);
+    }
     if (instanceOfLossPosition(json)) {
         return LossPositionFromJSONTyped(json, true);
-    }
-    if (instanceOfModelError(json)) {
-        return ModelErrorFromJSONTyped(json, true);
     }
 
     return {} as any;
@@ -66,11 +66,11 @@ export function CreateLossPositions200ResponseInnerToJSONTyped(value?: CreateLos
     if (typeof value !== 'object') {
         return value;
     }
+    if (instanceOfErrors(value)) {
+        return ErrorsToJSON(value as Errors);
+    }
     if (instanceOfLossPosition(value)) {
         return LossPositionToJSON(value as LossPosition);
-    }
-    if (instanceOfModelError(value)) {
-        return ModelErrorToJSON(value as ModelError);
     }
 
     return {};

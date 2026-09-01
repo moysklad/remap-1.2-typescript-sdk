@@ -67,7 +67,7 @@ export interface LossPositionOwn {
      * @type {string}
      * @memberof LossPosition
      */
-    readonly id?: string;
+    id?: string;
     /**
      * ID учетной записи
      * @type {string}
@@ -164,13 +164,14 @@ export function LossPositionToJSON(json: any): LossPosition {
     return LossPositionToJSONTyped(json, false);
 }
 
-export function LossPositionToJSONTyped(value?: Omit<LossPosition, 'id'|'accountId'|'declaration'> | null, ignoreDiscriminator: boolean = false): any {
+export function LossPositionToJSONTyped(value?: Omit<LossPosition, 'accountId'|'declaration'> | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
     return {
         ...LossPositionPolymorphicParent.EntityWithMetaToJSONTyped(value as any, true),
         'meta': MetaToJSON(value['meta']),
+        'id': value['id'],
         'assortment': ProductMarkerToJSON(value['assortment']),
         'pack': PackToJSON(value['pack']),
         'price': value['price'],

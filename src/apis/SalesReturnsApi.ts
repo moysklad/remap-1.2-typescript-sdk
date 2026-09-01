@@ -21,7 +21,7 @@ import type {
   CreateSalesReturnPositions200ResponseInner,
   DeleteRowResult,
   DocumentMetadata,
-  ErrorOrArray,
+  Errors,
   SalesReturn,
   SalesReturnList,
   SalesReturnPosition,
@@ -41,8 +41,8 @@ import {
     DeleteRowResultToJSON,
     DocumentMetadataFromJSON,
     DocumentMetadataToJSON,
-    ErrorOrArrayFromJSON,
-    ErrorOrArrayToJSON,
+    ErrorsFromJSON,
+    ErrorsToJSON,
     SalesReturnFromJSON,
     SalesReturnToJSON,
     SalesReturnListFromJSON,
@@ -80,7 +80,7 @@ export interface CreateSalesReturnMetadataAttributeRequest {
 
 export interface CreateSalesReturnPositionRequest {
     id: string;
-    salesReturnPosition: Omit<SalesReturnPosition, 'id'|'accountId'>;
+    salesReturnPosition: Omit<SalesReturnPosition, 'accountId'>;
     expand?: string;
     accept?: CreateSalesReturnPositionAcceptEnum;
     acceptEncoding?: string;
@@ -244,7 +244,7 @@ export interface UpdateSalesReturnMetadataStateByIdRequest {
 export interface UpdateSalesReturnPositionRequest {
     id: string;
     positionId: string;
-    salesReturnPosition: Omit<SalesReturnPosition, 'id'|'accountId'>;
+    salesReturnPosition: Omit<SalesReturnPosition, 'accountId'>;
     expand?: string;
     fields?: UpdateSalesReturnPositionFieldsEnum;
     accept?: UpdateSalesReturnPositionAcceptEnum;

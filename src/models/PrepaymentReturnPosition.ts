@@ -53,7 +53,7 @@ export interface PrepaymentReturnPositionOwn {
      * @type {string}
      * @memberof PrepaymentReturnPosition
      */
-    readonly id?: string;
+    id?: string;
     /**
      * ID учетной записи
      * @type {string}
@@ -140,13 +140,14 @@ export function PrepaymentReturnPositionToJSON(json: any): PrepaymentReturnPosit
     return PrepaymentReturnPositionToJSONTyped(json, false);
 }
 
-export function PrepaymentReturnPositionToJSONTyped(value?: Omit<PrepaymentReturnPosition, 'id'|'accountId'> | null, ignoreDiscriminator: boolean = false): any {
+export function PrepaymentReturnPositionToJSONTyped(value?: Omit<PrepaymentReturnPosition, 'accountId'> | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
     return {
         ...PrepaymentReturnPositionPolymorphicParent.EntityWithMetaToJSONTyped(value as any, true),
         'meta': MetaToJSON(value['meta']),
+        'id': value['id'],
         'assortment': ProductMarkerToJSON(value['assortment']),
         'discount': value['discount'],
         'pack': PackToJSON(value['pack']),

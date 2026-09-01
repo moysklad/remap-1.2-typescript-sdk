@@ -16,13 +16,13 @@
 import * as runtime from '../runtime.js';
 import type {
   AttributeMetaInfo,
-  ErrorOrArray,
+  Errors,
 } from '../models/index.js';
 import {
     AttributeMetaInfoFromJSON,
     AttributeMetaInfoToJSON,
-    ErrorOrArrayFromJSON,
-    ErrorOrArrayToJSON,
+    ErrorsFromJSON,
+    ErrorsToJSON,
 } from '../models/index.js';
 
 export interface CreatePrepaymentMetadataAttributeRequest {

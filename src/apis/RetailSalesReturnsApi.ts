@@ -21,7 +21,7 @@ import type {
   CreateRetailSalesReturnsBatch200ResponseInner,
   DeleteInvoiceOutBatch200ResponseInner,
   DocumentMetadata,
-  ErrorOrArray,
+  Errors,
   RetailSalesReturn,
   RetailSalesReturnList,
   RetailSalesReturnPosition,
@@ -41,8 +41,8 @@ import {
     DeleteInvoiceOutBatch200ResponseInnerToJSON,
     DocumentMetadataFromJSON,
     DocumentMetadataToJSON,
-    ErrorOrArrayFromJSON,
-    ErrorOrArrayToJSON,
+    ErrorsFromJSON,
+    ErrorsToJSON,
     RetailSalesReturnFromJSON,
     RetailSalesReturnToJSON,
     RetailSalesReturnListFromJSON,
@@ -72,7 +72,7 @@ export interface CreateRetailSalesReturnMetadataAttributeRequest {
 
 export interface CreateRetailSalesReturnPositionRequest {
     id: string;
-    retailSalesReturnPosition: Omit<RetailSalesReturnPosition, 'id'|'accountId'>;
+    retailSalesReturnPosition: Omit<RetailSalesReturnPosition, 'accountId'>;
     expand?: string;
     accept?: CreateRetailSalesReturnPositionAcceptEnum;
     acceptEncoding?: string;
@@ -228,7 +228,7 @@ export interface UpdateRetailSalesReturnMetadataStateByIdRequest {
 export interface UpdateRetailSalesReturnPositionRequest {
     id: string;
     positionId: string;
-    retailSalesReturnPosition: Omit<RetailSalesReturnPosition, 'id'|'accountId'>;
+    retailSalesReturnPosition: Omit<RetailSalesReturnPosition, 'accountId'>;
     expand?: string;
     fields?: UpdateRetailSalesReturnPositionFieldsEnum;
     accept?: UpdateRetailSalesReturnPositionAcceptEnum;

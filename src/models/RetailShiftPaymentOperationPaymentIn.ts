@@ -311,7 +311,7 @@ export interface RetailShiftPaymentOperationPaymentInOwn {
      * @type {number}
      * @memberof RetailShiftPaymentOperationPaymentIn
      */
-    readonly sum?: number;
+    sum?: number;
     /**
      * Сумма НДС
      * @type {number}
@@ -408,7 +408,7 @@ export function RetailShiftPaymentOperationPaymentInToJSON(json: any): RetailShi
     return RetailShiftPaymentOperationPaymentInToJSONTyped(json, false);
 }
 
-export function RetailShiftPaymentOperationPaymentInToJSONTyped(value?: Omit<RetailShiftPaymentOperationPaymentIn, 'id'|'accountId'|'created'|'deleted'|'updated'|'printed'|'published'|'shared'|'sum'> | null, ignoreDiscriminator: boolean = false): any {
+export function RetailShiftPaymentOperationPaymentInToJSONTyped(value?: Omit<RetailShiftPaymentOperationPaymentIn, 'id'|'accountId'|'created'|'deleted'|'updated'|'printed'|'published'|'shared'> | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
@@ -436,6 +436,7 @@ export function RetailShiftPaymentOperationPaymentInToJSONTyped(value?: Omit<Ret
         'project': ProjectToJSON(value['project']),
         'salesChannel': SalesChannelToJSON(value['salesChannel']),
         'state': StateToJSON(value['state']),
+        'sum': value['sum'],
         'vatSum': value['vatSum'],
         'incomingNumber': value['incomingNumber'],
         'incomingDate': value['incomingDate'],

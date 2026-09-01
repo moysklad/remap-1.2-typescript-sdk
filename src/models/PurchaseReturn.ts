@@ -357,7 +357,7 @@ export interface PurchaseReturnOwn {
      * @type {PurchaseReturnPositionList}
      * @memberof PurchaseReturn
      */
-    positions?: PurchaseReturnPositionList | null;
+    positions?: PurchaseReturnPositionList;
     /**
      * Приемка, по которой произошел возврат
      * @type {Supply}

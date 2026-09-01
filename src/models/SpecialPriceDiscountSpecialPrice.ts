@@ -13,6 +13,13 @@
  */
 
 import { mapValues } from '../runtime.js';
+import type { Meta } from './Meta.js';
+import {
+    MetaFromJSON,
+    MetaFromJSONTyped,
+    MetaToJSON,
+    MetaToJSONTyped,
+} from './Meta.js';
 import type { PriceType } from './PriceType.js';
 import {
     PriceTypeFromJSON,
@@ -33,6 +40,12 @@ export interface SpecialPriceDiscountSpecialPrice {
      * @memberof SpecialPriceDiscountSpecialPrice
      */
     value?: number;
+    /**
+     * 
+     * @type {Meta}
+     * @memberof SpecialPriceDiscountSpecialPrice
+     */
+    meta?: Meta;
     /**
      * 
      * @type {PriceType}
@@ -59,6 +72,7 @@ export function SpecialPriceDiscountSpecialPriceFromJSONTyped(json: any, ignoreD
     }
     return {
         'value': json['value'] == null ? undefined : json['value'],
+        'meta': json['meta'] == null ? undefined : MetaFromJSON(json['meta']),
         'priceType': json['priceType'] == null ? undefined : PriceTypeFromJSON(json['priceType']),
     };
 }
@@ -73,6 +87,7 @@ export function SpecialPriceDiscountSpecialPriceToJSONTyped(value?: SpecialPrice
     }
     return {
         'value': value['value'],
+        'meta': MetaToJSON(value['meta']),
         'priceType': PriceTypeToJSON(value['priceType']),
     };
 }

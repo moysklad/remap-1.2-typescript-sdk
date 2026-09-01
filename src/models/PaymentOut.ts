@@ -306,7 +306,7 @@ export interface PaymentOutOwn {
      * @type {boolean}
      * @memberof PaymentOut
      */
-    readonly shared?: boolean;
+    shared?: boolean;
     /**
      * Метаданные статуса Исходящего платежа
      * @type {State}
@@ -415,7 +415,7 @@ export function PaymentOutToJSON(json: any): PaymentOut {
     return PaymentOutToJSONTyped(json, false);
 }
 
-export function PaymentOutToJSONTyped(value?: Omit<PaymentOut, 'id'|'accountId'|'created'|'deleted'|'updated'|'printed'|'published'|'shared'> | null, ignoreDiscriminator: boolean = false): any {
+export function PaymentOutToJSONTyped(value?: Omit<PaymentOut, 'id'|'accountId'|'created'|'deleted'|'updated'|'printed'|'published'> | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
@@ -442,6 +442,7 @@ export function PaymentOutToJSONTyped(value?: Omit<PaymentOut, 'id'|'accountId'|
         'paymentPurpose': value['paymentPurpose'],
         'project': ProjectToJSON(value['project']),
         'salesChannel': SalesChannelToJSON(value['salesChannel']),
+        'shared': value['shared'],
         'state': StateToJSON(value['state']),
         'sum': value['sum'],
         'vatSum': value['vatSum'],

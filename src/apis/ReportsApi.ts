@@ -15,14 +15,14 @@
 
 import * as runtime from '../runtime.js';
 import type {
-  ErrorOrArray,
+  Errors,
   ReportDashboard,
   ReportOrdersPlotSeriesList,
   ReportSalesPlotSeriesList,
 } from '../models/index.js';
 import {
-    ErrorOrArrayFromJSON,
-    ErrorOrArrayToJSON,
+    ErrorsFromJSON,
+    ErrorsToJSON,
     ReportDashboardFromJSON,
     ReportDashboardToJSON,
     ReportOrdersPlotSeriesListFromJSON,

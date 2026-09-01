@@ -60,7 +60,7 @@ export interface MovePositionOwn {
      * @type {string}
      * @memberof MovePosition
      */
-    readonly id?: string;
+    id?: string;
     /**
      * ID учетной записи
      * @type {string}
@@ -160,13 +160,14 @@ export function MovePositionToJSON(json: any): MovePosition {
     return MovePositionToJSONTyped(json, false);
 }
 
-export function MovePositionToJSONTyped(value?: Omit<MovePosition, 'id'|'accountId'|'overhead'> | null, ignoreDiscriminator: boolean = false): any {
+export function MovePositionToJSONTyped(value?: Omit<MovePosition, 'accountId'|'overhead'> | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
     return {
         ...MovePositionPolymorphicParent.EntityWithMetaToJSONTyped(value as any, true),
         'meta': MetaToJSON(value['meta']),
+        'id': value['id'],
         'assortment': ProductMarkerToJSON(value['assortment']),
         'pack': PackToJSON(value['pack']),
         'price': value['price'],

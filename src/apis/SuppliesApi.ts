@@ -20,7 +20,7 @@ import type {
   BatchResponseEntity,
   DeleteRowResult,
   DocumentMetadata,
-  ErrorOrArray,
+  Errors,
   EventNote,
   EventNoteList,
   FileUpload,
@@ -43,8 +43,8 @@ import {
     DeleteRowResultToJSON,
     DocumentMetadataFromJSON,
     DocumentMetadataToJSON,
-    ErrorOrArrayFromJSON,
-    ErrorOrArrayToJSON,
+    ErrorsFromJSON,
+    ErrorsToJSON,
     EventNoteFromJSON,
     EventNoteToJSON,
     EventNoteListFromJSON,
@@ -122,7 +122,7 @@ export interface CreateSupplyNoteRequest {
 
 export interface CreateSupplyPositionRequest {
     id: string;
-    supplyPosition: Omit<SupplyPosition, 'id'|'accountId'|'overhead'>;
+    supplyPosition: Omit<SupplyPosition, 'accountId'|'overhead'>;
     expand?: string;
     accept?: CreateSupplyPositionAcceptEnum;
     acceptEncoding?: string;
@@ -332,7 +332,7 @@ export interface UpdateSupplyNoteRequest {
 export interface UpdateSupplyPositionRequest {
     id: string;
     positionId: string;
-    supplyPosition: Omit<SupplyPosition, 'id'|'accountId'|'overhead'>;
+    supplyPosition: Omit<SupplyPosition, 'accountId'|'overhead'>;
     expand?: string;
     fields?: UpdateSupplyPositionFieldsEnum;
     accept?: UpdateSupplyPositionAcceptEnum;

@@ -21,7 +21,7 @@ import type {
   BundleList,
   CreateBundleComponentsRequest,
   DeleteRowResult,
-  ErrorOrArray,
+  Errors,
 } from '../models/index.js';
 import {
     BatchResponseEntityFromJSON,
@@ -36,8 +36,8 @@ import {
     CreateBundleComponentsRequestToJSON,
     DeleteRowResultFromJSON,
     DeleteRowResultToJSON,
-    ErrorOrArrayFromJSON,
-    ErrorOrArrayToJSON,
+    ErrorsFromJSON,
+    ErrorsToJSON,
 } from '../models/index.js';
 
 export interface CreateBundleRequest {

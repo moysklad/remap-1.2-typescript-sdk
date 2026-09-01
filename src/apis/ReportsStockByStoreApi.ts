@@ -15,12 +15,12 @@
 
 import * as runtime from '../runtime.js';
 import type {
-  ErrorOrArray,
+  Errors,
   StockByStoreList,
 } from '../models/index.js';
 import {
-    ErrorOrArrayFromJSON,
-    ErrorOrArrayToJSON,
+    ErrorsFromJSON,
+    ErrorsToJSON,
     StockByStoreListFromJSON,
     StockByStoreListToJSON,
 } from '../models/index.js';

@@ -356,7 +356,7 @@ export interface FinanceInOperationPurchaseReturnOwn {
      * @type {PurchaseReturnPositionList}
      * @memberof FinanceInOperationPurchaseReturn
      */
-    positions?: PurchaseReturnPositionList | null;
+    positions?: PurchaseReturnPositionList;
     /**
      * Приемка, по которой произошел возврат
      * @type {Supply}

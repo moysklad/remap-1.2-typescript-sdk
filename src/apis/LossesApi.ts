@@ -21,12 +21,13 @@ import type {
   CreateLossPositions200ResponseInner,
   DeleteRowResult,
   DocumentMetadata,
-  ErrorOrArray,
+  Errors,
   Loss,
   LossList,
   LossPosition,
   LossPositionList,
   State,
+  StateRowResult,
 } from '../models/index.js';
 import {
     AttributeMetaInfoFromJSON,
@@ -41,8 +42,8 @@ import {
     DeleteRowResultToJSON,
     DocumentMetadataFromJSON,
     DocumentMetadataToJSON,
-    ErrorOrArrayFromJSON,
-    ErrorOrArrayToJSON,
+    ErrorsFromJSON,
+    ErrorsToJSON,
     LossFromJSON,
     LossToJSON,
     LossListFromJSON,
@@ -53,6 +54,8 @@ import {
     LossPositionListToJSON,
     StateFromJSON,
     StateToJSON,
+    StateRowResultFromJSON,
+    StateRowResultToJSON,
 } from '../models/index.js';
 
 export interface CreateLossRequest {
@@ -78,9 +81,23 @@ export interface CreateLossMetadataAttributeRequest {
     contentType?: CreateLossMetadataAttributeContentTypeEnum;
 }
 
+export interface CreateLossMetadataStateRequest {
+    state: Omit<State, 'id'|'accountId'|'entityType'>;
+    accept?: CreateLossMetadataStateAcceptEnum;
+    acceptEncoding?: string;
+    contentType?: CreateLossMetadataStateContentTypeEnum;
+}
+
+export interface CreateLossMetadataStatesBatchRequest {
+    state: Array<State>;
+    accept?: CreateLossMetadataStatesBatchAcceptEnum;
+    acceptEncoding?: string;
+    contentType?: CreateLossMetadataStatesBatchContentTypeEnum;
+}
+
 export interface CreateLossPositionRequest {
     id: string;
-    lossPosition: Omit<LossPosition, 'id'|'accountId'|'declaration'>;
+    lossPosition: Omit<LossPosition, 'accountId'|'declaration'>;
     expand?: string;
     accept?: CreateLossPositionAcceptEnum;
     acceptEncoding?: string;
@@ -234,7 +251,7 @@ export interface UpdateLossMetadataStateByIdRequest {
 export interface UpdateLossPositionRequest {
     id: string;
     positionId: string;
-    lossPosition: Omit<LossPosition, 'id'|'accountId'|'declaration'>;
+    lossPosition: Omit<LossPosition, 'accountId'|'declaration'>;
     expand?: string;
     fields?: UpdateLossPositionFieldsEnum;
     accept?: UpdateLossPositionAcceptEnum;
@@ -438,6 +455,130 @@ export class LossesApi extends runtime.BaseAPI {
      */
     async createLossMetadataAttribute(requestParameters: CreateLossMetadataAttributeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AttributeMetaInfo> {
         const response = await this.createLossMetadataAttributeRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Создать статус Списания
+     */
+    async createLossMetadataStateRaw(requestParameters: CreateLossMetadataStateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<State>> {
+        if (requestParameters['state'] == null) {
+            throw new runtime.RequiredError(
+                'state',
+                'Required parameter "state" was null or undefined when calling createLossMetadataState().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (requestParameters['accept'] != null) {
+            headerParameters['accept'] = String(requestParameters['accept']);
+        }
+
+        if (requestParameters['acceptEncoding'] != null) {
+            headerParameters['Accept-Encoding'] = String(requestParameters['acceptEncoding']);
+        }
+
+        if (requestParameters['contentType'] != null) {
+            headerParameters['Content-Type'] = String(requestParameters['contentType']);
+        }
+
+        if (this.configuration && (this.configuration.username !== undefined || this.configuration.password !== undefined)) {
+            headerParameters["Authorization"] = "Basic " + btoa(this.configuration.username + ":" + this.configuration.password);
+        }
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearerAuth", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/entity/loss/metadata/states`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: StateToJSON(requestParameters['state']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => StateFromJSON(jsonValue));
+    }
+
+    /**
+     * Создать статус Списания
+     */
+    async createLossMetadataState(requestParameters: CreateLossMetadataStateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<State> {
+        const response = await this.createLossMetadataStateRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Массовое создание и обновление статусов Списания
+     */
+    async createLossMetadataStatesBatchRaw(requestParameters: CreateLossMetadataStatesBatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<StateRowResult>>> {
+        if (requestParameters['state'] == null) {
+            throw new runtime.RequiredError(
+                'state',
+                'Required parameter "state" was null or undefined when calling createLossMetadataStatesBatch().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (requestParameters['accept'] != null) {
+            headerParameters['accept'] = String(requestParameters['accept']);
+        }
+
+        if (requestParameters['acceptEncoding'] != null) {
+            headerParameters['Accept-Encoding'] = String(requestParameters['acceptEncoding']);
+        }
+
+        if (requestParameters['contentType'] != null) {
+            headerParameters['Content-Type'] = String(requestParameters['contentType']);
+        }
+
+        if (this.configuration && (this.configuration.username !== undefined || this.configuration.password !== undefined)) {
+            headerParameters["Authorization"] = "Basic " + btoa(this.configuration.username + ":" + this.configuration.password);
+        }
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearerAuth", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/entity/loss/metadata/states/batch`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['state']!.map(StateToJSON),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(StateRowResultFromJSON));
+    }
+
+    /**
+     * Массовое создание и обновление статусов Списания
+     */
+    async createLossMetadataStatesBatch(requestParameters: CreateLossMetadataStatesBatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<StateRowResult>> {
+        const response = await this.createLossMetadataStatesBatchRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -1853,6 +1994,36 @@ export const CreateLossMetadataAttributeContentTypeEnum = {
     ApplicationJson: 'application/json'
 } as const;
 export type CreateLossMetadataAttributeContentTypeEnum = typeof CreateLossMetadataAttributeContentTypeEnum[keyof typeof CreateLossMetadataAttributeContentTypeEnum];
+/**
+ * @export
+ */
+export const CreateLossMetadataStateAcceptEnum = {
+    ApplicationJson: 'application/json',
+    ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
+} as const;
+export type CreateLossMetadataStateAcceptEnum = typeof CreateLossMetadataStateAcceptEnum[keyof typeof CreateLossMetadataStateAcceptEnum];
+/**
+ * @export
+ */
+export const CreateLossMetadataStateContentTypeEnum = {
+    ApplicationJson: 'application/json'
+} as const;
+export type CreateLossMetadataStateContentTypeEnum = typeof CreateLossMetadataStateContentTypeEnum[keyof typeof CreateLossMetadataStateContentTypeEnum];
+/**
+ * @export
+ */
+export const CreateLossMetadataStatesBatchAcceptEnum = {
+    ApplicationJson: 'application/json',
+    ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
+} as const;
+export type CreateLossMetadataStatesBatchAcceptEnum = typeof CreateLossMetadataStatesBatchAcceptEnum[keyof typeof CreateLossMetadataStatesBatchAcceptEnum];
+/**
+ * @export
+ */
+export const CreateLossMetadataStatesBatchContentTypeEnum = {
+    ApplicationJson: 'application/json'
+} as const;
+export type CreateLossMetadataStatesBatchContentTypeEnum = typeof CreateLossMetadataStatesBatchContentTypeEnum[keyof typeof CreateLossMetadataStatesBatchContentTypeEnum];
 /**
  * @export
  */

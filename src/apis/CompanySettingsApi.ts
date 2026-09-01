@@ -17,15 +17,15 @@ import * as runtime from '../runtime.js';
 import type {
   CompanySettings,
   CompanySettingsMetadata,
-  ErrorOrArray,
+  Errors,
 } from '../models/index.js';
 import {
     CompanySettingsFromJSON,
     CompanySettingsToJSON,
     CompanySettingsMetadataFromJSON,
     CompanySettingsMetadataToJSON,
-    ErrorOrArrayFromJSON,
-    ErrorOrArrayToJSON,
+    ErrorsFromJSON,
+    ErrorsToJSON,
 } from '../models/index.js';
 
 export interface GetCompanySettingsRequest {

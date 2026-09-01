@@ -12,13 +12,13 @@
  * Do not edit the class manually.
  */
 
-import type { ModelError } from './ModelError.js';
+import type { Errors } from './Errors.js';
 import {
-    instanceOfModelError,
-    ModelErrorFromJSON,
-    ModelErrorFromJSONTyped,
-    ModelErrorToJSON,
-} from './ModelError.js';
+    instanceOfErrors,
+    ErrorsFromJSON,
+    ErrorsFromJSONTyped,
+    ErrorsToJSON,
+} from './Errors.js';
 import type { RetailSalesReturn } from './RetailSalesReturn.js';
 import {
     instanceOfRetailSalesReturn,
@@ -32,7 +32,7 @@ import {
  * 
  * @export
  */
-export type CreateRetailSalesReturnsBatch200ResponseInner = ModelError | RetailSalesReturn;
+export type CreateRetailSalesReturnsBatch200ResponseInner = Errors | RetailSalesReturn;
 
 export function CreateRetailSalesReturnsBatch200ResponseInnerFromJSON(json: any): CreateRetailSalesReturnsBatch200ResponseInner {
     return CreateRetailSalesReturnsBatch200ResponseInnerFromJSONTyped(json, false);
@@ -45,8 +45,8 @@ export function CreateRetailSalesReturnsBatch200ResponseInnerFromJSONTyped(json:
     if (typeof json !== 'object') {
         return json;
     }
-    if (instanceOfModelError(json)) {
-        return ModelErrorFromJSONTyped(json, true);
+    if (instanceOfErrors(json)) {
+        return ErrorsFromJSONTyped(json, true);
     }
     if (instanceOfRetailSalesReturn(json)) {
         return RetailSalesReturnFromJSONTyped(json, true);
@@ -66,8 +66,8 @@ export function CreateRetailSalesReturnsBatch200ResponseInnerToJSONTyped(value?:
     if (typeof value !== 'object') {
         return value;
     }
-    if (instanceOfModelError(value)) {
-        return ModelErrorToJSON(value as ModelError);
+    if (instanceOfErrors(value)) {
+        return ErrorsToJSON(value as Errors);
     }
     if (instanceOfRetailSalesReturn(value)) {
         return RetailSalesReturnToJSON(value as RetailSalesReturn);

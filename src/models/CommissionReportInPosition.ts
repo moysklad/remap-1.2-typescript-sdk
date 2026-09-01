@@ -53,7 +53,7 @@ export interface CommissionReportInPositionOwn {
      * @type {string}
      * @memberof CommissionReportInPosition
      */
-    readonly id?: string;
+    id?: string;
     /**
      * ID учетной записи
      * @type {string}
@@ -140,13 +140,14 @@ export function CommissionReportInPositionToJSON(json: any): CommissionReportInP
     return CommissionReportInPositionToJSONTyped(json, false);
 }
 
-export function CommissionReportInPositionToJSONTyped(value?: Omit<CommissionReportInPosition, 'id'|'accountId'> | null, ignoreDiscriminator: boolean = false): any {
+export function CommissionReportInPositionToJSONTyped(value?: Omit<CommissionReportInPosition, 'accountId'> | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
     return {
         ...CommissionReportInPositionPolymorphicParent.EntityWithMetaToJSONTyped(value as any, true),
         'meta': MetaToJSON(value['meta']),
+        'id': value['id'],
         'quantity': value['quantity'],
         'price': value['price'],
         'reward': value['reward'],

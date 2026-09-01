@@ -27,13 +27,13 @@ import {
     EmployeeToJSON,
     EmployeeToJSONTyped,
 } from './Employee.js';
-import type { TaskNoteFileList } from './TaskNoteFileList.js';
+import type { FileList } from './FileList.js';
 import {
-    TaskNoteFileListFromJSON,
-    TaskNoteFileListFromJSONTyped,
-    TaskNoteFileListToJSON,
-    TaskNoteFileListToJSONTyped,
-} from './TaskNoteFileList.js';
+    FileListFromJSON,
+    FileListFromJSONTyped,
+    FileListToJSON,
+    FileListToJSONTyped,
+} from './FileList.js';
 import type { Application } from './Application.js';
 import {
     ApplicationFromJSON,
@@ -93,10 +93,10 @@ export interface TaskNoteOwn {
     text?: string;
     /**
      * Метаданные массива Файлов
-     * @type {TaskNoteFileList}
+     * @type {FileList}
      * @memberof TaskNote
      */
-    files?: TaskNoteFileList | null;
+    files?: FileList | null;
 }
 export type TaskNote = TaskNoteOwn & TaskNotePolymorphicParent.EntityWithMeta;
 
@@ -125,7 +125,7 @@ export function TaskNoteFromJSONTyped(json: any, ignoreDiscriminator: boolean): 
         'authorApplication': json['authorApplication'] == null ? undefined : ApplicationFromJSON(json['authorApplication']),
         'moment': json['moment'] == null ? undefined : json['moment'],
         'text': json['text'] == null ? undefined : json['text'],
-        'files': json['files'] == null ? undefined : TaskNoteFileListFromJSON(json['files']),
+        'files': json['files'] == null ? undefined : FileListFromJSON(json['files']),
     };
 }
 
@@ -143,7 +143,7 @@ export function TaskNoteToJSONTyped(value?: Omit<TaskNote, 'id'|'accountId'|'mom
         'author': EmployeeToJSON(value['author']),
         'authorApplication': ApplicationToJSON(value['authorApplication']),
         'text': value['text'],
-        'files': TaskNoteFileListToJSON(value['files']),
+        'files': FileListToJSON(value['files']),
     };
 }
 

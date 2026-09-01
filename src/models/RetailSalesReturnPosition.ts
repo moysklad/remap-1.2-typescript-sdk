@@ -53,7 +53,7 @@ export interface RetailSalesReturnPositionOwn {
      * @type {string}
      * @memberof RetailSalesReturnPosition
      */
-    readonly id?: string;
+    id?: string;
     /**
      * ID учетной записи
      * @type {string}
@@ -154,13 +154,14 @@ export function RetailSalesReturnPositionToJSON(json: any): RetailSalesReturnPos
     return RetailSalesReturnPositionToJSONTyped(json, false);
 }
 
-export function RetailSalesReturnPositionToJSONTyped(value?: Omit<RetailSalesReturnPosition, 'id'|'accountId'> | null, ignoreDiscriminator: boolean = false): any {
+export function RetailSalesReturnPositionToJSONTyped(value?: Omit<RetailSalesReturnPosition, 'accountId'> | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
     return {
         ...RetailSalesReturnPositionPolymorphicParent.EntityWithMetaToJSONTyped(value as any, true),
         'meta': MetaToJSON(value['meta']),
+        'id': value['id'],
         'assortment': ProductMarkerToJSON(value['assortment']),
         'cost': value['cost'],
         'discount': value['discount'],

@@ -74,7 +74,7 @@ export interface EnterPositionOwn {
      * @type {string}
      * @memberof EnterPosition
      */
-    readonly id?: string;
+    id?: string;
     /**
      * ID учетной записи
      * @type {string}
@@ -184,13 +184,14 @@ export function EnterPositionToJSON(json: any): EnterPosition {
     return EnterPositionToJSONTyped(json, false);
 }
 
-export function EnterPositionToJSONTyped(value?: Omit<EnterPosition, 'id'|'accountId'|'overhead'> | null, ignoreDiscriminator: boolean = false): any {
+export function EnterPositionToJSONTyped(value?: Omit<EnterPosition, 'accountId'|'overhead'> | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
     return {
         ...EnterPositionPolymorphicParent.EntityWithMetaToJSONTyped(value as any, true),
         'meta': MetaToJSON(value['meta']),
+        'id': value['id'],
         'assortment': ProductMarkerToJSON(value['assortment']),
         'country': CountryToJSON(value['country']),
         'gtd': GtdToJSON(value['gtd']),

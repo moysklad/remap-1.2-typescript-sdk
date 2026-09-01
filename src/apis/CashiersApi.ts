@@ -17,15 +17,15 @@ import * as runtime from '../runtime.js';
 import type {
   Cashier,
   CashierList,
-  ErrorOrArray,
+  Errors,
 } from '../models/index.js';
 import {
     CashierFromJSON,
     CashierToJSON,
     CashierListFromJSON,
     CashierListToJSON,
-    ErrorOrArrayFromJSON,
-    ErrorOrArrayToJSON,
+    ErrorsFromJSON,
+    ErrorsToJSON,
 } from '../models/index.js';
 
 export interface GetCashierByIdRequest {

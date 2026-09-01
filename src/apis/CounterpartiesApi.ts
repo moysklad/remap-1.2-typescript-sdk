@@ -24,7 +24,7 @@ import type {
   CounterpartyList,
   CounterpartyMetadata,
   DeleteRowResult,
-  ErrorOrArray,
+  Errors,
   FileUpload,
   GetCounterpartyAccounts200Response,
   GetCounterpartyContactPersons200Response,
@@ -52,8 +52,8 @@ import {
     CounterpartyMetadataToJSON,
     DeleteRowResultFromJSON,
     DeleteRowResultToJSON,
-    ErrorOrArrayFromJSON,
-    ErrorOrArrayToJSON,
+    ErrorsFromJSON,
+    ErrorsToJSON,
     FileUploadFromJSON,
     FileUploadToJSON,
     GetCounterpartyAccounts200ResponseFromJSON,
@@ -87,7 +87,7 @@ export interface CreateCounterpartiesBatchRequest {
 }
 
 export interface CreateCounterpartyRequest {
-    counterparty: Omit<Counterparty, 'id'|'accountId'|'created'|'updated'|'salesAmount'|'bonusPoints'>;
+    counterparty: Omit<Counterparty, 'accountId'|'created'|'updated'|'salesAmount'|'bonusPoints'>;
     expand?: string;
     accept?: CreateCounterpartyAcceptEnum;
     acceptEncoding?: string;
@@ -291,7 +291,7 @@ export interface GetCounterpartyNotesRequest {
 
 export interface UpdateCounterpartyRequest {
     id: string;
-    counterparty: Omit<Counterparty, 'id'|'accountId'|'created'|'updated'|'salesAmount'|'bonusPoints'>;
+    counterparty: Omit<Counterparty, 'accountId'|'created'|'updated'|'salesAmount'|'bonusPoints'>;
     expand?: string;
     accept?: UpdateCounterpartyAcceptEnum;
     acceptEncoding?: string;

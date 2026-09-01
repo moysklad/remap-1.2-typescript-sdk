@@ -12,13 +12,13 @@
  * Do not edit the class manually.
  */
 
-import type { ModelError } from './ModelError.js';
+import type { Errors } from './Errors.js';
 import {
-    instanceOfModelError,
-    ModelErrorFromJSON,
-    ModelErrorFromJSONTyped,
-    ModelErrorToJSON,
-} from './ModelError.js';
+    instanceOfErrors,
+    ErrorsFromJSON,
+    ErrorsFromJSONTyped,
+    ErrorsToJSON,
+} from './Errors.js';
 import type { State } from './State.js';
 import {
     instanceOfState,
@@ -32,7 +32,7 @@ import {
  * 
  * @export
  */
-export type StateRowResult = ModelError | State;
+export type StateRowResult = Errors | State;
 
 export function StateRowResultFromJSON(json: any): StateRowResult {
     return StateRowResultFromJSONTyped(json, false);
@@ -45,8 +45,8 @@ export function StateRowResultFromJSONTyped(json: any, ignoreDiscriminator: bool
     if (typeof json !== 'object') {
         return json;
     }
-    if (instanceOfModelError(json)) {
-        return ModelErrorFromJSONTyped(json, true);
+    if (instanceOfErrors(json)) {
+        return ErrorsFromJSONTyped(json, true);
     }
     if (instanceOfState(json)) {
         return StateFromJSONTyped(json, true);
@@ -66,8 +66,8 @@ export function StateRowResultToJSONTyped(value?: StateRowResult | null, ignoreD
     if (typeof value !== 'object') {
         return value;
     }
-    if (instanceOfModelError(value)) {
-        return ModelErrorToJSON(value as ModelError);
+    if (instanceOfErrors(value)) {
+        return ErrorsToJSON(value as Errors);
     }
     if (instanceOfState(value)) {
         return StateToJSON(value as State);

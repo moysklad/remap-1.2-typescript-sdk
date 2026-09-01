@@ -19,7 +19,7 @@ import type {
   Currency,
   CurrencyList,
   DeleteRowResult,
-  ErrorOrArray,
+  Errors,
 } from '../models/index.js';
 import {
     BatchResponseEntityFromJSON,
@@ -30,8 +30,8 @@ import {
     CurrencyListToJSON,
     DeleteRowResultFromJSON,
     DeleteRowResultToJSON,
-    ErrorOrArrayFromJSON,
-    ErrorOrArrayToJSON,
+    ErrorsFromJSON,
+    ErrorsToJSON,
 } from '../models/index.js';
 
 export interface CreateCurrenciesBatchRequest {

@@ -21,7 +21,7 @@ import type {
   CreateInvoiceInPositionsBatch200ResponseInner,
   DeleteInvoiceOutBatch200ResponseInner,
   DocumentMetadata,
-  ErrorOrArray,
+  Errors,
   EventNote,
   EventNoteList,
   FileUpload,
@@ -31,6 +31,7 @@ import type {
   InvoiceInPosition,
   InvoiceInPositionList,
   State,
+  StateRowResult,
 } from '../models/index.js';
 import {
     AttributeMetaInfoFromJSON,
@@ -45,8 +46,8 @@ import {
     DeleteInvoiceOutBatch200ResponseInnerToJSON,
     DocumentMetadataFromJSON,
     DocumentMetadataToJSON,
-    ErrorOrArrayFromJSON,
-    ErrorOrArrayToJSON,
+    ErrorsFromJSON,
+    ErrorsToJSON,
     EventNoteFromJSON,
     EventNoteToJSON,
     EventNoteListFromJSON,
@@ -65,6 +66,8 @@ import {
     InvoiceInPositionListToJSON,
     StateFromJSON,
     StateToJSON,
+    StateRowResultFromJSON,
+    StateRowResultToJSON,
 } from '../models/index.js';
 
 export interface AddInvoiceInFilesRequest {
@@ -98,6 +101,20 @@ export interface CreateInvoiceInMetadataAttributeRequest {
     contentType?: CreateInvoiceInMetadataAttributeContentTypeEnum;
 }
 
+export interface CreateInvoiceInMetadataStateRequest {
+    state: Omit<State, 'id'|'accountId'|'entityType'>;
+    accept?: CreateInvoiceInMetadataStateAcceptEnum;
+    acceptEncoding?: string;
+    contentType?: CreateInvoiceInMetadataStateContentTypeEnum;
+}
+
+export interface CreateInvoiceInMetadataStatesBatchRequest {
+    state: Array<State>;
+    accept?: CreateInvoiceInMetadataStatesBatchAcceptEnum;
+    acceptEncoding?: string;
+    contentType?: CreateInvoiceInMetadataStatesBatchContentTypeEnum;
+}
+
 export interface CreateInvoiceInNoteRequest {
     id: string;
     eventNote: Omit<EventNote, 'id'|'accountId'|'created'|'authorApplication'>;
@@ -108,7 +125,7 @@ export interface CreateInvoiceInNoteRequest {
 
 export interface CreateInvoiceInPositionsRequest {
     id: string;
-    invoiceInPosition: Omit<InvoiceInPosition, 'id'|'accountId'>;
+    invoiceInPosition: Omit<InvoiceInPosition, 'accountId'>;
     expand?: string;
     accept?: CreateInvoiceInPositionsAcceptEnum;
     acceptEncoding?: string;
@@ -326,7 +343,7 @@ export interface UpdateInvoiceInNoteRequest {
 export interface UpdateInvoiceInPositionRequest {
     id: string;
     positionId: string;
-    invoiceInPosition: Omit<InvoiceInPosition, 'id'|'accountId'>;
+    invoiceInPosition: Omit<InvoiceInPosition, 'accountId'>;
     expand?: string;
     fields?: UpdateInvoiceInPositionFieldsEnum;
     accept?: UpdateInvoiceInPositionAcceptEnum;
@@ -602,6 +619,130 @@ export class InvoiceInsApi extends runtime.BaseAPI {
      */
     async createInvoiceInMetadataAttribute(requestParameters: CreateInvoiceInMetadataAttributeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AttributeMetaInfo> {
         const response = await this.createInvoiceInMetadataAttributeRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Создать статус InvoiceIn
+     */
+    async createInvoiceInMetadataStateRaw(requestParameters: CreateInvoiceInMetadataStateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<State>> {
+        if (requestParameters['state'] == null) {
+            throw new runtime.RequiredError(
+                'state',
+                'Required parameter "state" was null or undefined when calling createInvoiceInMetadataState().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (requestParameters['accept'] != null) {
+            headerParameters['accept'] = String(requestParameters['accept']);
+        }
+
+        if (requestParameters['acceptEncoding'] != null) {
+            headerParameters['Accept-Encoding'] = String(requestParameters['acceptEncoding']);
+        }
+
+        if (requestParameters['contentType'] != null) {
+            headerParameters['Content-Type'] = String(requestParameters['contentType']);
+        }
+
+        if (this.configuration && (this.configuration.username !== undefined || this.configuration.password !== undefined)) {
+            headerParameters["Authorization"] = "Basic " + btoa(this.configuration.username + ":" + this.configuration.password);
+        }
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearerAuth", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/entity/invoicein/metadata/states`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: StateToJSON(requestParameters['state']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => StateFromJSON(jsonValue));
+    }
+
+    /**
+     * Создать статус InvoiceIn
+     */
+    async createInvoiceInMetadataState(requestParameters: CreateInvoiceInMetadataStateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<State> {
+        const response = await this.createInvoiceInMetadataStateRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Массовое создание и обновление статусов InvoiceIn
+     */
+    async createInvoiceInMetadataStatesBatchRaw(requestParameters: CreateInvoiceInMetadataStatesBatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<StateRowResult>>> {
+        if (requestParameters['state'] == null) {
+            throw new runtime.RequiredError(
+                'state',
+                'Required parameter "state" was null or undefined when calling createInvoiceInMetadataStatesBatch().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (requestParameters['accept'] != null) {
+            headerParameters['accept'] = String(requestParameters['accept']);
+        }
+
+        if (requestParameters['acceptEncoding'] != null) {
+            headerParameters['Accept-Encoding'] = String(requestParameters['acceptEncoding']);
+        }
+
+        if (requestParameters['contentType'] != null) {
+            headerParameters['Content-Type'] = String(requestParameters['contentType']);
+        }
+
+        if (this.configuration && (this.configuration.username !== undefined || this.configuration.password !== undefined)) {
+            headerParameters["Authorization"] = "Basic " + btoa(this.configuration.username + ":" + this.configuration.password);
+        }
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearerAuth", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/entity/invoicein/metadata/states/batch`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['state']!.map(StateToJSON),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(StateRowResultFromJSON));
+    }
+
+    /**
+     * Массовое создание и обновление статусов InvoiceIn
+     */
+    async createInvoiceInMetadataStatesBatch(requestParameters: CreateInvoiceInMetadataStatesBatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<StateRowResult>> {
+        const response = await this.createInvoiceInMetadataStatesBatchRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -2626,6 +2767,36 @@ export const CreateInvoiceInMetadataAttributeContentTypeEnum = {
     ApplicationJson: 'application/json'
 } as const;
 export type CreateInvoiceInMetadataAttributeContentTypeEnum = typeof CreateInvoiceInMetadataAttributeContentTypeEnum[keyof typeof CreateInvoiceInMetadataAttributeContentTypeEnum];
+/**
+ * @export
+ */
+export const CreateInvoiceInMetadataStateAcceptEnum = {
+    ApplicationJson: 'application/json',
+    ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
+} as const;
+export type CreateInvoiceInMetadataStateAcceptEnum = typeof CreateInvoiceInMetadataStateAcceptEnum[keyof typeof CreateInvoiceInMetadataStateAcceptEnum];
+/**
+ * @export
+ */
+export const CreateInvoiceInMetadataStateContentTypeEnum = {
+    ApplicationJson: 'application/json'
+} as const;
+export type CreateInvoiceInMetadataStateContentTypeEnum = typeof CreateInvoiceInMetadataStateContentTypeEnum[keyof typeof CreateInvoiceInMetadataStateContentTypeEnum];
+/**
+ * @export
+ */
+export const CreateInvoiceInMetadataStatesBatchAcceptEnum = {
+    ApplicationJson: 'application/json',
+    ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
+} as const;
+export type CreateInvoiceInMetadataStatesBatchAcceptEnum = typeof CreateInvoiceInMetadataStatesBatchAcceptEnum[keyof typeof CreateInvoiceInMetadataStatesBatchAcceptEnum];
+/**
+ * @export
+ */
+export const CreateInvoiceInMetadataStatesBatchContentTypeEnum = {
+    ApplicationJson: 'application/json'
+} as const;
+export type CreateInvoiceInMetadataStatesBatchContentTypeEnum = typeof CreateInvoiceInMetadataStatesBatchContentTypeEnum[keyof typeof CreateInvoiceInMetadataStatesBatchContentTypeEnum];
 /**
  * @export
  */

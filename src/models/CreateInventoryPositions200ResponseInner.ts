@@ -12,6 +12,13 @@
  * Do not edit the class manually.
  */
 
+import type { Errors } from './Errors.js';
+import {
+    instanceOfErrors,
+    ErrorsFromJSON,
+    ErrorsFromJSONTyped,
+    ErrorsToJSON,
+} from './Errors.js';
 import type { InventoryPosition } from './InventoryPosition.js';
 import {
     instanceOfInventoryPosition,
@@ -19,20 +26,13 @@ import {
     InventoryPositionFromJSONTyped,
     InventoryPositionToJSON,
 } from './InventoryPosition.js';
-import type { ModelError } from './ModelError.js';
-import {
-    instanceOfModelError,
-    ModelErrorFromJSON,
-    ModelErrorFromJSONTyped,
-    ModelErrorToJSON,
-} from './ModelError.js';
 
 /**
  * @type CreateInventoryPositions200ResponseInner
  * 
  * @export
  */
-export type CreateInventoryPositions200ResponseInner = InventoryPosition | ModelError;
+export type CreateInventoryPositions200ResponseInner = Errors | InventoryPosition;
 
 export function CreateInventoryPositions200ResponseInnerFromJSON(json: any): CreateInventoryPositions200ResponseInner {
     return CreateInventoryPositions200ResponseInnerFromJSONTyped(json, false);
@@ -45,11 +45,11 @@ export function CreateInventoryPositions200ResponseInnerFromJSONTyped(json: any,
     if (typeof json !== 'object') {
         return json;
     }
+    if (instanceOfErrors(json)) {
+        return ErrorsFromJSONTyped(json, true);
+    }
     if (instanceOfInventoryPosition(json)) {
         return InventoryPositionFromJSONTyped(json, true);
-    }
-    if (instanceOfModelError(json)) {
-        return ModelErrorFromJSONTyped(json, true);
     }
 
     return {} as any;
@@ -66,11 +66,11 @@ export function CreateInventoryPositions200ResponseInnerToJSONTyped(value?: Crea
     if (typeof value !== 'object') {
         return value;
     }
+    if (instanceOfErrors(value)) {
+        return ErrorsToJSON(value as Errors);
+    }
     if (instanceOfInventoryPosition(value)) {
         return InventoryPositionToJSON(value as InventoryPosition);
-    }
-    if (instanceOfModelError(value)) {
-        return ModelErrorToJSON(value as ModelError);
     }
 
     return {};

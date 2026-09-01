@@ -19,7 +19,7 @@ import type {
   AssortmentList,
   AssortmentSettings,
   DeleteRowResult,
-  ErrorOrArray,
+  Errors,
 } from '../models/index.js';
 import {
     AssortmentFromJSON,
@@ -30,8 +30,8 @@ import {
     AssortmentSettingsToJSON,
     DeleteRowResultFromJSON,
     DeleteRowResultToJSON,
-    ErrorOrArrayFromJSON,
-    ErrorOrArrayToJSON,
+    ErrorsFromJSON,
+    ErrorsToJSON,
 } from '../models/index.js';
 
 export interface DeleteAssortmentPositionsBatchRequest {

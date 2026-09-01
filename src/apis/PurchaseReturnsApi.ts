@@ -21,7 +21,7 @@ import type {
   CreatePurchaseReturnPositions200ResponseInner,
   DeleteRowResult,
   DocumentMetadata,
-  ErrorOrArray,
+  Errors,
   EventNote,
   EventNoteList,
   FileUpload,
@@ -46,8 +46,8 @@ import {
     DeleteRowResultToJSON,
     DocumentMetadataFromJSON,
     DocumentMetadataToJSON,
-    ErrorOrArrayFromJSON,
-    ErrorOrArrayToJSON,
+    ErrorsFromJSON,
+    ErrorsToJSON,
     EventNoteFromJSON,
     EventNoteToJSON,
     EventNoteListFromJSON,
@@ -125,7 +125,7 @@ export interface CreatePurchaseReturnNoteRequest {
 
 export interface CreatePurchaseReturnPositionRequest {
     id: string;
-    purchaseReturnPosition: Omit<PurchaseReturnPosition, 'id'|'accountId'|'discount'>;
+    purchaseReturnPosition: Omit<PurchaseReturnPosition, 'accountId'|'discount'>;
     expand?: string;
     accept?: CreatePurchaseReturnPositionAcceptEnum;
     acceptEncoding?: string;
@@ -328,7 +328,7 @@ export interface UpdatePurchaseReturnNoteRequest {
 export interface UpdatePurchaseReturnPositionRequest {
     id: string;
     positionId: string;
-    purchaseReturnPosition: Omit<PurchaseReturnPosition, 'id'|'accountId'|'discount'>;
+    purchaseReturnPosition: Omit<PurchaseReturnPosition, 'accountId'|'discount'>;
     expand?: string;
     fields?: UpdatePurchaseReturnPositionFieldsEnum;
     accept?: UpdatePurchaseReturnPositionAcceptEnum;

@@ -60,7 +60,7 @@ export interface PurchaseOrderPositionOwn {
      * @type {string}
      * @memberof PurchaseOrderPosition
      */
-    readonly id?: string;
+    id?: string;
     /**
      * ID учетной записи
      * @type {string}
@@ -170,13 +170,14 @@ export function PurchaseOrderPositionToJSON(json: any): PurchaseOrderPosition {
     return PurchaseOrderPositionToJSONTyped(json, false);
 }
 
-export function PurchaseOrderPositionToJSONTyped(value?: Omit<PurchaseOrderPosition, 'id'|'accountId'|'shipped'|'inTransit'> | null, ignoreDiscriminator: boolean = false): any {
+export function PurchaseOrderPositionToJSONTyped(value?: Omit<PurchaseOrderPosition, 'accountId'|'shipped'|'inTransit'> | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
     return {
         ...PurchaseOrderPositionPolymorphicParent.EntityWithMetaToJSONTyped(value as any, true),
         'meta': MetaToJSON(value['meta']),
+        'id': value['id'],
         'quantity': value['quantity'],
         'price': value['price'],
         'discount': value['discount'],

@@ -12,70 +12,65 @@
  * Do not edit the class manually.
  */
 
+import { mapValues } from '../runtime.js';
 import type { ModelError } from './ModelError.js';
 import {
-    instanceOfModelError,
     ModelErrorFromJSON,
     ModelErrorFromJSONTyped,
     ModelErrorToJSON,
+    ModelErrorToJSONTyped,
 } from './ModelError.js';
 
+import * as ErrorsPolymorphicParent from './BatchResponseEntity.js';
 /**
- * @type ErrorOrArray
- * 
+ * Ответ ошибки: объект { errors }
  * @export
+ * @interface Errors
  */
-export type ErrorOrArray = Array<ModelError> | ModelError;
+export interface ErrorsOwn {
+    /**
+     * 
+     * @type {Array<ModelError>}
+     * @memberof Errors
+     */
+    errors: Array<ModelError>;
+}
+export type Errors = ErrorsOwn & ErrorsPolymorphicParent.BatchResponseEntity;
 
-export function ErrorOrArrayFromJSON(json: any): ErrorOrArray {
-    return ErrorOrArrayFromJSONTyped(json, false);
+
+/**
+ * Check if a given object implements the Errors interface.
+ */
+export function instanceOfErrors(value: object): value is Errors {
+    if (!('errors' in value) || value['errors'] === undefined) return false;
+    return true;
 }
 
-export function ErrorOrArrayFromJSONTyped(json: any, ignoreDiscriminator: boolean): ErrorOrArray {
+export function ErrorsFromJSON(json: any): Errors {
+    return ErrorsFromJSONTyped(json, false);
+}
+
+export function ErrorsFromJSONTyped(json: any, ignoreDiscriminator: boolean): Errors {
     if (json == null) {
         return json;
     }
-    if (typeof json !== 'object') {
-        return json;
-    }
-    if (instanceOfModelError(json)) {
-        return ModelErrorFromJSONTyped(json, true);
-    }
-    if (Array.isArray(json)) {
-        if (json.every(item => typeof item === 'object')) {
-            if (json.every(item => instanceOfModelError(item))) {
-                return json.map(value => ModelErrorFromJSONTyped(value, true));
-            }
-        }
-        return json;
-    }
-
-    return {} as any;
+    return {
+        ...ErrorsPolymorphicParent.BatchResponseEntityFromJSONTyped(json, true),
+        'errors': ((json['errors'] as Array<any>).map(ModelErrorFromJSON)),
+    };
 }
 
-export function ErrorOrArrayToJSON(json: any): any {
-    return ErrorOrArrayToJSONTyped(json, false);
+export function ErrorsToJSON(json: any): Errors {
+    return ErrorsToJSONTyped(json, false);
 }
 
-export function ErrorOrArrayToJSONTyped(value?: ErrorOrArray | null, ignoreDiscriminator: boolean = false): any {
+export function ErrorsToJSONTyped(value?: Errors | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
-    if (typeof value !== 'object') {
-        return value;
-    }
-    if (instanceOfModelError(value)) {
-        return ModelErrorToJSON(value as ModelError);
-    }
-    if (Array.isArray(value)) {
-        if (value.every(item => typeof item === 'object')) {
-            if (value.every(item => instanceOfModelError(item))) {
-                return value.map(value => ModelErrorToJSON(value as ModelError));
-            }
-        }
-        return value;
-    }
-
-    return {};
+    return {
+        ...ErrorsPolymorphicParent.BatchResponseEntityToJSONTyped(value as any, true),
+        'errors': ((value['errors'] as Array<any>).map(ModelErrorToJSON)),
+    };
 }
 

@@ -17,15 +17,15 @@ import * as runtime from '../runtime.js';
 import type {
   CustomRole,
   CustomRoleList,
-  ErrorOrArray,
+  Errors,
 } from '../models/index.js';
 import {
     CustomRoleFromJSON,
     CustomRoleToJSON,
     CustomRoleListFromJSON,
     CustomRoleListToJSON,
-    ErrorOrArrayFromJSON,
-    ErrorOrArrayToJSON,
+    ErrorsFromJSON,
+    ErrorsToJSON,
 } from '../models/index.js';
 
 export interface CreateCustomRoleRequest {

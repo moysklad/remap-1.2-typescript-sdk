@@ -13,6 +13,20 @@
  */
 
 import { mapValues } from '../runtime.js';
+import type { Context } from './Context.js';
+import {
+    ContextFromJSON,
+    ContextFromJSONTyped,
+    ContextToJSON,
+    ContextToJSONTyped,
+} from './Context.js';
+import type { NotificationAbstract } from './NotificationAbstract.js';
+import {
+    NotificationAbstractFromJSON,
+    NotificationAbstractFromJSONTyped,
+    NotificationAbstractToJSON,
+    NotificationAbstractToJSONTyped,
+} from './NotificationAbstract.js';
 import type { MetaList } from './MetaList.js';
 import {
     MetaListFromJSON,
@@ -20,67 +34,68 @@ import {
     MetaListToJSON,
     MetaListToJSONTyped,
 } from './MetaList.js';
-import type { TaskNoteFile } from './TaskNoteFile.js';
-import {
-    TaskNoteFileFromJSON,
-    TaskNoteFileFromJSONTyped,
-    TaskNoteFileToJSON,
-    TaskNoteFileToJSONTyped,
-} from './TaskNoteFile.js';
 
 /**
- * Файлы комментария к Задаче
+ * Лента уведомлений
  * @export
- * @interface TaskNoteFileList
+ * @interface NotificationList
  */
-export interface TaskNoteFileList {
+export interface NotificationList {
+    /**
+     * 
+     * @type {Context}
+     * @memberof NotificationList
+     */
+    context?: Context;
     /**
      * 
      * @type {MetaList}
-     * @memberof TaskNoteFileList
+     * @memberof NotificationList
      */
     meta?: MetaList;
     /**
-     * 
-     * @type {Array<TaskNoteFile>}
-     * @memberof TaskNoteFileList
+     * Массив уведомлений разных типов, определяемых по meta.type
+     * @type {Array<NotificationAbstract>}
+     * @memberof NotificationList
      */
-    rows?: Array<TaskNoteFile> | null;
+    rows?: Array<NotificationAbstract>;
 }
 
 
 /**
- * Check if a given object implements the TaskNoteFileList interface.
+ * Check if a given object implements the NotificationList interface.
  */
-export function instanceOfTaskNoteFileList(value: object): value is TaskNoteFileList {
+export function instanceOfNotificationList(value: object): value is NotificationList {
     return true;
 }
 
-export function TaskNoteFileListFromJSON(json: any): TaskNoteFileList {
-    return TaskNoteFileListFromJSONTyped(json, false);
+export function NotificationListFromJSON(json: any): NotificationList {
+    return NotificationListFromJSONTyped(json, false);
 }
 
-export function TaskNoteFileListFromJSONTyped(json: any, ignoreDiscriminator: boolean): TaskNoteFileList {
+export function NotificationListFromJSONTyped(json: any, ignoreDiscriminator: boolean): NotificationList {
     if (json == null) {
         return json;
     }
     return {
+        'context': json['context'] == null ? undefined : ContextFromJSON(json['context']),
         'meta': json['meta'] == null ? undefined : MetaListFromJSON(json['meta']),
-        'rows': json['rows'] == null ? undefined : ((json['rows'] as Array<any>).map(TaskNoteFileFromJSON)),
+        'rows': json['rows'] == null ? undefined : ((json['rows'] as Array<any>).map(NotificationAbstractFromJSON)),
     };
 }
 
-export function TaskNoteFileListToJSON(json: any): TaskNoteFileList {
-    return TaskNoteFileListToJSONTyped(json, false);
+export function NotificationListToJSON(json: any): NotificationList {
+    return NotificationListToJSONTyped(json, false);
 }
 
-export function TaskNoteFileListToJSONTyped(value?: TaskNoteFileList | null, ignoreDiscriminator: boolean = false): any {
+export function NotificationListToJSONTyped(value?: NotificationList | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
     return {
+        'context': ContextToJSON(value['context']),
         'meta': MetaListToJSON(value['meta']),
-        'rows': value['rows'] == null ? undefined : ((value['rows'] as Array<any>).map(TaskNoteFileToJSON)),
+        'rows': value['rows'] == null ? undefined : ((value['rows'] as Array<any>).map(NotificationAbstractToJSON)),
     };
 }
 

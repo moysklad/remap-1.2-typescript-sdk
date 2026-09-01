@@ -19,20 +19,20 @@ import {
     CustomerOrderPositionFromJSONTyped,
     CustomerOrderPositionToJSON,
 } from './CustomerOrderPosition.js';
-import type { ModelError } from './ModelError.js';
+import type { Errors } from './Errors.js';
 import {
-    instanceOfModelError,
-    ModelErrorFromJSON,
-    ModelErrorFromJSONTyped,
-    ModelErrorToJSON,
-} from './ModelError.js';
+    instanceOfErrors,
+    ErrorsFromJSON,
+    ErrorsFromJSONTyped,
+    ErrorsToJSON,
+} from './Errors.js';
 
 /**
  * @type CreateCustomerOrderPositions200ResponseInner
  * 
  * @export
  */
-export type CreateCustomerOrderPositions200ResponseInner = CustomerOrderPosition | ModelError;
+export type CreateCustomerOrderPositions200ResponseInner = CustomerOrderPosition | Errors;
 
 export function CreateCustomerOrderPositions200ResponseInnerFromJSON(json: any): CreateCustomerOrderPositions200ResponseInner {
     return CreateCustomerOrderPositions200ResponseInnerFromJSONTyped(json, false);
@@ -48,8 +48,8 @@ export function CreateCustomerOrderPositions200ResponseInnerFromJSONTyped(json: 
     if (instanceOfCustomerOrderPosition(json)) {
         return CustomerOrderPositionFromJSONTyped(json, true);
     }
-    if (instanceOfModelError(json)) {
-        return ModelErrorFromJSONTyped(json, true);
+    if (instanceOfErrors(json)) {
+        return ErrorsFromJSONTyped(json, true);
     }
 
     return {} as any;
@@ -69,8 +69,8 @@ export function CreateCustomerOrderPositions200ResponseInnerToJSONTyped(value?: 
     if (instanceOfCustomerOrderPosition(value)) {
         return CustomerOrderPositionToJSON(value as CustomerOrderPosition);
     }
-    if (instanceOfModelError(value)) {
-        return ModelErrorToJSON(value as ModelError);
+    if (instanceOfErrors(value)) {
+        return ErrorsToJSON(value as Errors);
     }
 
     return {};

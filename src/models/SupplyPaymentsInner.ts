@@ -338,7 +338,7 @@ export interface SupplyPaymentsInner {
      * @type {number}
      * @memberof SupplyPaymentsInner
      */
-    readonly sum?: number;
+    sum?: number;
     /**
      * Сумма НДС
      * @type {number}
@@ -454,7 +454,7 @@ export function SupplyPaymentsInnerToJSON(json: any): SupplyPaymentsInner {
     return SupplyPaymentsInnerToJSONTyped(json, false);
 }
 
-export function SupplyPaymentsInnerToJSONTyped(value?: Omit<SupplyPaymentsInner, 'id'|'accountId'|'created'|'deleted'|'updated'|'printed'|'published'|'shared'|'sum'> | null, ignoreDiscriminator: boolean = false): any {
+export function SupplyPaymentsInnerToJSONTyped(value?: Omit<SupplyPaymentsInner, 'id'|'accountId'|'created'|'deleted'|'updated'|'printed'|'published'|'shared'> | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
@@ -481,6 +481,7 @@ export function SupplyPaymentsInnerToJSONTyped(value?: Omit<SupplyPaymentsInner,
         'project': ProjectToJSON(value['project']),
         'salesChannel': SalesChannelToJSON(value['salesChannel']),
         'state': StateToJSON(value['state']),
+        'sum': value['sum'],
         'vatSum': value['vatSum'],
         'factureIn': FactureInToJSON(value['factureIn']),
         'agentAccount': AccountToJSON(value['agentAccount']),

@@ -12,6 +12,13 @@
  * Do not edit the class manually.
  */
 
+import type { Errors } from './Errors.js';
+import {
+    instanceOfErrors,
+    ErrorsFromJSON,
+    ErrorsFromJSONTyped,
+    ErrorsToJSON,
+} from './Errors.js';
 import type { InternalOrderPosition } from './InternalOrderPosition.js';
 import {
     instanceOfInternalOrderPosition,
@@ -19,20 +26,13 @@ import {
     InternalOrderPositionFromJSONTyped,
     InternalOrderPositionToJSON,
 } from './InternalOrderPosition.js';
-import type { ModelError } from './ModelError.js';
-import {
-    instanceOfModelError,
-    ModelErrorFromJSON,
-    ModelErrorFromJSONTyped,
-    ModelErrorToJSON,
-} from './ModelError.js';
 
 /**
  * @type CreateInternalOrderPositions200ResponseInner
  * 
  * @export
  */
-export type CreateInternalOrderPositions200ResponseInner = InternalOrderPosition | ModelError;
+export type CreateInternalOrderPositions200ResponseInner = Errors | InternalOrderPosition;
 
 export function CreateInternalOrderPositions200ResponseInnerFromJSON(json: any): CreateInternalOrderPositions200ResponseInner {
     return CreateInternalOrderPositions200ResponseInnerFromJSONTyped(json, false);
@@ -45,11 +45,11 @@ export function CreateInternalOrderPositions200ResponseInnerFromJSONTyped(json: 
     if (typeof json !== 'object') {
         return json;
     }
+    if (instanceOfErrors(json)) {
+        return ErrorsFromJSONTyped(json, true);
+    }
     if (instanceOfInternalOrderPosition(json)) {
         return InternalOrderPositionFromJSONTyped(json, true);
-    }
-    if (instanceOfModelError(json)) {
-        return ModelErrorFromJSONTyped(json, true);
     }
 
     return {} as any;
@@ -66,11 +66,11 @@ export function CreateInternalOrderPositions200ResponseInnerToJSONTyped(value?: 
     if (typeof value !== 'object') {
         return value;
     }
+    if (instanceOfErrors(value)) {
+        return ErrorsToJSON(value as Errors);
+    }
     if (instanceOfInternalOrderPosition(value)) {
         return InternalOrderPositionToJSON(value as InternalOrderPosition);
-    }
-    if (instanceOfModelError(value)) {
-        return ModelErrorToJSON(value as ModelError);
     }
 
     return {};

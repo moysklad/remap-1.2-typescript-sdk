@@ -17,7 +17,7 @@ import * as runtime from '../runtime.js';
 import type {
   BatchResponseEntity,
   DeleteRowResult,
-  ErrorOrArray,
+  Errors,
   ProcessingStage,
   ProcessingStageList,
 } from '../models/index.js';
@@ -26,8 +26,8 @@ import {
     BatchResponseEntityToJSON,
     DeleteRowResultFromJSON,
     DeleteRowResultToJSON,
-    ErrorOrArrayFromJSON,
-    ErrorOrArrayToJSON,
+    ErrorsFromJSON,
+    ErrorsToJSON,
     ProcessingStageFromJSON,
     ProcessingStageToJSON,
     ProcessingStageListFromJSON,

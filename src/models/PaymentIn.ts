@@ -311,7 +311,7 @@ export interface PaymentInOwn {
      * @type {number}
      * @memberof PaymentIn
      */
-    readonly sum?: number;
+    sum?: number;
     /**
      * Сумма НДС
      * @type {number}
@@ -408,7 +408,7 @@ export function PaymentInToJSON(json: any): PaymentIn {
     return PaymentInToJSONTyped(json, false);
 }
 
-export function PaymentInToJSONTyped(value?: Omit<PaymentIn, 'id'|'accountId'|'created'|'deleted'|'updated'|'printed'|'published'|'shared'|'sum'> | null, ignoreDiscriminator: boolean = false): any {
+export function PaymentInToJSONTyped(value?: Omit<PaymentIn, 'id'|'accountId'|'created'|'deleted'|'updated'|'printed'|'published'|'shared'> | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
@@ -436,6 +436,7 @@ export function PaymentInToJSONTyped(value?: Omit<PaymentIn, 'id'|'accountId'|'c
         'project': ProjectToJSON(value['project']),
         'salesChannel': SalesChannelToJSON(value['salesChannel']),
         'state': StateToJSON(value['state']),
+        'sum': value['sum'],
         'vatSum': value['vatSum'],
         'incomingNumber': value['incomingNumber'],
         'incomingDate': value['incomingDate'],

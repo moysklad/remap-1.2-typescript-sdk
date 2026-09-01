@@ -25,7 +25,7 @@ import type {
   CustomerOrderPositionList,
   DeleteRowResult,
   DocumentMetadata,
-  ErrorOrArray,
+  Errors,
   EventNote,
   EventNoteList,
   ExportRequest,
@@ -55,8 +55,8 @@ import {
     DeleteRowResultToJSON,
     DocumentMetadataFromJSON,
     DocumentMetadataToJSON,
-    ErrorOrArrayFromJSON,
-    ErrorOrArrayToJSON,
+    ErrorsFromJSON,
+    ErrorsToJSON,
     EventNoteFromJSON,
     EventNoteToJSON,
     EventNoteListFromJSON,
@@ -120,7 +120,7 @@ export interface CreateCustomerOrderNoteRequest {
 
 export interface CreateCustomerOrderPositionRequest {
     id: string;
-    customerOrderPosition: Omit<CustomerOrderPosition, 'id'|'accountId'|'shipped'>;
+    customerOrderPosition: Omit<CustomerOrderPosition, 'accountId'|'shipped'>;
     expand?: string;
     accept?: CreateCustomerOrderPositionAcceptEnum;
     acceptEncoding?: string;
@@ -362,7 +362,7 @@ export interface UpdateCustomerOrderNoteRequest {
 export interface UpdateCustomerOrderPositionRequest {
     id: string;
     positionId: string;
-    customerOrderPosition: Omit<CustomerOrderPosition, 'id'|'accountId'|'shipped'>;
+    customerOrderPosition: Omit<CustomerOrderPosition, 'accountId'|'shipped'>;
     expand?: string;
     fields?: UpdateCustomerOrderPositionFieldsEnum;
     accept?: UpdateCustomerOrderPositionAcceptEnum;

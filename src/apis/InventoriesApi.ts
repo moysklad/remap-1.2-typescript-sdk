@@ -21,7 +21,7 @@ import type {
   CreateInventoryPositions200ResponseInner,
   DeleteRowResult,
   DocumentMetadata,
-  ErrorOrArray,
+  Errors,
   FileUpload,
   GetProductFiles200Response,
   Inventory,
@@ -44,8 +44,8 @@ import {
     DeleteRowResultToJSON,
     DocumentMetadataFromJSON,
     DocumentMetadataToJSON,
-    ErrorOrArrayFromJSON,
-    ErrorOrArrayToJSON,
+    ErrorsFromJSON,
+    ErrorsToJSON,
     FileUploadFromJSON,
     FileUploadToJSON,
     GetProductFiles200ResponseFromJSON,
@@ -111,7 +111,7 @@ export interface CreateInventoryMetadataStatesBatchRequest {
 
 export interface CreateInventoryPositionRequest {
     id: string;
-    inventoryPosition: Omit<InventoryPosition, 'id'|'accountId'|'correctionAmount'|'correctionSum'>;
+    inventoryPosition: Omit<InventoryPosition, 'accountId'|'correctionAmount'|'correctionSum'>;
     expand?: string;
     accept?: CreateInventoryPositionAcceptEnum;
     acceptEncoding?: string;
@@ -282,7 +282,7 @@ export interface UpdateInventoryMetadataStateByIdRequest {
 export interface UpdateInventoryPositionRequest {
     id: string;
     positionId: string;
-    inventoryPosition: Omit<InventoryPosition, 'id'|'accountId'|'correctionAmount'|'correctionSum'>;
+    inventoryPosition: Omit<InventoryPosition, 'accountId'|'correctionAmount'|'correctionSum'>;
     expand?: string;
     accept?: UpdateInventoryPositionAcceptEnum;
     acceptEncoding?: string;

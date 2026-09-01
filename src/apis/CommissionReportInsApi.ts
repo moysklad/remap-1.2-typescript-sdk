@@ -28,7 +28,7 @@ import type {
   CreateCommissionReportInReturnedPositionsRequest,
   DeleteRowResult,
   DocumentMetadata,
-  ErrorOrArray,
+  Errors,
   State,
   StateRowResult,
 } from '../models/index.js';
@@ -59,8 +59,8 @@ import {
     DeleteRowResultToJSON,
     DocumentMetadataFromJSON,
     DocumentMetadataToJSON,
-    ErrorOrArrayFromJSON,
-    ErrorOrArrayToJSON,
+    ErrorsFromJSON,
+    ErrorsToJSON,
     StateFromJSON,
     StateToJSON,
     StateRowResultFromJSON,
@@ -106,7 +106,7 @@ export interface CreateCommissionReportInMetadataStatesBatchRequest {
 
 export interface CreateCommissionReportInPositionRequest {
     id: string;
-    commissionReportInPosition: Omit<CommissionReportInPosition, 'id'|'accountId'>;
+    commissionReportInPosition: Omit<CommissionReportInPosition, 'accountId'>;
     expand?: string;
     accept?: CreateCommissionReportInPositionAcceptEnum;
     acceptEncoding?: string;
@@ -304,7 +304,7 @@ export interface UpdateCommissionReportInMetadataStateByIdRequest {
 export interface UpdateCommissionReportInPositionRequest {
     id: string;
     positionId: string;
-    commissionReportInPosition: Omit<CommissionReportInPosition, 'id'|'accountId'>;
+    commissionReportInPosition: Omit<CommissionReportInPosition, 'accountId'>;
     expand?: string;
     accept?: UpdateCommissionReportInPositionAcceptEnum;
     acceptEncoding?: string;

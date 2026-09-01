@@ -21,7 +21,7 @@ import type {
   CreateProcessingOrderPositions200ResponseInner,
   DeleteRowResult,
   DocumentMetadata,
-  ErrorOrArray,
+  Errors,
   FileUpload,
   GetProductFiles200Response,
   ProcessingOrder,
@@ -43,8 +43,8 @@ import {
     DeleteRowResultToJSON,
     DocumentMetadataFromJSON,
     DocumentMetadataToJSON,
-    ErrorOrArrayFromJSON,
-    ErrorOrArrayToJSON,
+    ErrorsFromJSON,
+    ErrorsToJSON,
     FileUploadFromJSON,
     FileUploadToJSON,
     GetProductFiles200ResponseFromJSON,
@@ -108,7 +108,7 @@ export interface CreateProcessingOrderMetadataStatesBatchRequest {
 
 export interface CreateProcessingOrderPositionRequest {
     id: string;
-    processingOrderPosition: Omit<ProcessingOrderPosition, 'id'|'accountId'>;
+    processingOrderPosition: Omit<ProcessingOrderPosition, 'accountId'>;
     expand?: string;
     accept?: CreateProcessingOrderPositionAcceptEnum;
     acceptEncoding?: string;
@@ -278,7 +278,7 @@ export interface UpdateProcessingOrderMetadataStateByIdRequest {
 export interface UpdateProcessingOrderPositionRequest {
     id: string;
     positionId: string;
-    processingOrderPosition: Omit<ProcessingOrderPosition, 'id'|'accountId'>;
+    processingOrderPosition: Omit<ProcessingOrderPosition, 'accountId'>;
     expand?: string;
     accept?: UpdateProcessingOrderPositionAcceptEnum;
     acceptEncoding?: string;

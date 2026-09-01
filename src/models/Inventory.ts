@@ -193,7 +193,7 @@ export interface InventoryOwn {
      * @type {InventoryPositionList}
      * @memberof Inventory
      */
-    positions?: InventoryPositionList | null;
+    positions?: InventoryPositionList;
     /**
      * Напечатан ли документ
      * @type {boolean}

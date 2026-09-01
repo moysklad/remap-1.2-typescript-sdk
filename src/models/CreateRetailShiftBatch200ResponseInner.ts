@@ -12,13 +12,13 @@
  * Do not edit the class manually.
  */
 
-import type { ModelError } from './ModelError.js';
+import type { Errors } from './Errors.js';
 import {
-    instanceOfModelError,
-    ModelErrorFromJSON,
-    ModelErrorFromJSONTyped,
-    ModelErrorToJSON,
-} from './ModelError.js';
+    instanceOfErrors,
+    ErrorsFromJSON,
+    ErrorsFromJSONTyped,
+    ErrorsToJSON,
+} from './Errors.js';
 import type { RetailShift } from './RetailShift.js';
 import {
     instanceOfRetailShift,
@@ -32,7 +32,7 @@ import {
  * 
  * @export
  */
-export type CreateRetailShiftBatch200ResponseInner = ModelError | RetailShift;
+export type CreateRetailShiftBatch200ResponseInner = Errors | RetailShift;
 
 export function CreateRetailShiftBatch200ResponseInnerFromJSON(json: any): CreateRetailShiftBatch200ResponseInner {
     return CreateRetailShiftBatch200ResponseInnerFromJSONTyped(json, false);
@@ -45,8 +45,8 @@ export function CreateRetailShiftBatch200ResponseInnerFromJSONTyped(json: any, i
     if (typeof json !== 'object') {
         return json;
     }
-    if (instanceOfModelError(json)) {
-        return ModelErrorFromJSONTyped(json, true);
+    if (instanceOfErrors(json)) {
+        return ErrorsFromJSONTyped(json, true);
     }
     if (instanceOfRetailShift(json)) {
         return RetailShiftFromJSONTyped(json, true);
@@ -66,8 +66,8 @@ export function CreateRetailShiftBatch200ResponseInnerToJSONTyped(value?: Create
     if (typeof value !== 'object') {
         return value;
     }
-    if (instanceOfModelError(value)) {
-        return ModelErrorToJSON(value as ModelError);
+    if (instanceOfErrors(value)) {
+        return ErrorsToJSON(value as Errors);
     }
     if (instanceOfRetailShift(value)) {
         return RetailShiftToJSON(value as RetailShift);

@@ -25,7 +25,7 @@ import type {
   EnterList,
   EnterPosition,
   EnterPositionList,
-  ErrorOrArray,
+  Errors,
   FileUpload,
   GetProductFiles200Response,
   State,
@@ -52,8 +52,8 @@ import {
     EnterPositionToJSON,
     EnterPositionListFromJSON,
     EnterPositionListToJSON,
-    ErrorOrArrayFromJSON,
-    ErrorOrArrayToJSON,
+    ErrorsFromJSON,
+    ErrorsToJSON,
     FileUploadFromJSON,
     FileUploadToJSON,
     GetProductFiles200ResponseFromJSON,
@@ -111,7 +111,7 @@ export interface CreateEnterMetadataStatesBatchRequest {
 
 export interface CreateEnterPositionRequest {
     id: string;
-    enterPosition: Omit<EnterPosition, 'id'|'accountId'|'overhead'>;
+    enterPosition: Omit<EnterPosition, 'accountId'|'overhead'>;
     expand?: string;
     accept?: CreateEnterPositionAcceptEnum;
     acceptEncoding?: string;
@@ -275,7 +275,7 @@ export interface UpdateEnterMetadataStateByIdRequest {
 export interface UpdateEnterPositionRequest {
     id: string;
     positionId: string;
-    enterPosition: Omit<EnterPosition, 'id'|'accountId'|'overhead'>;
+    enterPosition: Omit<EnterPosition, 'accountId'|'overhead'>;
     expand?: string;
     accept?: UpdateEnterPositionAcceptEnum;
     acceptEncoding?: string;

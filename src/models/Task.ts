@@ -41,13 +41,6 @@ import {
     TaskNotesToJSON,
     TaskNotesToJSONTyped,
 } from './TaskNotes.js';
-import type { DocumentMetadata } from './DocumentMetadata.js';
-import {
-    DocumentMetadataFromJSON,
-    DocumentMetadataFromJSONTyped,
-    DocumentMetadataToJSON,
-    DocumentMetadataToJSONTyped,
-} from './DocumentMetadata.js';
 import type { FileList } from './FileList.js';
 import {
     FileListFromJSON,
@@ -62,6 +55,13 @@ import {
     StateToJSON,
     StateToJSONTyped,
 } from './State.js';
+import type { EntityWithMeta } from './EntityWithMeta.js';
+import {
+    EntityWithMetaFromJSON,
+    EntityWithMetaFromJSONTyped,
+    EntityWithMetaToJSON,
+    EntityWithMetaToJSONTyped,
+} from './EntityWithMeta.js';
 import type { Application } from './Application.js';
 import {
     ApplicationFromJSON,
@@ -169,10 +169,10 @@ export interface TaskOwn {
     notes?: TaskNotes;
     /**
      * 
-     * @type {DocumentMetadata}
+     * @type {EntityWithMeta}
      * @memberof Task
      */
-    operation?: DocumentMetadata;
+    operation?: EntityWithMeta;
     /**
      * Метаданные типа задачи
      * @type {State}
@@ -221,7 +221,7 @@ export function TaskFromJSONTyped(json: any, ignoreDiscriminator: boolean): Task
         'files': json['files'] == null ? undefined : FileListFromJSON(json['files']),
         'implementer': json['implementer'] == null ? undefined : EmployeeFromJSON(json['implementer']),
         'notes': json['notes'] == null ? undefined : TaskNotesFromJSON(json['notes']),
-        'operation': json['operation'] == null ? undefined : DocumentMetadataFromJSON(json['operation']),
+        'operation': json['operation'] == null ? undefined : EntityWithMetaFromJSON(json['operation']),
         'state': json['state'] == null ? undefined : StateFromJSON(json['state']),
         'updated': json['updated'] == null ? undefined : json['updated'],
     };
@@ -248,7 +248,7 @@ export function TaskToJSONTyped(value?: Omit<Task, 'id'|'accountId'|'completed'|
         'files': FileListToJSON(value['files']),
         'implementer': EmployeeToJSON(value['implementer']),
         'notes': TaskNotesToJSON(value['notes']),
-        'operation': DocumentMetadataToJSON(value['operation']),
+        'operation': EntityWithMetaToJSON(value['operation']),
         'state': StateToJSON(value['state']),
     };
 }
