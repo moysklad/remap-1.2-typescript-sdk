@@ -1,6 +1,6 @@
 {
   "name": "@moysklad/remap-1.2-sdk",
-  "version": "0.26.0",
+  "version": "0.27.0",
   "description": "Официальный TypeScript SDK для МойСклад Remap 1.2",
   "keywords": [
     "moysklad",
