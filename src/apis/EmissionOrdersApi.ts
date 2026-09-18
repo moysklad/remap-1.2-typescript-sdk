@@ -150,6 +150,12 @@ export interface GetEmissionOrderPositionsRequest {
     acceptEncoding?: string;
 }
 
+export interface MoveEmissionOrderToTrashRequest {
+    id: string;
+    accept?: MoveEmissionOrderToTrashAcceptEnum;
+    acceptEncoding?: string;
+}
+
 export interface UpdateEmissionOrderRequest {
     id: string;
     emissionOrder: Omit<EmissionOrder, 'id'|'accountId'|'created'|'documentState'|'printed'|'published'|'updated'>;
@@ -1032,6 +1038,61 @@ export class EmissionOrdersApi extends runtime.BaseAPI {
     }
 
     /**
+     * Удалить Заказ кодов маркировки в корзину
+     */
+    async moveEmissionOrderToTrashRaw(requestParameters: MoveEmissionOrderToTrashRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling moveEmissionOrderToTrash().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (requestParameters['accept'] != null) {
+            headerParameters['accept'] = String(requestParameters['accept']);
+        }
+
+        if (requestParameters['acceptEncoding'] != null) {
+            headerParameters['Accept-Encoding'] = String(requestParameters['acceptEncoding']);
+        }
+
+        if (this.configuration && (this.configuration.username !== undefined || this.configuration.password !== undefined)) {
+            headerParameters["Authorization"] = "Basic " + btoa(this.configuration.username + ":" + this.configuration.password);
+        }
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearerAuth", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/entity/emissionorder/{id}/trash`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Удалить Заказ кодов маркировки в корзину
+     */
+    async moveEmissionOrderToTrash(requestParameters: MoveEmissionOrderToTrashRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.moveEmissionOrderToTrashRaw(requestParameters, initOverrides);
+    }
+
+    /**
      * Изменить Заказ кодов маркировки
      */
     async updateEmissionOrderRaw(requestParameters: UpdateEmissionOrderRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<EmissionOrder>> {
@@ -1474,6 +1535,14 @@ export const GetEmissionOrderPositionsAcceptEnum = {
     ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
 } as const;
 export type GetEmissionOrderPositionsAcceptEnum = typeof GetEmissionOrderPositionsAcceptEnum[keyof typeof GetEmissionOrderPositionsAcceptEnum];
+/**
+ * @export
+ */
+export const MoveEmissionOrderToTrashAcceptEnum = {
+    ApplicationJson: 'application/json',
+    ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
+} as const;
+export type MoveEmissionOrderToTrashAcceptEnum = typeof MoveEmissionOrderToTrashAcceptEnum[keyof typeof MoveEmissionOrderToTrashAcceptEnum];
 /**
  * @export
  */

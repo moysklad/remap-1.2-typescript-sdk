@@ -36,632 +36,648 @@ import {
 } from './ScriptPermissions.js';
 
 /**
- * Список пермиссий (только для индивидуальной роли)
+ * Права роли. В JSON передаются объектом, где ключи — названия пермиссий,
+ * значения — Boolean или объекты прав сущностей.
+ * Для currency, country, taxrate и uom право view неизменяемо и равно ALL;
+ * попытка изменить его приводит к ошибке.
+ * 
  * @export
- * @interface EmployeeRolePermissions
+ * @interface RolePermissions
  */
-export interface EmployeeRolePermissions {
+export interface RolePermissions {
     /**
      * Доступ по АПИ
      * @type {boolean}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     apiRequest?: boolean;
     /**
      * Удалять аккаунт
      * @type {boolean}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     accountDelete?: boolean;
     /**
      * Очищать корзину
      * @type {boolean}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     deleteFromRecycleBin?: boolean;
     /**
      * Редактировать курс валюты документа
      * @type {boolean}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     editCurrencyRateOfDocument?: boolean;
     /**
      * Редактировать шаблоны документов и отчетов
      * @type {boolean}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     editDocumentTemplates?: boolean;
     /**
      * Редактировать документы закрытого периода
      * @type {boolean}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     editDocumentsOfRestrictedPeriod?: boolean;
     /**
      * Экспортировать данные
      * @type {boolean}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     exportData?: boolean;
     /**
      * Импортировать данные
      * @type {boolean}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     importData?: boolean;
     /**
      * Прослушивание звонков
      * @type {boolean}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     listenCalls?: boolean;
     /**
      * Интернет магазины
      * @type {boolean}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     onlineShops?: boolean;
     /**
      * Передавать владение аккаунтом
      * @type {boolean}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     ownerAssign?: boolean;
     /**
      * Редактировать данные владельца
      * @type {boolean}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     ownerDataUpdate?: boolean;
     /**
      * Управление закупками
      * @type {boolean}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     purchaseControl?: boolean;
     /**
-     * Восстанавливать документы
+     * Восстанавливать документы из корзины
      * @type {boolean}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
-    resto$refromRecycleBin?: boolean;
+    restoreFromRecycleBin?: boolean;
     /**
      * Отправлять почту
      * @type {boolean}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     sendEmail?: boolean;
     /**
      * Управление подпиской
      * @type {boolean}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     subscriptionControl?: boolean;
     /**
      * Просматривать аудит
      * @type {boolean}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     viewAudit?: boolean;
     /**
      * Просматривать движение денежных средств
      * @type {boolean}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     viewCashFlow?: boolean;
     /**
      * Просматривать товары на реализации
      * @type {boolean}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     viewCommissionGoods?: boolean;
     /**
      * Просматривать показатели
      * @type {boolean}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     viewCompanyCRM?: boolean;
     /**
      * Просматривать взаиморасчеты
      * @type {boolean}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     viewCustomerBalanceList?: boolean;
     /**
      * Просматривать показатели
      * @type {boolean}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     viewDashboard?: boolean;
     /**
      * Видеть остатки денег
      * @type {boolean}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     viewMoneyDashboard?: boolean;
     /**
      * Видеть себестоимость, цену закупки и прибыль товаров
      * @type {boolean}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     viewProductCostAndProfit?: boolean;
     /**
      * Просматривать прибыль и убытки
      * @type {boolean}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     viewProfitAndLoss?: boolean;
     /**
      * Просматривать воронку продаж
      * @type {boolean}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     viewPurchaseFunnel?: boolean;
     /**
      * Просматривать корзину
      * @type {boolean}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     viewRecycleBin?: boolean;
     /**
      * Просматривать прибыльность
      * @type {boolean}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     viewSaleProfit?: boolean;
     /**
      * Просматривать серийные номера
      * @type {boolean}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     viewSerialNumbers?: boolean;
     /**
      * Просматривать остатки по товарам
      * @type {boolean}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     viewStockReport?: boolean;
     /**
      * Просматривать обороты
      * @type {boolean}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     viewTurnover?: boolean;
     /**
      * 
      * @type {Permissions}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     gTINList?: Permissions;
     /**
      * 
      * @type {Permissions}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     accountAdjustment?: Permissions;
     /**
      * 
      * @type {Permissions}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     bonusTransaction?: Permissions;
     /**
      * 
      * @type {Permissions}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     cashIn?: Permissions;
     /**
      * 
      * @type {Permissions}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     cashOut?: Permissions;
     /**
      * 
      * @type {Permissions}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     cashboxAdjustment?: Permissions;
     /**
      * 
      * @type {Permissions}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     commissionReportIn?: Permissions;
     /**
      * 
      * @type {Permissions}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     commissionReportOut?: Permissions;
     /**
      * 
      * @type {Permissions}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     company?: Permissions;
     /**
      * 
      * @type {Permissions}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     contract?: Permissions;
     /**
      * 
      * @type {Permissions}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     counterpartyAdjustment?: Permissions;
     /**
      * 
      * @type {Permissions}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     country?: Permissions;
     /**
      * 
      * @type {Permissions}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     crptCancellation?: Permissions;
     /**
      * 
      * @type {Permissions}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     crptPackageCreation?: Permissions;
     /**
      * 
      * @type {Permissions}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     crptPackageDisaggregation?: Permissions;
     /**
      * 
      * @type {Permissions}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     crptPackageItemRemoval?: Permissions;
     /**
      * 
      * @type {Permissions}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     currency?: Permissions;
     /**
      * 
      * @type {Permissions}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     customEntity?: Permissions;
     /**
      * 
      * @type {Permissions}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     customerOrder?: Permissions;
     /**
      * 
      * @type {Permissions}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     demand?: Permissions;
     /**
      * 
      * @type {Permissions}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     emissionOrder?: Permissions;
     /**
      * 
      * @type {Permissions}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     utilizationReport?: Permissions;
     /**
      * 
      * @type {Permissions}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     atkAggregation?: Permissions;
     /**
      * 
      * @type {Permissions}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     retireOrderOSU?: Permissions;
     /**
      * 
      * @type {Permissions}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     employee?: Permissions;
     /**
      * 
      * @type {Permissions}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     enrollOrder?: Permissions;
     /**
      * 
      * @type {Permissions}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
+     */
+    enrollReturn?: Permissions;
+    /**
+     * 
+     * @type {Permissions}
+     * @memberof RolePermissions
      */
     enter?: Permissions;
     /**
      * 
      * @type {Permissions}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
+     */
+    expenseitem?: Permissions;
+    /**
+     * 
+     * @type {Permissions}
+     * @memberof RolePermissions
      */
     factureIn?: Permissions;
     /**
      * 
      * @type {Permissions}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     factureOut?: Permissions;
     /**
      * 
      * @type {Permissions}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     good?: Permissions;
     /**
      * 
      * @type {Permissions}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     internalOrder?: Permissions;
     /**
      * 
      * @type {Permissions}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     inventory?: Permissions;
     /**
      * 
      * @type {Permissions}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     invoiceIn?: Permissions;
     /**
      * 
      * @type {Permissions}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     invoiceOut?: Permissions;
     /**
      * 
      * @type {Permissions}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     loss?: Permissions;
     /**
      * 
      * @type {Permissions}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     move?: Permissions;
     /**
      * 
      * @type {Permissions}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     myCompany?: Permissions;
     /**
      * 
      * @type {Permissions}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     paymentIn?: Permissions;
     /**
      * 
      * @type {Permissions}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     paymentOut?: Permissions;
     /**
      * 
      * @type {Permissions}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     prepayment?: Permissions;
     /**
      * 
      * @type {Permissions}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     prepaymentReturn?: Permissions;
     /**
      * 
      * @type {Permissions}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     priceList?: Permissions;
     /**
      * 
      * @type {Permissions}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     processing?: Permissions;
     /**
      * 
      * @type {Permissions}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     processingOrder?: Permissions;
     /**
      * 
      * @type {Permissions}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     processingPlan?: Permissions;
     /**
      * 
      * @type {Permissions}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     processingStage?: Permissions;
     /**
      * 
      * @type {Permissions}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     processingProcess?: Permissions;
     /**
      * 
      * @type {Permissions}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     productionTask?: Permissions;
     /**
      * 
      * @type {Permissions}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     productionStageCompletion?: Permissions;
     /**
      * 
      * @type {Permissions}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     project?: Permissions;
     /**
      * 
      * @type {Permissions}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     purchaseOrder?: Permissions;
     /**
      * 
      * @type {Permissions}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     purchaseReturn?: Permissions;
     /**
      * 
      * @type {Permissions}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     remainsOrder?: Permissions;
     /**
      * 
      * @type {Permissions}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     remarkingOrder?: Permissions;
     /**
      * 
      * @type {Permissions}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     retailDemand?: Permissions;
     /**
      * 
      * @type {Permissions}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     retailDrawerCashIn?: Permissions;
     /**
      * 
      * @type {Permissions}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     retailDrawerCashOut?: Permissions;
     /**
      * 
      * @type {Permissions}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     retailSalesReturn?: Permissions;
     /**
      * 
      * @type {Permissions}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     retailShift?: Permissions;
     /**
      * 
      * @type {Permissions}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     retailStore?: Permissions;
     /**
      * 
      * @type {Permissions}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     retireOrder?: Permissions;
     /**
      * 
      * @type {Permissions}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     salesReturn?: Permissions;
     /**
      * 
      * @type {Permissions}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     salesChannel?: Permissions;
     /**
      * 
      * @type {ScriptPermissions}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     script?: ScriptPermissions;
     /**
      * 
      * @type {ScriptTemplatePermissions}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     scriptTemplate?: ScriptTemplatePermissions;
     /**
      * 
      * @type {Permissions}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     supply?: Permissions;
     /**
      * 
      * @type {Permissions}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     taxrate?: Permissions;
     /**
      * 
      * @type {Permissions}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     trackingCodeList?: Permissions;
     /**
      * 
      * @type {Permissions}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     uom?: Permissions;
     /**
      * 
      * @type {Permissions}
-     * @memberof EmployeeRolePermissions
+     * @memberof RolePermissions
      */
     warehouse?: Permissions;
 }
 
 
 /**
- * Check if a given object implements the EmployeeRolePermissions interface.
+ * Check if a given object implements the RolePermissions interface.
  */
-export function instanceOfEmployeeRolePermissions(value: object): value is EmployeeRolePermissions {
+export function instanceOfRolePermissions(value: object): value is RolePermissions {
     return true;
 }
 
-export function EmployeeRolePermissionsFromJSON(json: any): EmployeeRolePermissions {
-    return EmployeeRolePermissionsFromJSONTyped(json, false);
+export function RolePermissionsFromJSON(json: any): RolePermissions {
+    return RolePermissionsFromJSONTyped(json, false);
 }
 
-export function EmployeeRolePermissionsFromJSONTyped(json: any, ignoreDiscriminator: boolean): EmployeeRolePermissions {
+export function RolePermissionsFromJSONTyped(json: any, ignoreDiscriminator: boolean): RolePermissions {
     if (json == null) {
         return json;
     }
@@ -679,7 +695,7 @@ export function EmployeeRolePermissionsFromJSONTyped(json: any, ignoreDiscrimina
         'ownerAssign': json['ownerAssign'] == null ? undefined : json['ownerAssign'],
         'ownerDataUpdate': json['ownerDataUpdate'] == null ? undefined : json['ownerDataUpdate'],
         'purchaseControl': json['purchaseControl'] == null ? undefined : json['purchaseControl'],
-        'resto$refromRecycleBin': json['resto$refromRecycleBin'] == null ? undefined : json['resto$refromRecycleBin'],
+        'restoreFromRecycleBin': json['restoreFromRecycleBin'] == null ? undefined : json['restoreFromRecycleBin'],
         'sendEmail': json['sendEmail'] == null ? undefined : json['sendEmail'],
         'subscriptionControl': json['subscriptionControl'] == null ? undefined : json['subscriptionControl'],
         'viewAudit': json['viewAudit'] == null ? undefined : json['viewAudit'],
@@ -723,7 +739,9 @@ export function EmployeeRolePermissionsFromJSONTyped(json: any, ignoreDiscrimina
         'retireOrderOSU': json['retireOrderOSU'] == null ? undefined : PermissionsFromJSON(json['retireOrderOSU']),
         'employee': json['employee'] == null ? undefined : PermissionsFromJSON(json['employee']),
         'enrollOrder': json['enrollOrder'] == null ? undefined : PermissionsFromJSON(json['enrollOrder']),
+        'enrollReturn': json['enrollReturn'] == null ? undefined : PermissionsFromJSON(json['enrollReturn']),
         'enter': json['enter'] == null ? undefined : PermissionsFromJSON(json['enter']),
+        'expenseitem': json['expenseitem'] == null ? undefined : PermissionsFromJSON(json['expenseitem']),
         'factureIn': json['factureIn'] == null ? undefined : PermissionsFromJSON(json['factureIn']),
         'factureOut': json['factureOut'] == null ? undefined : PermissionsFromJSON(json['factureOut']),
         'good': json['good'] == null ? undefined : PermissionsFromJSON(json['good']),
@@ -770,11 +788,11 @@ export function EmployeeRolePermissionsFromJSONTyped(json: any, ignoreDiscrimina
     };
 }
 
-export function EmployeeRolePermissionsToJSON(json: any): EmployeeRolePermissions {
-    return EmployeeRolePermissionsToJSONTyped(json, false);
+export function RolePermissionsToJSON(json: any): RolePermissions {
+    return RolePermissionsToJSONTyped(json, false);
 }
 
-export function EmployeeRolePermissionsToJSONTyped(value?: EmployeeRolePermissions | null, ignoreDiscriminator: boolean = false): any {
+export function RolePermissionsToJSONTyped(value?: RolePermissions | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
@@ -792,7 +810,7 @@ export function EmployeeRolePermissionsToJSONTyped(value?: EmployeeRolePermissio
         'ownerAssign': value['ownerAssign'],
         'ownerDataUpdate': value['ownerDataUpdate'],
         'purchaseControl': value['purchaseControl'],
-        'resto$refromRecycleBin': value['resto$refromRecycleBin'],
+        'restoreFromRecycleBin': value['restoreFromRecycleBin'],
         'sendEmail': value['sendEmail'],
         'subscriptionControl': value['subscriptionControl'],
         'viewAudit': value['viewAudit'],
@@ -836,7 +854,9 @@ export function EmployeeRolePermissionsToJSONTyped(value?: EmployeeRolePermissio
         'retireOrderOSU': PermissionsToJSON(value['retireOrderOSU']),
         'employee': PermissionsToJSON(value['employee']),
         'enrollOrder': PermissionsToJSON(value['enrollOrder']),
+        'enrollReturn': PermissionsToJSON(value['enrollReturn']),
         'enter': PermissionsToJSON(value['enter']),
+        'expenseitem': PermissionsToJSON(value['expenseitem']),
         'factureIn': PermissionsToJSON(value['factureIn']),
         'factureOut': PermissionsToJSON(value['factureOut']),
         'good': PermissionsToJSON(value['good']),

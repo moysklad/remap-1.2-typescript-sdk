@@ -199,6 +199,12 @@ export interface GetRetailSalesReturnsRequest {
     acceptEncoding?: string;
 }
 
+export interface MoveRetailSalesReturnToTrashRequest {
+    id: string;
+    accept?: MoveRetailSalesReturnToTrashAcceptEnum;
+    acceptEncoding?: string;
+}
+
 export interface UpdateRetailSalesReturnRequest {
     id: string;
     retailSalesReturn: Omit<RetailSalesReturn, 'id'|'accountId'|'created'|'deleted'|'printed'|'published'|'sum'|'updated'|'vatSum'>;
@@ -1441,6 +1447,61 @@ export class RetailSalesReturnsApi extends runtime.BaseAPI {
     }
 
     /**
+     * Удалить Розничный возврат в корзину
+     */
+    async moveRetailSalesReturnToTrashRaw(requestParameters: MoveRetailSalesReturnToTrashRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling moveRetailSalesReturnToTrash().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (requestParameters['accept'] != null) {
+            headerParameters['accept'] = String(requestParameters['accept']);
+        }
+
+        if (requestParameters['acceptEncoding'] != null) {
+            headerParameters['Accept-Encoding'] = String(requestParameters['acceptEncoding']);
+        }
+
+        if (this.configuration && (this.configuration.username !== undefined || this.configuration.password !== undefined)) {
+            headerParameters["Authorization"] = "Basic " + btoa(this.configuration.username + ":" + this.configuration.password);
+        }
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearerAuth", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/entity/retailsalesreturn/{id}/trash`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Удалить Розничный возврат в корзину
+     */
+    async moveRetailSalesReturnToTrash(requestParameters: MoveRetailSalesReturnToTrashRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.moveRetailSalesReturnToTrashRaw(requestParameters, initOverrides);
+    }
+
+    /**
      * Изменить Розничный возврат
      */
     async updateRetailSalesReturnRaw(requestParameters: UpdateRetailSalesReturnRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<RetailSalesReturn>> {
@@ -1994,6 +2055,14 @@ export const GetRetailSalesReturnsAcceptEnum = {
     ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
 } as const;
 export type GetRetailSalesReturnsAcceptEnum = typeof GetRetailSalesReturnsAcceptEnum[keyof typeof GetRetailSalesReturnsAcceptEnum];
+/**
+ * @export
+ */
+export const MoveRetailSalesReturnToTrashAcceptEnum = {
+    ApplicationJson: 'application/json',
+    ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
+} as const;
+export type MoveRetailSalesReturnToTrashAcceptEnum = typeof MoveRetailSalesReturnToTrashAcceptEnum[keyof typeof MoveRetailSalesReturnToTrashAcceptEnum];
 /**
  * @export
  */

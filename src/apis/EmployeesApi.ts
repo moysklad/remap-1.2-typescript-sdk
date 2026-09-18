@@ -1070,7 +1070,7 @@ export class EmployeesApi extends runtime.BaseAPI {
     }
 
     /**
-     * Запрос на получение роли системного администратора.
+     * Запрос на получение роли системного администратора. Ответ содержит meta роли с type = systemrole. 
      * Получить роль администратора
      */
     async getRoleAdminRaw(requestParameters: GetRoleAdminRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<EmployeeRole>> {
@@ -1111,7 +1111,7 @@ export class EmployeesApi extends runtime.BaseAPI {
     }
 
     /**
-     * Запрос на получение роли системного администратора.
+     * Запрос на получение роли системного администратора. Ответ содержит meta роли с type = systemrole. 
      * Получить роль администратора
      */
     async getRoleAdmin(requestParameters: GetRoleAdminRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<EmployeeRole> {
@@ -1120,7 +1120,7 @@ export class EmployeesApi extends runtime.BaseAPI {
     }
 
     /**
-     * Запрос на получение роли кассира.
+     * Запрос на получение роли кассира. Ответ содержит meta роли с type = systemrole. 
      * Получить роль кассира
      */
     async getRoleCashierRaw(requestParameters: GetRoleCashierRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<EmployeeRole>> {
@@ -1161,7 +1161,7 @@ export class EmployeesApi extends runtime.BaseAPI {
     }
 
     /**
-     * Запрос на получение роли кассира.
+     * Запрос на получение роли кассира. Ответ содержит meta роли с type = systemrole. 
      * Получить роль кассира
      */
     async getRoleCashier(requestParameters: GetRoleCashierRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<EmployeeRole> {
@@ -1170,7 +1170,7 @@ export class EmployeesApi extends runtime.BaseAPI {
     }
 
     /**
-     * Запрос на получение индивидуальной роли.
+     * Запрос на получение индивидуальной роли. Ответ содержит meta роли с type = individualrole. Индивидуальные права сотрудника доступны через /entity/employee/{id}/security. 
      * Получить индивидуальную роль
      */
     async getRoleIndividualRaw(requestParameters: GetRoleIndividualRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<EmployeeRole>> {
@@ -1211,7 +1211,7 @@ export class EmployeesApi extends runtime.BaseAPI {
     }
 
     /**
-     * Запрос на получение индивидуальной роли.
+     * Запрос на получение индивидуальной роли. Ответ содержит meta роли с type = individualrole. Индивидуальные права сотрудника доступны через /entity/employee/{id}/security. 
      * Получить индивидуальную роль
      */
     async getRoleIndividual(requestParameters: GetRoleIndividualRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<EmployeeRole> {
@@ -1220,7 +1220,7 @@ export class EmployeesApi extends runtime.BaseAPI {
     }
 
     /**
-     * Запрос на получение роли владельца аккаунта.
+     * Запрос на получение роли владельца аккаунта. Ответ содержит meta роли с type = systemrole. 
      * Получить роль владельца аккаунта
      */
     async getRoleOwnerRaw(requestParameters: GetRoleOwnerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<EmployeeRole>> {
@@ -1261,7 +1261,7 @@ export class EmployeesApi extends runtime.BaseAPI {
     }
 
     /**
-     * Запрос на получение роли владельца аккаунта.
+     * Запрос на получение роли владельца аккаунта. Ответ содержит meta роли с type = systemrole. 
      * Получить роль владельца аккаунта
      */
     async getRoleOwner(requestParameters: GetRoleOwnerRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<EmployeeRole> {
@@ -1270,7 +1270,7 @@ export class EmployeesApi extends runtime.BaseAPI {
     }
 
     /**
-     * Запрос на получение роли сотрудника производства. Роль доступна только при подключенной опции Управление производством.
+     * Запрос на получение роли сотрудника производства. Роль доступна только при подключенной опции Управление производством. Ответ содержит meta роли с type = systemrole. 
      * Получить роль сотрудника производства
      */
     async getRoleWorkerRaw(requestParameters: GetRoleWorkerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<EmployeeRole>> {
@@ -1311,7 +1311,7 @@ export class EmployeesApi extends runtime.BaseAPI {
     }
 
     /**
-     * Запрос на получение роли сотрудника производства. Роль доступна только при подключенной опции Управление производством.
+     * Запрос на получение роли сотрудника производства. Роль доступна только при подключенной опции Управление производством. Ответ содержит meta роли с type = systemrole. 
      * Получить роль сотрудника производства
      */
     async getRoleWorker(requestParameters: GetRoleWorkerRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<EmployeeRole> {

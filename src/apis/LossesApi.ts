@@ -222,6 +222,12 @@ export interface GetLossTemplateRequest {
     body?: object;
 }
 
+export interface MoveLossToTrashRequest {
+    id: string;
+    accept?: MoveLossToTrashAcceptEnum;
+    acceptEncoding?: string;
+}
+
 export interface UpdateLossRequest {
     id: string;
     loss: Omit<Loss, 'id'|'accountId'|'created'|'deleted'|'expenseItem'|'printed'|'published'|'sum'|'updated'>;
@@ -1644,6 +1650,61 @@ export class LossesApi extends runtime.BaseAPI {
     }
 
     /**
+     * Удалить Списание в корзину
+     */
+    async moveLossToTrashRaw(requestParameters: MoveLossToTrashRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling moveLossToTrash().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (requestParameters['accept'] != null) {
+            headerParameters['accept'] = String(requestParameters['accept']);
+        }
+
+        if (requestParameters['acceptEncoding'] != null) {
+            headerParameters['Accept-Encoding'] = String(requestParameters['acceptEncoding']);
+        }
+
+        if (this.configuration && (this.configuration.username !== undefined || this.configuration.password !== undefined)) {
+            headerParameters["Authorization"] = "Basic " + btoa(this.configuration.username + ":" + this.configuration.password);
+        }
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearerAuth", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/entity/loss/{id}/trash`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Удалить Списание в корзину
+     */
+    async moveLossToTrash(requestParameters: MoveLossToTrashRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.moveLossToTrashRaw(requestParameters, initOverrides);
+    }
+
+    /**
      * Изменить Списание
      */
     async updateLossRaw(requestParameters: UpdateLossRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Loss>> {
@@ -2235,6 +2296,14 @@ export const GetLossTemplateContentTypeEnum = {
     ApplicationJson: 'application/json'
 } as const;
 export type GetLossTemplateContentTypeEnum = typeof GetLossTemplateContentTypeEnum[keyof typeof GetLossTemplateContentTypeEnum];
+/**
+ * @export
+ */
+export const MoveLossToTrashAcceptEnum = {
+    ApplicationJson: 'application/json',
+    ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
+} as const;
+export type MoveLossToTrashAcceptEnum = typeof MoveLossToTrashAcceptEnum[keyof typeof MoveLossToTrashAcceptEnum];
 /**
  * @export
  */

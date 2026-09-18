@@ -193,6 +193,12 @@ export interface GetPaymentOutTemplateRequest {
     body?: object;
 }
 
+export interface MovePaymentOutToTrashRequest {
+    id: string;
+    accept?: MovePaymentOutToTrashAcceptEnum;
+    acceptEncoding?: string;
+}
+
 export interface UpdatePaymentOutRequest {
     id: string;
     paymentOut: Omit<PaymentOut, 'id'|'accountId'|'created'|'deleted'|'updated'|'printed'|'published'>;
@@ -1433,6 +1439,61 @@ export class PaymentOutsApi extends runtime.BaseAPI {
     }
 
     /**
+     * Удалить PaymentOut в корзину
+     */
+    async movePaymentOutToTrashRaw(requestParameters: MovePaymentOutToTrashRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling movePaymentOutToTrash().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (requestParameters['accept'] != null) {
+            headerParameters['accept'] = String(requestParameters['accept']);
+        }
+
+        if (requestParameters['acceptEncoding'] != null) {
+            headerParameters['Accept-Encoding'] = String(requestParameters['acceptEncoding']);
+        }
+
+        if (this.configuration && (this.configuration.username !== undefined || this.configuration.password !== undefined)) {
+            headerParameters["Authorization"] = "Basic " + btoa(this.configuration.username + ":" + this.configuration.password);
+        }
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearerAuth", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/entity/paymentout/{id}/trash`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Удалить PaymentOut в корзину
+     */
+    async movePaymentOutToTrash(requestParameters: MovePaymentOutToTrashRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.movePaymentOutToTrashRaw(requestParameters, initOverrides);
+    }
+
+    /**
      * Изменить PaymentOut
      */
     async updatePaymentOutRaw(requestParameters: UpdatePaymentOutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PaymentOut>> {
@@ -1857,6 +1918,14 @@ export const GetPaymentOutTemplateContentTypeEnum = {
     ApplicationJson: 'application/json'
 } as const;
 export type GetPaymentOutTemplateContentTypeEnum = typeof GetPaymentOutTemplateContentTypeEnum[keyof typeof GetPaymentOutTemplateContentTypeEnum];
+/**
+ * @export
+ */
+export const MovePaymentOutToTrashAcceptEnum = {
+    ApplicationJson: 'application/json',
+    ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
+} as const;
+export type MovePaymentOutToTrashAcceptEnum = typeof MovePaymentOutToTrashAcceptEnum[keyof typeof MovePaymentOutToTrashAcceptEnum];
 /**
  * @export
  */

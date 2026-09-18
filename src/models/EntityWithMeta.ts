@@ -33,6 +33,7 @@ import * as EntityWithMetaPolymorphicCommissionReportOutPosition from './Commiss
 import * as EntityWithMetaPolymorphicConsignment from './Consignment.js';
 import * as EntityWithMetaPolymorphicContract from './Contract.js';
 import * as EntityWithMetaPolymorphicCounterparty from './Counterparty.js';
+import * as EntityWithMetaPolymorphicCounterpartyAdjustment from './CounterpartyAdjustment.js';
 import * as EntityWithMetaPolymorphicCountry from './Country.js';
 import * as EntityWithMetaPolymorphicCurrency from './Currency.js';
 import * as EntityWithMetaPolymorphicCustomerOrder from './CustomerOrder.js';
@@ -56,7 +57,11 @@ import * as EntityWithMetaPolymorphicMovePosition from './MovePosition.js';
 import * as EntityWithMetaPolymorphicOrganization from './Organization.js';
 import * as EntityWithMetaPolymorphicPaymentIn from './PaymentIn.js';
 import * as EntityWithMetaPolymorphicPaymentOut from './PaymentOut.js';
+import * as EntityWithMetaPolymorphicPayroll from './Payroll.js';
+import * as EntityWithMetaPolymorphicPayrollPosition from './PayrollPosition.js';
 import * as EntityWithMetaPolymorphicPrepaymentReturnPosition from './PrepaymentReturnPosition.js';
+import * as EntityWithMetaPolymorphicPriceList from './PriceList.js';
+import * as EntityWithMetaPolymorphicPriceListPosition from './PriceListPosition.js';
 import * as EntityWithMetaPolymorphicPriceType from './PriceType.js';
 import * as EntityWithMetaPolymorphicProcessing from './Processing.js';
 import * as EntityWithMetaPolymorphicProcessingOrder from './ProcessingOrder.js';
@@ -151,6 +156,7 @@ export function EntityWithMetaFromJSONTyped(json: any, ignoreDiscriminator: bool
             'consignment': EntityWithMetaPolymorphicConsignment.ConsignmentFromJSON,
             'contract': EntityWithMetaPolymorphicContract.ContractFromJSON,
             'counterparty': EntityWithMetaPolymorphicCounterparty.CounterpartyFromJSON,
+            'counterpartyadjustment': EntityWithMetaPolymorphicCounterpartyAdjustment.CounterpartyAdjustmentFromJSON,
             'country': EntityWithMetaPolymorphicCountry.CountryFromJSON,
             'currency': EntityWithMetaPolymorphicCurrency.CurrencyFromJSON,
             'customerorder': EntityWithMetaPolymorphicCustomerOrder.CustomerOrderFromJSON,
@@ -174,7 +180,11 @@ export function EntityWithMetaFromJSONTyped(json: any, ignoreDiscriminator: bool
             'organization': EntityWithMetaPolymorphicOrganization.OrganizationFromJSON,
             'paymentin': EntityWithMetaPolymorphicPaymentIn.PaymentInFromJSON,
             'paymentout': EntityWithMetaPolymorphicPaymentOut.PaymentOutFromJSON,
+            'payroll': EntityWithMetaPolymorphicPayroll.PayrollFromJSON,
+            'payrollposition': EntityWithMetaPolymorphicPayrollPosition.PayrollPositionFromJSON,
             'prepaymentreturnposition': EntityWithMetaPolymorphicPrepaymentReturnPosition.PrepaymentReturnPositionFromJSON,
+            'pricelist': EntityWithMetaPolymorphicPriceList.PriceListFromJSON,
+            'pricelistrow': EntityWithMetaPolymorphicPriceListPosition.PriceListPositionFromJSON,
             'pricetype': EntityWithMetaPolymorphicPriceType.PriceTypeFromJSON,
             'processing': EntityWithMetaPolymorphicProcessing.ProcessingFromJSON,
             'processingorder': EntityWithMetaPolymorphicProcessingOrder.ProcessingOrderFromJSON,
@@ -244,6 +254,7 @@ export function EntityWithMetaToJSONTyped(value?: EntityWithMeta | null, ignoreD
             'consignment': EntityWithMetaPolymorphicConsignment.ConsignmentToJSON,
             'contract': EntityWithMetaPolymorphicContract.ContractToJSON,
             'counterparty': EntityWithMetaPolymorphicCounterparty.CounterpartyToJSON,
+            'counterpartyadjustment': EntityWithMetaPolymorphicCounterpartyAdjustment.CounterpartyAdjustmentToJSON,
             'country': EntityWithMetaPolymorphicCountry.CountryToJSON,
             'currency': EntityWithMetaPolymorphicCurrency.CurrencyToJSON,
             'customerorder': EntityWithMetaPolymorphicCustomerOrder.CustomerOrderToJSON,
@@ -267,7 +278,11 @@ export function EntityWithMetaToJSONTyped(value?: EntityWithMeta | null, ignoreD
             'organization': EntityWithMetaPolymorphicOrganization.OrganizationToJSON,
             'paymentin': EntityWithMetaPolymorphicPaymentIn.PaymentInToJSON,
             'paymentout': EntityWithMetaPolymorphicPaymentOut.PaymentOutToJSON,
+            'payroll': EntityWithMetaPolymorphicPayroll.PayrollToJSON,
+            'payrollposition': EntityWithMetaPolymorphicPayrollPosition.PayrollPositionToJSON,
             'prepaymentreturnposition': EntityWithMetaPolymorphicPrepaymentReturnPosition.PrepaymentReturnPositionToJSON,
+            'pricelist': EntityWithMetaPolymorphicPriceList.PriceListToJSON,
+            'pricelistrow': EntityWithMetaPolymorphicPriceListPosition.PriceListPositionToJSON,
             'pricetype': EntityWithMetaPolymorphicPriceType.PriceTypeToJSON,
             'processing': EntityWithMetaPolymorphicProcessing.ProcessingToJSON,
             'processingorder': EntityWithMetaPolymorphicProcessingOrder.ProcessingOrderToJSON,

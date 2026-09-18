@@ -20,16 +20,21 @@ import {
     MetaToJSON,
     MetaToJSONTyped,
 } from './Meta.js';
-import type { EmployeeRolePermissions } from './EmployeeRolePermissions.js';
+import type { RolePermissions } from './RolePermissions.js';
 import {
-    EmployeeRolePermissionsFromJSON,
-    EmployeeRolePermissionsFromJSONTyped,
-    EmployeeRolePermissionsToJSON,
-    EmployeeRolePermissionsToJSONTyped,
-} from './EmployeeRolePermissions.js';
+    RolePermissionsFromJSON,
+    RolePermissionsFromJSONTyped,
+    RolePermissionsToJSON,
+    RolePermissionsToJSONTyped,
+} from './RolePermissions.js';
 
 /**
- * Пользовательская роль
+ * Пользовательская роль — именованный набор прав сотрудника.
+ * Код сущности в URL — role, значение meta.type — customrole.
+ * Получать и изменять роли можно от лица сотрудника с правами системного
+ * администратора или от лица Решения. Использование пользовательских ролей
+ * доступно на тарифах «Профессиональный» и «Корпоративный».
+ * 
  * @export
  * @interface CustomRole
  */
@@ -47,17 +52,17 @@ export interface CustomRole {
      */
     readonly id?: string;
     /**
-     * Наименование пользовательской роли
+     * Наименование пользовательской роли. Необходимо при создании.
      * @type {string}
      * @memberof CustomRole
      */
     name?: string;
     /**
      * 
-     * @type {EmployeeRolePermissions}
+     * @type {RolePermissions}
      * @memberof CustomRole
      */
-    permissions?: EmployeeRolePermissions | null;
+    permissions?: RolePermissions | null;
 }
 
 
@@ -80,7 +85,7 @@ export function CustomRoleFromJSONTyped(json: any, ignoreDiscriminator: boolean)
         'meta': json['meta'] == null ? undefined : MetaFromJSON(json['meta']),
         'id': json['id'] == null ? undefined : json['id'],
         'name': json['name'] == null ? undefined : json['name'],
-        'permissions': json['permissions'] == null ? undefined : EmployeeRolePermissionsFromJSON(json['permissions']),
+        'permissions': json['permissions'] == null ? undefined : RolePermissionsFromJSON(json['permissions']),
     };
 }
 
@@ -95,7 +100,7 @@ export function CustomRoleToJSONTyped(value?: Omit<CustomRole, 'id'> | null, ign
     return {
         'meta': MetaToJSON(value['meta']),
         'name': value['name'],
-        'permissions': EmployeeRolePermissionsToJSON(value['permissions']),
+        'permissions': RolePermissionsToJSON(value['permissions']),
     };
 }
 

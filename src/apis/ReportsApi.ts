@@ -16,20 +16,73 @@
 import * as runtime from '../runtime.js';
 import type {
   Errors,
+  ReportCounterparty,
+  ReportCounterpartyList,
+  ReportCounterpartyQuery,
   ReportDashboard,
+  ReportMoneyByAccountList,
+  ReportMoneyPlotSeries,
   ReportOrdersPlotSeriesList,
+  ReportProfitByCounterpartyList,
+  ReportProfitByEmployeeList,
+  ReportProfitByProductList,
+  ReportProfitBySalesChannelList,
+  ReportProfitByVariantList,
   ReportSalesPlotSeriesList,
+  ReportTurnoverByOperationList,
+  ReportTurnoverByStoreList,
+  ReportTurnoverList,
 } from '../models/index.js';
 import {
     ErrorsFromJSON,
     ErrorsToJSON,
+    ReportCounterpartyFromJSON,
+    ReportCounterpartyToJSON,
+    ReportCounterpartyListFromJSON,
+    ReportCounterpartyListToJSON,
+    ReportCounterpartyQueryFromJSON,
+    ReportCounterpartyQueryToJSON,
     ReportDashboardFromJSON,
     ReportDashboardToJSON,
+    ReportMoneyByAccountListFromJSON,
+    ReportMoneyByAccountListToJSON,
+    ReportMoneyPlotSeriesFromJSON,
+    ReportMoneyPlotSeriesToJSON,
     ReportOrdersPlotSeriesListFromJSON,
     ReportOrdersPlotSeriesListToJSON,
+    ReportProfitByCounterpartyListFromJSON,
+    ReportProfitByCounterpartyListToJSON,
+    ReportProfitByEmployeeListFromJSON,
+    ReportProfitByEmployeeListToJSON,
+    ReportProfitByProductListFromJSON,
+    ReportProfitByProductListToJSON,
+    ReportProfitBySalesChannelListFromJSON,
+    ReportProfitBySalesChannelListToJSON,
+    ReportProfitByVariantListFromJSON,
+    ReportProfitByVariantListToJSON,
     ReportSalesPlotSeriesListFromJSON,
     ReportSalesPlotSeriesListToJSON,
+    ReportTurnoverByOperationListFromJSON,
+    ReportTurnoverByOperationListToJSON,
+    ReportTurnoverByStoreListFromJSON,
+    ReportTurnoverByStoreListToJSON,
+    ReportTurnoverListFromJSON,
+    ReportTurnoverListToJSON,
 } from '../models/index.js';
+
+export interface GetReportCounterpartyRequest {
+    limit?: number;
+    offset?: number;
+    filter?: string;
+    accept?: GetReportCounterpartyAcceptEnum;
+    acceptEncoding?: string;
+}
+
+export interface GetReportCounterpartyByIdRequest {
+    id: string;
+    accept?: GetReportCounterpartyByIdAcceptEnum;
+    acceptEncoding?: string;
+}
 
 export interface GetReportDashboardDayRequest {
     accept?: GetReportDashboardDayAcceptEnum;
@@ -46,12 +99,82 @@ export interface GetReportDashboardWeekRequest {
     acceptEncoding?: string;
 }
 
+export interface GetReportMoneyByAccountRequest {
+    accept?: GetReportMoneyByAccountAcceptEnum;
+    acceptEncoding?: string;
+}
+
+export interface GetReportMoneyPlotSeriesRequest {
+    momentFrom: string;
+    momentTo: string;
+    interval: GetReportMoneyPlotSeriesIntervalEnum;
+    filter?: string;
+    accept?: GetReportMoneyPlotSeriesAcceptEnum;
+    acceptEncoding?: string;
+    xLognexAcceptTimezone?: string;
+}
+
 export interface GetReportOrdersPlotSeriesRequest {
     momentFrom: string;
     momentTo: string;
     interval: GetReportOrdersPlotSeriesIntervalEnum;
     filter?: string;
     accept?: GetReportOrdersPlotSeriesAcceptEnum;
+    acceptEncoding?: string;
+    xLognexAcceptTimezone?: string;
+}
+
+export interface GetReportProfitByCounterpartyRequest {
+    limit?: number;
+    offset?: number;
+    filter?: string;
+    momentFrom?: string;
+    momentTo?: string;
+    accept?: GetReportProfitByCounterpartyAcceptEnum;
+    acceptEncoding?: string;
+    xLognexAcceptTimezone?: string;
+}
+
+export interface GetReportProfitByEmployeeRequest {
+    limit?: number;
+    offset?: number;
+    filter?: string;
+    momentFrom?: string;
+    momentTo?: string;
+    accept?: GetReportProfitByEmployeeAcceptEnum;
+    acceptEncoding?: string;
+    xLognexAcceptTimezone?: string;
+}
+
+export interface GetReportProfitByProductRequest {
+    limit?: number;
+    offset?: number;
+    filter?: string;
+    momentFrom?: string;
+    momentTo?: string;
+    accept?: GetReportProfitByProductAcceptEnum;
+    acceptEncoding?: string;
+    xLognexAcceptTimezone?: string;
+}
+
+export interface GetReportProfitBySalesChannelRequest {
+    limit?: number;
+    offset?: number;
+    filter?: string;
+    momentFrom?: string;
+    momentTo?: string;
+    accept?: GetReportProfitBySalesChannelAcceptEnum;
+    acceptEncoding?: string;
+    xLognexAcceptTimezone?: string;
+}
+
+export interface GetReportProfitByVariantRequest {
+    limit?: number;
+    offset?: number;
+    filter?: string;
+    momentFrom?: string;
+    momentTo?: string;
+    accept?: GetReportProfitByVariantAcceptEnum;
     acceptEncoding?: string;
     xLognexAcceptTimezone?: string;
 }
@@ -66,10 +189,167 @@ export interface GetReportSalesPlotSeriesRequest {
     xLognexAcceptTimezone?: string;
 }
 
+export interface GetReportTurnoverAllRequest {
+    limit?: number;
+    offset?: number;
+    filter?: string;
+    momentFrom?: string;
+    momentTo?: string;
+    groupBy?: GetReportTurnoverAllGroupByEnum;
+    accept?: GetReportTurnoverAllAcceptEnum;
+    acceptEncoding?: string;
+    xLognexAcceptTimezone?: string;
+}
+
+export interface GetReportTurnoverByOperationsRequest {
+    filter?: string;
+    momentFrom?: string;
+    momentTo?: string;
+    accept?: GetReportTurnoverByOperationsAcceptEnum;
+    acceptEncoding?: string;
+    xLognexAcceptTimezone?: string;
+}
+
+export interface GetReportTurnoverByStoreRequest {
+    filter?: string;
+    momentFrom?: string;
+    momentTo?: string;
+    accept?: GetReportTurnoverByStoreAcceptEnum;
+    acceptEncoding?: string;
+    xLognexAcceptTimezone?: string;
+}
+
+export interface QueryReportCounterpartyRequest {
+    reportCounterpartyQuery: ReportCounterpartyQuery;
+    accept?: QueryReportCounterpartyAcceptEnum;
+    acceptEncoding?: string;
+    contentType?: QueryReportCounterpartyContentTypeEnum;
+}
+
 /**
  * 
  */
 export class ReportsApi extends runtime.BaseAPI {
+
+    /**
+     * Запрос отчета «Показатели контрагентов» по всем контрагентам.
+     * Получить показатели контрагентов
+     */
+    async getReportCounterpartyRaw(requestParameters: GetReportCounterpartyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ReportCounterpartyList>> {
+        const queryParameters: any = {};
+
+        if (requestParameters['limit'] != null) {
+            queryParameters['limit'] = requestParameters['limit'];
+        }
+
+        if (requestParameters['offset'] != null) {
+            queryParameters['offset'] = requestParameters['offset'];
+        }
+
+        if (requestParameters['filter'] != null) {
+            queryParameters['filter'] = requestParameters['filter'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (requestParameters['accept'] != null) {
+            headerParameters['accept'] = String(requestParameters['accept']);
+        }
+
+        if (requestParameters['acceptEncoding'] != null) {
+            headerParameters['Accept-Encoding'] = String(requestParameters['acceptEncoding']);
+        }
+
+        if (this.configuration && (this.configuration.username !== undefined || this.configuration.password !== undefined)) {
+            headerParameters["Authorization"] = "Basic " + btoa(this.configuration.username + ":" + this.configuration.password);
+        }
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearerAuth", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/report/counterparty`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ReportCounterpartyListFromJSON(jsonValue));
+    }
+
+    /**
+     * Запрос отчета «Показатели контрагентов» по всем контрагентам.
+     * Получить показатели контрагентов
+     */
+    async getReportCounterparty(requestParameters: GetReportCounterpartyRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ReportCounterpartyList> {
+        const response = await this.getReportCounterpartyRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Запрос отчета «Показатели контрагентов» по контрагенту с указанным id.
+     * Получить показатели контрагента
+     */
+    async getReportCounterpartyByIdRaw(requestParameters: GetReportCounterpartyByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ReportCounterparty>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling getReportCounterpartyById().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (requestParameters['accept'] != null) {
+            headerParameters['accept'] = String(requestParameters['accept']);
+        }
+
+        if (requestParameters['acceptEncoding'] != null) {
+            headerParameters['Accept-Encoding'] = String(requestParameters['acceptEncoding']);
+        }
+
+        if (this.configuration && (this.configuration.username !== undefined || this.configuration.password !== undefined)) {
+            headerParameters["Authorization"] = "Basic " + btoa(this.configuration.username + ":" + this.configuration.password);
+        }
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearerAuth", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/report/counterparty/{id}`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ReportCounterpartyFromJSON(jsonValue));
+    }
+
+    /**
+     * Запрос отчета «Показатели контрагентов» по контрагенту с указанным id.
+     * Получить показатели контрагента
+     */
+    async getReportCounterpartyById(requestParameters: GetReportCounterpartyByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ReportCounterparty> {
+        const response = await this.getReportCounterpartyByIdRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
 
     /**
      * Запрос показателей за день. Для доступа к отчету требуется право на просмотр показателей `viewDashboard`. 
@@ -222,6 +502,147 @@ export class ReportsApi extends runtime.BaseAPI {
     }
 
     /**
+     * Запрос текущих остатков денежных средств по кассам и счетам организаций. Для доступа к отчету требуется право на просмотр показателей `viewDashboard` и право «Видеть остатки денег» `viewMoneyDashboard`. 
+     * Получить остатки денежных средств по кассам и счетам
+     */
+    async getReportMoneyByAccountRaw(requestParameters: GetReportMoneyByAccountRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ReportMoneyByAccountList>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (requestParameters['accept'] != null) {
+            headerParameters['accept'] = String(requestParameters['accept']);
+        }
+
+        if (requestParameters['acceptEncoding'] != null) {
+            headerParameters['Accept-Encoding'] = String(requestParameters['acceptEncoding']);
+        }
+
+        if (this.configuration && (this.configuration.username !== undefined || this.configuration.password !== undefined)) {
+            headerParameters["Authorization"] = "Basic " + btoa(this.configuration.username + ":" + this.configuration.password);
+        }
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearerAuth", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/report/money/byaccount`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ReportMoneyByAccountListFromJSON(jsonValue));
+    }
+
+    /**
+     * Запрос текущих остатков денежных средств по кассам и счетам организаций. Для доступа к отчету требуется право на просмотр показателей `viewDashboard` и право «Видеть остатки денег» `viewMoneyDashboard`. 
+     * Получить остатки денежных средств по кассам и счетам
+     */
+    async getReportMoneyByAccount(requestParameters: GetReportMoneyByAccountRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ReportMoneyByAccountList> {
+        const response = await this.getReportMoneyByAccountRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Запрос отчета о движении денежных средств за период с разбивкой по часам, дням или месяцам. Для доступа к отчету требуется право на просмотр показателей `viewDashboard` и право «Видеть остатки денег» `viewMoneyDashboard`. 
+     * Получить график движения денежных средств
+     */
+    async getReportMoneyPlotSeriesRaw(requestParameters: GetReportMoneyPlotSeriesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ReportMoneyPlotSeries>> {
+        if (requestParameters['momentFrom'] == null) {
+            throw new runtime.RequiredError(
+                'momentFrom',
+                'Required parameter "momentFrom" was null or undefined when calling getReportMoneyPlotSeries().'
+            );
+        }
+
+        if (requestParameters['momentTo'] == null) {
+            throw new runtime.RequiredError(
+                'momentTo',
+                'Required parameter "momentTo" was null or undefined when calling getReportMoneyPlotSeries().'
+            );
+        }
+
+        if (requestParameters['interval'] == null) {
+            throw new runtime.RequiredError(
+                'interval',
+                'Required parameter "interval" was null or undefined when calling getReportMoneyPlotSeries().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters['momentFrom'] != null) {
+            queryParameters['momentFrom'] = requestParameters['momentFrom'];
+        }
+
+        if (requestParameters['momentTo'] != null) {
+            queryParameters['momentTo'] = requestParameters['momentTo'];
+        }
+
+        if (requestParameters['interval'] != null) {
+            queryParameters['interval'] = requestParameters['interval'];
+        }
+
+        if (requestParameters['filter'] != null) {
+            queryParameters['filter'] = requestParameters['filter'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (requestParameters['accept'] != null) {
+            headerParameters['accept'] = String(requestParameters['accept']);
+        }
+
+        if (requestParameters['acceptEncoding'] != null) {
+            headerParameters['Accept-Encoding'] = String(requestParameters['acceptEncoding']);
+        }
+
+        if (requestParameters['xLognexAcceptTimezone'] != null) {
+            headerParameters['X-Lognex-Accept-Timezone'] = String(requestParameters['xLognexAcceptTimezone']);
+        }
+
+        if (this.configuration && (this.configuration.username !== undefined || this.configuration.password !== undefined)) {
+            headerParameters["Authorization"] = "Basic " + btoa(this.configuration.username + ":" + this.configuration.password);
+        }
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearerAuth", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/report/money/plotseries`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ReportMoneyPlotSeriesFromJSON(jsonValue));
+    }
+
+    /**
+     * Запрос отчета о движении денежных средств за период с разбивкой по часам, дням или месяцам. Для доступа к отчету требуется право на просмотр показателей `viewDashboard` и право «Видеть остатки денег» `viewMoneyDashboard`. 
+     * Получить график движения денежных средств
+     */
+    async getReportMoneyPlotSeries(requestParameters: GetReportMoneyPlotSeriesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ReportMoneyPlotSeries> {
+        const response = await this.getReportMoneyPlotSeriesRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Запрос показателей заказов покупателей за период с разбивкой по часам, дням или месяцам. Для доступа к отчету требуется право на просмотр показателей `viewDashboard`. 
      * Получить показатели заказов
      */
@@ -309,6 +730,376 @@ export class ReportsApi extends runtime.BaseAPI {
      */
     async getReportOrdersPlotSeries(requestParameters: GetReportOrdersPlotSeriesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ReportOrdersPlotSeriesList> {
         const response = await this.getReportOrdersPlotSeriesRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Запрос отчета «Прибыльность по покупателям». Для доступа к отчету требуется право на просмотр отчета «Прибыльность». 
+     * Получить прибыльность по покупателям
+     */
+    async getReportProfitByCounterpartyRaw(requestParameters: GetReportProfitByCounterpartyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ReportProfitByCounterpartyList>> {
+        const queryParameters: any = {};
+
+        if (requestParameters['limit'] != null) {
+            queryParameters['limit'] = requestParameters['limit'];
+        }
+
+        if (requestParameters['offset'] != null) {
+            queryParameters['offset'] = requestParameters['offset'];
+        }
+
+        if (requestParameters['filter'] != null) {
+            queryParameters['filter'] = requestParameters['filter'];
+        }
+
+        if (requestParameters['momentFrom'] != null) {
+            queryParameters['momentFrom'] = requestParameters['momentFrom'];
+        }
+
+        if (requestParameters['momentTo'] != null) {
+            queryParameters['momentTo'] = requestParameters['momentTo'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (requestParameters['accept'] != null) {
+            headerParameters['accept'] = String(requestParameters['accept']);
+        }
+
+        if (requestParameters['acceptEncoding'] != null) {
+            headerParameters['Accept-Encoding'] = String(requestParameters['acceptEncoding']);
+        }
+
+        if (requestParameters['xLognexAcceptTimezone'] != null) {
+            headerParameters['X-Lognex-Accept-Timezone'] = String(requestParameters['xLognexAcceptTimezone']);
+        }
+
+        if (this.configuration && (this.configuration.username !== undefined || this.configuration.password !== undefined)) {
+            headerParameters["Authorization"] = "Basic " + btoa(this.configuration.username + ":" + this.configuration.password);
+        }
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearerAuth", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/report/profit/bycounterparty`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ReportProfitByCounterpartyListFromJSON(jsonValue));
+    }
+
+    /**
+     * Запрос отчета «Прибыльность по покупателям». Для доступа к отчету требуется право на просмотр отчета «Прибыльность». 
+     * Получить прибыльность по покупателям
+     */
+    async getReportProfitByCounterparty(requestParameters: GetReportProfitByCounterpartyRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ReportProfitByCounterpartyList> {
+        const response = await this.getReportProfitByCounterpartyRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Запрос отчета «Прибыльность по сотрудникам». Для доступа к отчету требуется право на просмотр отчета «Прибыльность». 
+     * Получить прибыльность по сотрудникам
+     */
+    async getReportProfitByEmployeeRaw(requestParameters: GetReportProfitByEmployeeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ReportProfitByEmployeeList>> {
+        const queryParameters: any = {};
+
+        if (requestParameters['limit'] != null) {
+            queryParameters['limit'] = requestParameters['limit'];
+        }
+
+        if (requestParameters['offset'] != null) {
+            queryParameters['offset'] = requestParameters['offset'];
+        }
+
+        if (requestParameters['filter'] != null) {
+            queryParameters['filter'] = requestParameters['filter'];
+        }
+
+        if (requestParameters['momentFrom'] != null) {
+            queryParameters['momentFrom'] = requestParameters['momentFrom'];
+        }
+
+        if (requestParameters['momentTo'] != null) {
+            queryParameters['momentTo'] = requestParameters['momentTo'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (requestParameters['accept'] != null) {
+            headerParameters['accept'] = String(requestParameters['accept']);
+        }
+
+        if (requestParameters['acceptEncoding'] != null) {
+            headerParameters['Accept-Encoding'] = String(requestParameters['acceptEncoding']);
+        }
+
+        if (requestParameters['xLognexAcceptTimezone'] != null) {
+            headerParameters['X-Lognex-Accept-Timezone'] = String(requestParameters['xLognexAcceptTimezone']);
+        }
+
+        if (this.configuration && (this.configuration.username !== undefined || this.configuration.password !== undefined)) {
+            headerParameters["Authorization"] = "Basic " + btoa(this.configuration.username + ":" + this.configuration.password);
+        }
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearerAuth", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/report/profit/byemployee`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ReportProfitByEmployeeListFromJSON(jsonValue));
+    }
+
+    /**
+     * Запрос отчета «Прибыльность по сотрудникам». Для доступа к отчету требуется право на просмотр отчета «Прибыльность». 
+     * Получить прибыльность по сотрудникам
+     */
+    async getReportProfitByEmployee(requestParameters: GetReportProfitByEmployeeRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ReportProfitByEmployeeList> {
+        const response = await this.getReportProfitByEmployeeRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Запрос отчета «Прибыльность по товарам». В отчете учитываются товары, услуги и комплекты. Для доступа к отчету требуется право на просмотр отчета «Прибыльность». 
+     * Получить прибыльность по товарам
+     */
+    async getReportProfitByProductRaw(requestParameters: GetReportProfitByProductRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ReportProfitByProductList>> {
+        const queryParameters: any = {};
+
+        if (requestParameters['limit'] != null) {
+            queryParameters['limit'] = requestParameters['limit'];
+        }
+
+        if (requestParameters['offset'] != null) {
+            queryParameters['offset'] = requestParameters['offset'];
+        }
+
+        if (requestParameters['filter'] != null) {
+            queryParameters['filter'] = requestParameters['filter'];
+        }
+
+        if (requestParameters['momentFrom'] != null) {
+            queryParameters['momentFrom'] = requestParameters['momentFrom'];
+        }
+
+        if (requestParameters['momentTo'] != null) {
+            queryParameters['momentTo'] = requestParameters['momentTo'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (requestParameters['accept'] != null) {
+            headerParameters['accept'] = String(requestParameters['accept']);
+        }
+
+        if (requestParameters['acceptEncoding'] != null) {
+            headerParameters['Accept-Encoding'] = String(requestParameters['acceptEncoding']);
+        }
+
+        if (requestParameters['xLognexAcceptTimezone'] != null) {
+            headerParameters['X-Lognex-Accept-Timezone'] = String(requestParameters['xLognexAcceptTimezone']);
+        }
+
+        if (this.configuration && (this.configuration.username !== undefined || this.configuration.password !== undefined)) {
+            headerParameters["Authorization"] = "Basic " + btoa(this.configuration.username + ":" + this.configuration.password);
+        }
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearerAuth", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/report/profit/byproduct`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ReportProfitByProductListFromJSON(jsonValue));
+    }
+
+    /**
+     * Запрос отчета «Прибыльность по товарам». В отчете учитываются товары, услуги и комплекты. Для доступа к отчету требуется право на просмотр отчета «Прибыльность». 
+     * Получить прибыльность по товарам
+     */
+    async getReportProfitByProduct(requestParameters: GetReportProfitByProductRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ReportProfitByProductList> {
+        const response = await this.getReportProfitByProductRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Запрос отчета «Прибыльность по каналам продаж». Для доступа к отчету требуется право на просмотр отчета «Прибыльность». 
+     * Получить прибыльность по каналам продаж
+     */
+    async getReportProfitBySalesChannelRaw(requestParameters: GetReportProfitBySalesChannelRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ReportProfitBySalesChannelList>> {
+        const queryParameters: any = {};
+
+        if (requestParameters['limit'] != null) {
+            queryParameters['limit'] = requestParameters['limit'];
+        }
+
+        if (requestParameters['offset'] != null) {
+            queryParameters['offset'] = requestParameters['offset'];
+        }
+
+        if (requestParameters['filter'] != null) {
+            queryParameters['filter'] = requestParameters['filter'];
+        }
+
+        if (requestParameters['momentFrom'] != null) {
+            queryParameters['momentFrom'] = requestParameters['momentFrom'];
+        }
+
+        if (requestParameters['momentTo'] != null) {
+            queryParameters['momentTo'] = requestParameters['momentTo'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (requestParameters['accept'] != null) {
+            headerParameters['accept'] = String(requestParameters['accept']);
+        }
+
+        if (requestParameters['acceptEncoding'] != null) {
+            headerParameters['Accept-Encoding'] = String(requestParameters['acceptEncoding']);
+        }
+
+        if (requestParameters['xLognexAcceptTimezone'] != null) {
+            headerParameters['X-Lognex-Accept-Timezone'] = String(requestParameters['xLognexAcceptTimezone']);
+        }
+
+        if (this.configuration && (this.configuration.username !== undefined || this.configuration.password !== undefined)) {
+            headerParameters["Authorization"] = "Basic " + btoa(this.configuration.username + ":" + this.configuration.password);
+        }
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearerAuth", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/report/profit/bysaleschannel`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ReportProfitBySalesChannelListFromJSON(jsonValue));
+    }
+
+    /**
+     * Запрос отчета «Прибыльность по каналам продаж». Для доступа к отчету требуется право на просмотр отчета «Прибыльность». 
+     * Получить прибыльность по каналам продаж
+     */
+    async getReportProfitBySalesChannel(requestParameters: GetReportProfitBySalesChannelRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ReportProfitBySalesChannelList> {
+        const response = await this.getReportProfitBySalesChannelRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Запрос отчета «Прибыльность по модификациям». В отчете учитываются модификации, товары, услуги и комплекты. Для доступа к отчету требуется право на просмотр отчета «Прибыльность». 
+     * Получить прибыльность по модификациям
+     */
+    async getReportProfitByVariantRaw(requestParameters: GetReportProfitByVariantRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ReportProfitByVariantList>> {
+        const queryParameters: any = {};
+
+        if (requestParameters['limit'] != null) {
+            queryParameters['limit'] = requestParameters['limit'];
+        }
+
+        if (requestParameters['offset'] != null) {
+            queryParameters['offset'] = requestParameters['offset'];
+        }
+
+        if (requestParameters['filter'] != null) {
+            queryParameters['filter'] = requestParameters['filter'];
+        }
+
+        if (requestParameters['momentFrom'] != null) {
+            queryParameters['momentFrom'] = requestParameters['momentFrom'];
+        }
+
+        if (requestParameters['momentTo'] != null) {
+            queryParameters['momentTo'] = requestParameters['momentTo'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (requestParameters['accept'] != null) {
+            headerParameters['accept'] = String(requestParameters['accept']);
+        }
+
+        if (requestParameters['acceptEncoding'] != null) {
+            headerParameters['Accept-Encoding'] = String(requestParameters['acceptEncoding']);
+        }
+
+        if (requestParameters['xLognexAcceptTimezone'] != null) {
+            headerParameters['X-Lognex-Accept-Timezone'] = String(requestParameters['xLognexAcceptTimezone']);
+        }
+
+        if (this.configuration && (this.configuration.username !== undefined || this.configuration.password !== undefined)) {
+            headerParameters["Authorization"] = "Basic " + btoa(this.configuration.username + ":" + this.configuration.password);
+        }
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearerAuth", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/report/profit/byvariant`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ReportProfitByVariantListFromJSON(jsonValue));
+    }
+
+    /**
+     * Запрос отчета «Прибыльность по модификациям». В отчете учитываются модификации, товары, услуги и комплекты. Для доступа к отчету требуется право на просмотр отчета «Прибыльность». 
+     * Получить прибыльность по модификациям
+     */
+    async getReportProfitByVariant(requestParameters: GetReportProfitByVariantRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ReportProfitByVariantList> {
+        const response = await this.getReportProfitByVariantRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -403,8 +1194,298 @@ export class ReportsApi extends runtime.BaseAPI {
         return await response.value();
     }
 
+    /**
+     * Запрос отчета «Обороты по товарам» — общий отчет по оборотам товаров и модификаций.
+     * Получить Обороты по товарам
+     */
+    async getReportTurnoverAllRaw(requestParameters: GetReportTurnoverAllRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ReportTurnoverList>> {
+        const queryParameters: any = {};
+
+        if (requestParameters['limit'] != null) {
+            queryParameters['limit'] = requestParameters['limit'];
+        }
+
+        if (requestParameters['offset'] != null) {
+            queryParameters['offset'] = requestParameters['offset'];
+        }
+
+        if (requestParameters['filter'] != null) {
+            queryParameters['filter'] = requestParameters['filter'];
+        }
+
+        if (requestParameters['momentFrom'] != null) {
+            queryParameters['momentFrom'] = requestParameters['momentFrom'];
+        }
+
+        if (requestParameters['momentTo'] != null) {
+            queryParameters['momentTo'] = requestParameters['momentTo'];
+        }
+
+        if (requestParameters['groupBy'] != null) {
+            queryParameters['groupBy'] = requestParameters['groupBy'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (requestParameters['accept'] != null) {
+            headerParameters['accept'] = String(requestParameters['accept']);
+        }
+
+        if (requestParameters['acceptEncoding'] != null) {
+            headerParameters['Accept-Encoding'] = String(requestParameters['acceptEncoding']);
+        }
+
+        if (requestParameters['xLognexAcceptTimezone'] != null) {
+            headerParameters['X-Lognex-Accept-Timezone'] = String(requestParameters['xLognexAcceptTimezone']);
+        }
+
+        if (this.configuration && (this.configuration.username !== undefined || this.configuration.password !== undefined)) {
+            headerParameters["Authorization"] = "Basic " + btoa(this.configuration.username + ":" + this.configuration.password);
+        }
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearerAuth", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/report/turnover/all`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ReportTurnoverListFromJSON(jsonValue));
+    }
+
+    /**
+     * Запрос отчета «Обороты по товарам» — общий отчет по оборотам товаров и модификаций.
+     * Получить Обороты по товарам
+     */
+    async getReportTurnoverAll(requestParameters: GetReportTurnoverAllRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ReportTurnoverList> {
+        const response = await this.getReportTurnoverAllRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Запрос отчета «Обороты по товару с детализацией по документам».
+     * Получить Обороты по товару с детализацией по документам
+     */
+    async getReportTurnoverByOperationsRaw(requestParameters: GetReportTurnoverByOperationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ReportTurnoverByOperationList>> {
+        const queryParameters: any = {};
+
+        if (requestParameters['filter'] != null) {
+            queryParameters['filter'] = requestParameters['filter'];
+        }
+
+        if (requestParameters['momentFrom'] != null) {
+            queryParameters['momentFrom'] = requestParameters['momentFrom'];
+        }
+
+        if (requestParameters['momentTo'] != null) {
+            queryParameters['momentTo'] = requestParameters['momentTo'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (requestParameters['accept'] != null) {
+            headerParameters['accept'] = String(requestParameters['accept']);
+        }
+
+        if (requestParameters['acceptEncoding'] != null) {
+            headerParameters['Accept-Encoding'] = String(requestParameters['acceptEncoding']);
+        }
+
+        if (requestParameters['xLognexAcceptTimezone'] != null) {
+            headerParameters['X-Lognex-Accept-Timezone'] = String(requestParameters['xLognexAcceptTimezone']);
+        }
+
+        if (this.configuration && (this.configuration.username !== undefined || this.configuration.password !== undefined)) {
+            headerParameters["Authorization"] = "Basic " + btoa(this.configuration.username + ":" + this.configuration.password);
+        }
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearerAuth", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/report/turnover/byoperations`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ReportTurnoverByOperationListFromJSON(jsonValue));
+    }
+
+    /**
+     * Запрос отчета «Обороты по товару с детализацией по документам».
+     * Получить Обороты по товару с детализацией по документам
+     */
+    async getReportTurnoverByOperations(requestParameters: GetReportTurnoverByOperationsRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ReportTurnoverByOperationList> {
+        const response = await this.getReportTurnoverByOperationsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Запрос отчета «Обороты по товару с детализацией по складам».
+     * Получить Обороты по товару с детализацией по складам
+     */
+    async getReportTurnoverByStoreRaw(requestParameters: GetReportTurnoverByStoreRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ReportTurnoverByStoreList>> {
+        const queryParameters: any = {};
+
+        if (requestParameters['filter'] != null) {
+            queryParameters['filter'] = requestParameters['filter'];
+        }
+
+        if (requestParameters['momentFrom'] != null) {
+            queryParameters['momentFrom'] = requestParameters['momentFrom'];
+        }
+
+        if (requestParameters['momentTo'] != null) {
+            queryParameters['momentTo'] = requestParameters['momentTo'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (requestParameters['accept'] != null) {
+            headerParameters['accept'] = String(requestParameters['accept']);
+        }
+
+        if (requestParameters['acceptEncoding'] != null) {
+            headerParameters['Accept-Encoding'] = String(requestParameters['acceptEncoding']);
+        }
+
+        if (requestParameters['xLognexAcceptTimezone'] != null) {
+            headerParameters['X-Lognex-Accept-Timezone'] = String(requestParameters['xLognexAcceptTimezone']);
+        }
+
+        if (this.configuration && (this.configuration.username !== undefined || this.configuration.password !== undefined)) {
+            headerParameters["Authorization"] = "Basic " + btoa(this.configuration.username + ":" + this.configuration.password);
+        }
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearerAuth", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/report/turnover/bystore`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ReportTurnoverByStoreListFromJSON(jsonValue));
+    }
+
+    /**
+     * Запрос отчета «Обороты по товару с детализацией по складам».
+     * Получить Обороты по товару с детализацией по складам
+     */
+    async getReportTurnoverByStore(requestParameters: GetReportTurnoverByStoreRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ReportTurnoverByStoreList> {
+        const response = await this.getReportTurnoverByStoreRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Запрос отчета «Показатели контрагентов» по указанным контрагентам.
+     * Получить выборочные показатели контрагентов
+     */
+    async queryReportCounterpartyRaw(requestParameters: QueryReportCounterpartyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ReportCounterpartyList>> {
+        if (requestParameters['reportCounterpartyQuery'] == null) {
+            throw new runtime.RequiredError(
+                'reportCounterpartyQuery',
+                'Required parameter "reportCounterpartyQuery" was null or undefined when calling queryReportCounterparty().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (requestParameters['accept'] != null) {
+            headerParameters['accept'] = String(requestParameters['accept']);
+        }
+
+        if (requestParameters['acceptEncoding'] != null) {
+            headerParameters['Accept-Encoding'] = String(requestParameters['acceptEncoding']);
+        }
+
+        if (requestParameters['contentType'] != null) {
+            headerParameters['Content-Type'] = String(requestParameters['contentType']);
+        }
+
+        if (this.configuration && (this.configuration.username !== undefined || this.configuration.password !== undefined)) {
+            headerParameters["Authorization"] = "Basic " + btoa(this.configuration.username + ":" + this.configuration.password);
+        }
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearerAuth", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/report/counterparty`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: ReportCounterpartyQueryToJSON(requestParameters['reportCounterpartyQuery']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ReportCounterpartyListFromJSON(jsonValue));
+    }
+
+    /**
+     * Запрос отчета «Показатели контрагентов» по указанным контрагентам.
+     * Получить выборочные показатели контрагентов
+     */
+    async queryReportCounterparty(requestParameters: QueryReportCounterpartyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ReportCounterpartyList> {
+        const response = await this.queryReportCounterpartyRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
 }
 
+/**
+ * @export
+ */
+export const GetReportCounterpartyAcceptEnum = {
+    ApplicationJson: 'application/json',
+    ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
+} as const;
+export type GetReportCounterpartyAcceptEnum = typeof GetReportCounterpartyAcceptEnum[keyof typeof GetReportCounterpartyAcceptEnum];
+/**
+ * @export
+ */
+export const GetReportCounterpartyByIdAcceptEnum = {
+    ApplicationJson: 'application/json',
+    ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
+} as const;
+export type GetReportCounterpartyByIdAcceptEnum = typeof GetReportCounterpartyByIdAcceptEnum[keyof typeof GetReportCounterpartyByIdAcceptEnum];
 /**
  * @export
  */
@@ -432,6 +1513,31 @@ export type GetReportDashboardWeekAcceptEnum = typeof GetReportDashboardWeekAcce
 /**
  * @export
  */
+export const GetReportMoneyByAccountAcceptEnum = {
+    ApplicationJson: 'application/json',
+    ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
+} as const;
+export type GetReportMoneyByAccountAcceptEnum = typeof GetReportMoneyByAccountAcceptEnum[keyof typeof GetReportMoneyByAccountAcceptEnum];
+/**
+ * @export
+ */
+export const GetReportMoneyPlotSeriesIntervalEnum = {
+    Hour: 'hour',
+    Day: 'day',
+    Month: 'month'
+} as const;
+export type GetReportMoneyPlotSeriesIntervalEnum = typeof GetReportMoneyPlotSeriesIntervalEnum[keyof typeof GetReportMoneyPlotSeriesIntervalEnum];
+/**
+ * @export
+ */
+export const GetReportMoneyPlotSeriesAcceptEnum = {
+    ApplicationJson: 'application/json',
+    ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
+} as const;
+export type GetReportMoneyPlotSeriesAcceptEnum = typeof GetReportMoneyPlotSeriesAcceptEnum[keyof typeof GetReportMoneyPlotSeriesAcceptEnum];
+/**
+ * @export
+ */
 export const GetReportOrdersPlotSeriesIntervalEnum = {
     Hour: 'hour',
     Day: 'day',
@@ -449,6 +1555,46 @@ export type GetReportOrdersPlotSeriesAcceptEnum = typeof GetReportOrdersPlotSeri
 /**
  * @export
  */
+export const GetReportProfitByCounterpartyAcceptEnum = {
+    ApplicationJson: 'application/json',
+    ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
+} as const;
+export type GetReportProfitByCounterpartyAcceptEnum = typeof GetReportProfitByCounterpartyAcceptEnum[keyof typeof GetReportProfitByCounterpartyAcceptEnum];
+/**
+ * @export
+ */
+export const GetReportProfitByEmployeeAcceptEnum = {
+    ApplicationJson: 'application/json',
+    ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
+} as const;
+export type GetReportProfitByEmployeeAcceptEnum = typeof GetReportProfitByEmployeeAcceptEnum[keyof typeof GetReportProfitByEmployeeAcceptEnum];
+/**
+ * @export
+ */
+export const GetReportProfitByProductAcceptEnum = {
+    ApplicationJson: 'application/json',
+    ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
+} as const;
+export type GetReportProfitByProductAcceptEnum = typeof GetReportProfitByProductAcceptEnum[keyof typeof GetReportProfitByProductAcceptEnum];
+/**
+ * @export
+ */
+export const GetReportProfitBySalesChannelAcceptEnum = {
+    ApplicationJson: 'application/json',
+    ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
+} as const;
+export type GetReportProfitBySalesChannelAcceptEnum = typeof GetReportProfitBySalesChannelAcceptEnum[keyof typeof GetReportProfitBySalesChannelAcceptEnum];
+/**
+ * @export
+ */
+export const GetReportProfitByVariantAcceptEnum = {
+    ApplicationJson: 'application/json',
+    ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
+} as const;
+export type GetReportProfitByVariantAcceptEnum = typeof GetReportProfitByVariantAcceptEnum[keyof typeof GetReportProfitByVariantAcceptEnum];
+/**
+ * @export
+ */
 export const GetReportSalesPlotSeriesIntervalEnum = {
     Hour: 'hour',
     Day: 'day',
@@ -463,3 +1609,50 @@ export const GetReportSalesPlotSeriesAcceptEnum = {
     ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
 } as const;
 export type GetReportSalesPlotSeriesAcceptEnum = typeof GetReportSalesPlotSeriesAcceptEnum[keyof typeof GetReportSalesPlotSeriesAcceptEnum];
+/**
+ * @export
+ */
+export const GetReportTurnoverAllGroupByEnum = {
+    Product: 'product',
+    Variant: 'variant'
+} as const;
+export type GetReportTurnoverAllGroupByEnum = typeof GetReportTurnoverAllGroupByEnum[keyof typeof GetReportTurnoverAllGroupByEnum];
+/**
+ * @export
+ */
+export const GetReportTurnoverAllAcceptEnum = {
+    ApplicationJson: 'application/json',
+    ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
+} as const;
+export type GetReportTurnoverAllAcceptEnum = typeof GetReportTurnoverAllAcceptEnum[keyof typeof GetReportTurnoverAllAcceptEnum];
+/**
+ * @export
+ */
+export const GetReportTurnoverByOperationsAcceptEnum = {
+    ApplicationJson: 'application/json',
+    ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
+} as const;
+export type GetReportTurnoverByOperationsAcceptEnum = typeof GetReportTurnoverByOperationsAcceptEnum[keyof typeof GetReportTurnoverByOperationsAcceptEnum];
+/**
+ * @export
+ */
+export const GetReportTurnoverByStoreAcceptEnum = {
+    ApplicationJson: 'application/json',
+    ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
+} as const;
+export type GetReportTurnoverByStoreAcceptEnum = typeof GetReportTurnoverByStoreAcceptEnum[keyof typeof GetReportTurnoverByStoreAcceptEnum];
+/**
+ * @export
+ */
+export const QueryReportCounterpartyAcceptEnum = {
+    ApplicationJson: 'application/json',
+    ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
+} as const;
+export type QueryReportCounterpartyAcceptEnum = typeof QueryReportCounterpartyAcceptEnum[keyof typeof QueryReportCounterpartyAcceptEnum];
+/**
+ * @export
+ */
+export const QueryReportCounterpartyContentTypeEnum = {
+    ApplicationJson: 'application/json'
+} as const;
+export type QueryReportCounterpartyContentTypeEnum = typeof QueryReportCounterpartyContentTypeEnum[keyof typeof QueryReportCounterpartyContentTypeEnum];

@@ -161,6 +161,12 @@ export interface GetFactureInsRequest {
     acceptEncoding?: string;
 }
 
+export interface MoveFactureInToTrashRequest {
+    id: string;
+    accept?: MoveFactureInToTrashAcceptEnum;
+    acceptEncoding?: string;
+}
+
 export interface UpdateFactureInRequest {
     id: string;
     factureIn: Omit<FactureIn, 'id'|'accountId'|'created'|'deleted'|'printed'|'published'|'sum'|'updated'>;
@@ -1157,6 +1163,61 @@ export class FactureInsApi extends runtime.BaseAPI {
     }
 
     /**
+     * Удалить Счет-фактуру полученный в корзину
+     */
+    async moveFactureInToTrashRaw(requestParameters: MoveFactureInToTrashRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling moveFactureInToTrash().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (requestParameters['accept'] != null) {
+            headerParameters['accept'] = String(requestParameters['accept']);
+        }
+
+        if (requestParameters['acceptEncoding'] != null) {
+            headerParameters['Accept-Encoding'] = String(requestParameters['acceptEncoding']);
+        }
+
+        if (this.configuration && (this.configuration.username !== undefined || this.configuration.password !== undefined)) {
+            headerParameters["Authorization"] = "Basic " + btoa(this.configuration.username + ":" + this.configuration.password);
+        }
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearerAuth", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/entity/facturein/{id}/trash`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Удалить Счет-фактуру полученный в корзину
+     */
+    async moveFactureInToTrash(requestParameters: MoveFactureInToTrashRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.moveFactureInToTrashRaw(requestParameters, initOverrides);
+    }
+
+    /**
      * Изменить Счет-фактуру полученный
      */
     async updateFactureInRaw(requestParameters: UpdateFactureInRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<FactureIn>> {
@@ -1549,6 +1610,14 @@ export const GetFactureInsAcceptEnum = {
     ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
 } as const;
 export type GetFactureInsAcceptEnum = typeof GetFactureInsAcceptEnum[keyof typeof GetFactureInsAcceptEnum];
+/**
+ * @export
+ */
+export const MoveFactureInToTrashAcceptEnum = {
+    ApplicationJson: 'application/json',
+    ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
+} as const;
+export type MoveFactureInToTrashAcceptEnum = typeof MoveFactureInToTrashAcceptEnum[keyof typeof MoveFactureInToTrashAcceptEnum];
 /**
  * @export
  */

@@ -18,6 +18,7 @@ import type {
   Account,
   AttributeMetaInfo,
   AttributeMetaInfoList,
+  AuditEventList,
   BatchResponseEntity,
   ContactPerson,
   Counterparty,
@@ -40,6 +41,8 @@ import {
     AttributeMetaInfoToJSON,
     AttributeMetaInfoListFromJSON,
     AttributeMetaInfoListToJSON,
+    AuditEventListFromJSON,
+    AuditEventListToJSON,
     BatchResponseEntityFromJSON,
     BatchResponseEntityToJSON,
     ContactPersonFromJSON,
@@ -1597,7 +1600,7 @@ export class CounterpartiesApi extends runtime.BaseAPI {
      * Возвращает список событий аудита для Контрагента по его ID. 
      * Получить события аудита контрагента
      */
-    async getCounterpartyAuditEventsRaw(requestParameters: GetCounterpartyAuditEventsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<{ [key: string]: any; }>> {
+    async getCounterpartyAuditEventsRaw(requestParameters: GetCounterpartyAuditEventsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AuditEventList>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
@@ -1647,14 +1650,14 @@ export class CounterpartiesApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse<any>(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => AuditEventListFromJSON(jsonValue));
     }
 
     /**
      * Возвращает список событий аудита для Контрагента по его ID. 
      * Получить события аудита контрагента
      */
-    async getCounterpartyAuditEvents(requestParameters: GetCounterpartyAuditEventsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<{ [key: string]: any; }> {
+    async getCounterpartyAuditEvents(requestParameters: GetCounterpartyAuditEventsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AuditEventList> {
         const response = await this.getCounterpartyAuditEventsRaw(requestParameters, initOverrides);
         return await response.value();
     }

@@ -72,7 +72,7 @@ export interface UpdateCustomRoleRequest {
 export class CustomRolesApi extends runtime.BaseAPI {
 
     /**
-     * Создание новой пользовательской роли
+     * Создание новой пользовательской роли. Необходимо передать name (не более 255 символов). Доступно сотруднику с правами системного администратора или Решению. 
      * Создать пользовательскую роль
      */
     async createCustomRoleRaw(requestParameters: CreateCustomRoleRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CustomRole>> {
@@ -127,7 +127,7 @@ export class CustomRolesApi extends runtime.BaseAPI {
     }
 
     /**
-     * Создание новой пользовательской роли
+     * Создание новой пользовательской роли. Необходимо передать name (не более 255 символов). Доступно сотруднику с правами системного администратора или Решению. 
      * Создать пользовательскую роль
      */
     async createCustomRole(requestParameters: CreateCustomRoleRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CustomRole> {
@@ -136,7 +136,7 @@ export class CustomRolesApi extends runtime.BaseAPI {
     }
 
     /**
-     * Удаление пользовательской роли с указанным id
+     * Удаление пользовательской роли с указанным id. Доступно сотруднику с правами системного администратора или Решению. 
      * Удалить пользовательскую роль
      */
     async deleteCustomRoleRaw(requestParameters: DeleteCustomRoleRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
@@ -185,7 +185,7 @@ export class CustomRolesApi extends runtime.BaseAPI {
     }
 
     /**
-     * Удаление пользовательской роли с указанным id
+     * Удаление пользовательской роли с указанным id. Доступно сотруднику с правами системного администратора или Решению. 
      * Удалить пользовательскую роль
      */
     async deleteCustomRole(requestParameters: DeleteCustomRoleRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
@@ -193,7 +193,7 @@ export class CustomRolesApi extends runtime.BaseAPI {
     }
 
     /**
-     * Запрос на получение пользовательской роли с указанным id
+     * Запрос на получение пользовательской роли с указанным id. Доступно сотруднику с правами системного администратора или Решению. 
      * Получить пользовательскую роль по ID
      */
     async getCustomRoleByIdRaw(requestParameters: GetCustomRoleByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CustomRole>> {
@@ -242,7 +242,7 @@ export class CustomRolesApi extends runtime.BaseAPI {
     }
 
     /**
-     * Запрос на получение пользовательской роли с указанным id
+     * Запрос на получение пользовательской роли с указанным id. Доступно сотруднику с правами системного администратора или Решению. 
      * Получить пользовательскую роль по ID
      */
     async getCustomRoleById(requestParameters: GetCustomRoleByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CustomRole> {
@@ -251,7 +251,7 @@ export class CustomRolesApi extends runtime.BaseAPI {
     }
 
     /**
-     * Запрос всех пользовательских ролей на данной учетной записи
+     * Запрос всех пользовательских ролей на данной учетной записи. Доступно сотруднику с правами системного администратора или Решению. 
      * Получить список пользовательских ролей
      */
     async getCustomRolesRaw(requestParameters: GetCustomRolesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CustomRoleList>> {
@@ -316,7 +316,7 @@ export class CustomRolesApi extends runtime.BaseAPI {
     }
 
     /**
-     * Запрос всех пользовательских ролей на данной учетной записи
+     * Запрос всех пользовательских ролей на данной учетной записи. Доступно сотруднику с правами системного администратора или Решению. 
      * Получить список пользовательских ролей
      */
     async getCustomRoles(requestParameters: GetCustomRolesRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CustomRoleList> {
@@ -325,7 +325,7 @@ export class CustomRolesApi extends runtime.BaseAPI {
     }
 
     /**
-     * Обновление пользовательской роли с указанным id
+     * Обновление пользовательской роли с указанным id. Доступно сотруднику с правами системного администратора или Решению. 
      * Обновить пользовательскую роль
      */
     async updateCustomRoleRaw(requestParameters: UpdateCustomRoleRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CustomRole>> {
@@ -388,7 +388,7 @@ export class CustomRolesApi extends runtime.BaseAPI {
     }
 
     /**
-     * Обновление пользовательской роли с указанным id
+     * Обновление пользовательской роли с указанным id. Доступно сотруднику с правами системного администратора или Решению. 
      * Обновить пользовательскую роль
      */
     async updateCustomRole(requestParameters: UpdateCustomRoleRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CustomRole> {

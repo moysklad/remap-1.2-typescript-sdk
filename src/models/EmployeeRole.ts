@@ -20,16 +20,23 @@ import {
     MetaToJSON,
     MetaToJSONTyped,
 } from './Meta.js';
-import type { EmployeeRolePermissions } from './EmployeeRolePermissions.js';
+import type { RolePermissions } from './RolePermissions.js';
 import {
-    EmployeeRolePermissionsFromJSON,
-    EmployeeRolePermissionsFromJSONTyped,
-    EmployeeRolePermissionsToJSON,
-    EmployeeRolePermissionsToJSONTyped,
-} from './EmployeeRolePermissions.js';
+    RolePermissionsFromJSON,
+    RolePermissionsFromJSONTyped,
+    RolePermissionsToJSON,
+    RolePermissionsToJSONTyped,
+} from './RolePermissions.js';
 
 /**
- * Роль сотрудника
+ * Роль сотрудника: владелец аккаунта, системный администратор, кассир,
+ * сотрудник производства, пользовательская или индивидуальная роль.
+ * Системные роли имеют meta.type = systemrole, индивидуальная — individualrole,
+ * пользовательская — customrole. Пользовательская роль описана в CustomRole.
+ * Роль сотрудника производства доступна при подключенной опции «Управление производством».
+ * Пользовательские роли и индивидуальные права, отличающиеся от значений по умолчанию,
+ * доступны на тарифах «Профессиональный» и «Корпоративный».
+ * 
  * @export
  * @interface EmployeeRole
  */
@@ -42,10 +49,10 @@ export interface EmployeeRole {
     meta?: Meta;
     /**
      * 
-     * @type {EmployeeRolePermissions}
+     * @type {RolePermissions}
      * @memberof EmployeeRole
      */
-    permissions?: EmployeeRolePermissions | null;
+    permissions?: RolePermissions | null;
 }
 
 
@@ -66,7 +73,7 @@ export function EmployeeRoleFromJSONTyped(json: any, ignoreDiscriminator: boolea
     }
     return {
         'meta': json['meta'] == null ? undefined : MetaFromJSON(json['meta']),
-        'permissions': json['permissions'] == null ? undefined : EmployeeRolePermissionsFromJSON(json['permissions']),
+        'permissions': json['permissions'] == null ? undefined : RolePermissionsFromJSON(json['permissions']),
     };
 }
 
@@ -80,7 +87,7 @@ export function EmployeeRoleToJSONTyped(value?: EmployeeRole | null, ignoreDiscr
     }
     return {
         'meta': MetaToJSON(value['meta']),
-        'permissions': EmployeeRolePermissionsToJSON(value['permissions']),
+        'permissions': RolePermissionsToJSON(value['permissions']),
     };
 }
 

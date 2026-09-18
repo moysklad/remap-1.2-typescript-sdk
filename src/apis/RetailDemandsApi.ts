@@ -225,6 +225,12 @@ export interface GetRetailDemandTemplateRequest {
     contentType?: GetRetailDemandTemplateContentTypeEnum;
 }
 
+export interface MoveRetailDemandToTrashRequest {
+    id: string;
+    accept?: MoveRetailDemandToTrashAcceptEnum;
+    acceptEncoding?: string;
+}
+
 export interface UpdateRetailDemandRequest {
     id: string;
     retailDemand: Omit<RetailDemand, 'id'|'accountId'|'created'|'deleted'|'updated'|'printed'|'published'|'vatSum'|'sum'|'payedSum'|'cheque'>;
@@ -1632,6 +1638,61 @@ export class RetailDemandsApi extends runtime.BaseAPI {
     }
 
     /**
+     * Удалить Розничную продажу в корзину
+     */
+    async moveRetailDemandToTrashRaw(requestParameters: MoveRetailDemandToTrashRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling moveRetailDemandToTrash().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (requestParameters['accept'] != null) {
+            headerParameters['accept'] = String(requestParameters['accept']);
+        }
+
+        if (requestParameters['acceptEncoding'] != null) {
+            headerParameters['Accept-Encoding'] = String(requestParameters['acceptEncoding']);
+        }
+
+        if (this.configuration && (this.configuration.username !== undefined || this.configuration.password !== undefined)) {
+            headerParameters["Authorization"] = "Basic " + btoa(this.configuration.username + ":" + this.configuration.password);
+        }
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearerAuth", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/entity/retaildemand/{id}/trash`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Удалить Розничную продажу в корзину
+     */
+    async moveRetailDemandToTrash(requestParameters: MoveRetailDemandToTrashRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.moveRetailDemandToTrashRaw(requestParameters, initOverrides);
+    }
+
+    /**
      * Изменить Розничную продажу
      */
     async updateRetailDemandRaw(requestParameters: UpdateRetailDemandRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<RetailDemand>> {
@@ -2278,6 +2339,14 @@ export const GetRetailDemandTemplateContentTypeEnum = {
     ApplicationJson: 'application/json'
 } as const;
 export type GetRetailDemandTemplateContentTypeEnum = typeof GetRetailDemandTemplateContentTypeEnum[keyof typeof GetRetailDemandTemplateContentTypeEnum];
+/**
+ * @export
+ */
+export const MoveRetailDemandToTrashAcceptEnum = {
+    ApplicationJson: 'application/json',
+    ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
+} as const;
+export type MoveRetailDemandToTrashAcceptEnum = typeof MoveRetailDemandToTrashAcceptEnum[keyof typeof MoveRetailDemandToTrashAcceptEnum];
 /**
  * @export
  */

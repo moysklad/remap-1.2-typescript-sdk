@@ -229,6 +229,12 @@ export interface GetInternalOrderTemplateRequest {
     body?: object;
 }
 
+export interface MoveInternalOrderToTrashRequest {
+    id: string;
+    accept?: MoveInternalOrderToTrashAcceptEnum;
+    acceptEncoding?: string;
+}
+
 export interface UpdateInternalOrderRequest {
     id: string;
     internalOrder: Omit<InternalOrder, 'id'|'accountId'|'created'|'deleted'|'updated'|'printed'|'published'|'shared'|'vatSum'|'sum'>;
@@ -1675,6 +1681,61 @@ export class InternalOrdersApi extends runtime.BaseAPI {
     }
 
     /**
+     * Удалить InternalOrder в корзину
+     */
+    async moveInternalOrderToTrashRaw(requestParameters: MoveInternalOrderToTrashRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling moveInternalOrderToTrash().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (requestParameters['accept'] != null) {
+            headerParameters['accept'] = String(requestParameters['accept']);
+        }
+
+        if (requestParameters['acceptEncoding'] != null) {
+            headerParameters['Accept-Encoding'] = String(requestParameters['acceptEncoding']);
+        }
+
+        if (this.configuration && (this.configuration.username !== undefined || this.configuration.password !== undefined)) {
+            headerParameters["Authorization"] = "Basic " + btoa(this.configuration.username + ":" + this.configuration.password);
+        }
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearerAuth", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/entity/internalorder/{id}/trash`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Удалить InternalOrder в корзину
+     */
+    async moveInternalOrderToTrash(requestParameters: MoveInternalOrderToTrashRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.moveInternalOrderToTrashRaw(requestParameters, initOverrides);
+    }
+
+    /**
      * Изменить InternalOrder
      */
     async updateInternalOrderRaw(requestParameters: UpdateInternalOrderRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<InternalOrder>> {
@@ -2295,6 +2356,14 @@ export const GetInternalOrderTemplateContentTypeEnum = {
     ApplicationJson: 'application/json'
 } as const;
 export type GetInternalOrderTemplateContentTypeEnum = typeof GetInternalOrderTemplateContentTypeEnum[keyof typeof GetInternalOrderTemplateContentTypeEnum];
+/**
+ * @export
+ */
+export const MoveInternalOrderToTrashAcceptEnum = {
+    ApplicationJson: 'application/json',
+    ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
+} as const;
+export type MoveInternalOrderToTrashAcceptEnum = typeof MoveInternalOrderToTrashAcceptEnum[keyof typeof MoveInternalOrderToTrashAcceptEnum];
 /**
  * @export
  */

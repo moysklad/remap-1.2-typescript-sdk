@@ -120,6 +120,14 @@ export interface CreateSupplyNoteRequest {
     contentType?: CreateSupplyNoteContentTypeEnum;
 }
 
+export interface CreateSupplyNotesBatchRequest {
+    id: string;
+    eventNote: Array<EventNote>;
+    accept?: CreateSupplyNotesBatchAcceptEnum;
+    acceptEncoding?: string;
+    contentType?: CreateSupplyNotesBatchContentTypeEnum;
+}
+
 export interface CreateSupplyPositionRequest {
     id: string;
     supplyPosition: Omit<SupplyPosition, 'accountId'|'overhead'>;
@@ -175,6 +183,14 @@ export interface DeleteSupplyNoteRequest {
     noteId: string;
     accept?: DeleteSupplyNoteAcceptEnum;
     acceptEncoding?: string;
+}
+
+export interface DeleteSupplyNotesBatchRequest {
+    id: string;
+    eventNote: Array<EventNote>;
+    accept?: DeleteSupplyNotesBatchAcceptEnum;
+    acceptEncoding?: string;
+    contentType?: DeleteSupplyNotesBatchContentTypeEnum;
 }
 
 export interface DeleteSupplyPositionRequest {
@@ -808,6 +824,78 @@ export class SuppliesApi extends runtime.BaseAPI {
     }
 
     /**
+     * В теле запроса передается массив Событий. Для создания События требуется description, для обновления — метаданные (meta). Для каждого документа можно создать не более 5000 Событий. Редактировать События может администратор или автор События с правом на просмотр документа.
+     * Массовое создание и обновление Событий Приемки
+     */
+    async createSupplyNotesBatchRaw(requestParameters: CreateSupplyNotesBatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<EventNote>>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling createSupplyNotesBatch().'
+            );
+        }
+
+        if (requestParameters['eventNote'] == null) {
+            throw new runtime.RequiredError(
+                'eventNote',
+                'Required parameter "eventNote" was null or undefined when calling createSupplyNotesBatch().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (requestParameters['accept'] != null) {
+            headerParameters['accept'] = String(requestParameters['accept']);
+        }
+
+        if (requestParameters['acceptEncoding'] != null) {
+            headerParameters['Accept-Encoding'] = String(requestParameters['acceptEncoding']);
+        }
+
+        if (requestParameters['contentType'] != null) {
+            headerParameters['Content-Type'] = String(requestParameters['contentType']);
+        }
+
+        if (this.configuration && (this.configuration.username !== undefined || this.configuration.password !== undefined)) {
+            headerParameters["Authorization"] = "Basic " + btoa(this.configuration.username + ":" + this.configuration.password);
+        }
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearerAuth", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/entity/supply/{id}/notes/batch`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['eventNote']!.map(EventNoteToJSON),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(EventNoteFromJSON));
+    }
+
+    /**
+     * В теле запроса передается массив Событий. Для создания События требуется description, для обновления — метаданные (meta). Для каждого документа можно создать не более 5000 Событий. Редактировать События может администратор или автор События с правом на просмотр документа.
+     * Массовое создание и обновление Событий Приемки
+     */
+    async createSupplyNotesBatch(requestParameters: CreateSupplyNotesBatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<EventNote>> {
+        const response = await this.createSupplyNotesBatchRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Создать и обновить позицию Приемки
      */
     async createSupplyPositionRaw(requestParameters: CreateSupplyPositionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<SupplyPosition>>> {
@@ -1310,6 +1398,77 @@ export class SuppliesApi extends runtime.BaseAPI {
      */
     async deleteSupplyNote(requestParameters: DeleteSupplyNoteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.deleteSupplyNoteRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * В теле запроса передается массив Событий с их метаданными (meta). Удалять События может администратор или автор События с правом на просмотр документа.
+     * Массовое удаление Событий Приемки
+     */
+    async deleteSupplyNotesBatchRaw(requestParameters: DeleteSupplyNotesBatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling deleteSupplyNotesBatch().'
+            );
+        }
+
+        if (requestParameters['eventNote'] == null) {
+            throw new runtime.RequiredError(
+                'eventNote',
+                'Required parameter "eventNote" was null or undefined when calling deleteSupplyNotesBatch().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (requestParameters['accept'] != null) {
+            headerParameters['accept'] = String(requestParameters['accept']);
+        }
+
+        if (requestParameters['acceptEncoding'] != null) {
+            headerParameters['Accept-Encoding'] = String(requestParameters['acceptEncoding']);
+        }
+
+        if (requestParameters['contentType'] != null) {
+            headerParameters['Content-Type'] = String(requestParameters['contentType']);
+        }
+
+        if (this.configuration && (this.configuration.username !== undefined || this.configuration.password !== undefined)) {
+            headerParameters["Authorization"] = "Basic " + btoa(this.configuration.username + ":" + this.configuration.password);
+        }
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearerAuth", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/entity/supply/{id}/notes/delete`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['eventNote']!.map(EventNoteToJSON),
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * В теле запроса передается массив Событий с их метаданными (meta). Удалять События может администратор или автор События с правом на просмотр документа.
+     * Массовое удаление Событий Приемки
+     */
+    async deleteSupplyNotesBatch(requestParameters: DeleteSupplyNotesBatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.deleteSupplyNotesBatchRaw(requestParameters, initOverrides);
     }
 
     /**
@@ -2761,6 +2920,21 @@ export type CreateSupplyNoteContentTypeEnum = typeof CreateSupplyNoteContentType
 /**
  * @export
  */
+export const CreateSupplyNotesBatchAcceptEnum = {
+    ApplicationJson: 'application/json',
+    ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
+} as const;
+export type CreateSupplyNotesBatchAcceptEnum = typeof CreateSupplyNotesBatchAcceptEnum[keyof typeof CreateSupplyNotesBatchAcceptEnum];
+/**
+ * @export
+ */
+export const CreateSupplyNotesBatchContentTypeEnum = {
+    ApplicationJson: 'application/json'
+} as const;
+export type CreateSupplyNotesBatchContentTypeEnum = typeof CreateSupplyNotesBatchContentTypeEnum[keyof typeof CreateSupplyNotesBatchContentTypeEnum];
+/**
+ * @export
+ */
 export const CreateSupplyPositionAcceptEnum = {
     ApplicationJson: 'application/json',
     ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
@@ -2843,6 +3017,21 @@ export const DeleteSupplyNoteAcceptEnum = {
     ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
 } as const;
 export type DeleteSupplyNoteAcceptEnum = typeof DeleteSupplyNoteAcceptEnum[keyof typeof DeleteSupplyNoteAcceptEnum];
+/**
+ * @export
+ */
+export const DeleteSupplyNotesBatchAcceptEnum = {
+    ApplicationJson: 'application/json',
+    ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
+} as const;
+export type DeleteSupplyNotesBatchAcceptEnum = typeof DeleteSupplyNotesBatchAcceptEnum[keyof typeof DeleteSupplyNotesBatchAcceptEnum];
+/**
+ * @export
+ */
+export const DeleteSupplyNotesBatchContentTypeEnum = {
+    ApplicationJson: 'application/json'
+} as const;
+export type DeleteSupplyNotesBatchContentTypeEnum = typeof DeleteSupplyNotesBatchContentTypeEnum[keyof typeof DeleteSupplyNotesBatchContentTypeEnum];
 /**
  * @export
  */

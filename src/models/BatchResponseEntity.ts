@@ -32,6 +32,7 @@ import * as BatchResponseEntityPolymorphicCommissionReportOutPosition from './Co
 import * as BatchResponseEntityPolymorphicConsignment from './Consignment.js';
 import * as BatchResponseEntityPolymorphicContract from './Contract.js';
 import * as BatchResponseEntityPolymorphicCounterparty from './Counterparty.js';
+import * as BatchResponseEntityPolymorphicCounterpartyAdjustment from './CounterpartyAdjustment.js';
 import * as BatchResponseEntityPolymorphicCountry from './Country.js';
 import * as BatchResponseEntityPolymorphicCurrency from './Currency.js';
 import * as BatchResponseEntityPolymorphicCustomerOrder from './CustomerOrder.js';
@@ -55,7 +56,11 @@ import * as BatchResponseEntityPolymorphicMovePosition from './MovePosition.js';
 import * as BatchResponseEntityPolymorphicOrganization from './Organization.js';
 import * as BatchResponseEntityPolymorphicPaymentIn from './PaymentIn.js';
 import * as BatchResponseEntityPolymorphicPaymentOut from './PaymentOut.js';
+import * as BatchResponseEntityPolymorphicPayroll from './Payroll.js';
+import * as BatchResponseEntityPolymorphicPayrollPosition from './PayrollPosition.js';
 import * as BatchResponseEntityPolymorphicPrepaymentReturnPosition from './PrepaymentReturnPosition.js';
+import * as BatchResponseEntityPolymorphicPriceList from './PriceList.js';
+import * as BatchResponseEntityPolymorphicPriceListPosition from './PriceListPosition.js';
 import * as BatchResponseEntityPolymorphicPriceType from './PriceType.js';
 import * as BatchResponseEntityPolymorphicProcessing from './Processing.js';
 import * as BatchResponseEntityPolymorphicProcessingOrder from './ProcessingOrder.js';
@@ -152,6 +157,7 @@ export function BatchResponseEntityFromJSONTyped(json: any, ignoreDiscriminator:
             'consignment': BatchResponseEntityPolymorphicConsignment.ConsignmentFromJSON,
             'contract': BatchResponseEntityPolymorphicContract.ContractFromJSON,
             'counterparty': BatchResponseEntityPolymorphicCounterparty.CounterpartyFromJSON,
+            'counterpartyadjustment': BatchResponseEntityPolymorphicCounterpartyAdjustment.CounterpartyAdjustmentFromJSON,
             'country': BatchResponseEntityPolymorphicCountry.CountryFromJSON,
             'currency': BatchResponseEntityPolymorphicCurrency.CurrencyFromJSON,
             'customerorder': BatchResponseEntityPolymorphicCustomerOrder.CustomerOrderFromJSON,
@@ -175,7 +181,11 @@ export function BatchResponseEntityFromJSONTyped(json: any, ignoreDiscriminator:
             'organization': BatchResponseEntityPolymorphicOrganization.OrganizationFromJSON,
             'paymentin': BatchResponseEntityPolymorphicPaymentIn.PaymentInFromJSON,
             'paymentout': BatchResponseEntityPolymorphicPaymentOut.PaymentOutFromJSON,
+            'payroll': BatchResponseEntityPolymorphicPayroll.PayrollFromJSON,
+            'payrollposition': BatchResponseEntityPolymorphicPayrollPosition.PayrollPositionFromJSON,
             'prepaymentreturnposition': BatchResponseEntityPolymorphicPrepaymentReturnPosition.PrepaymentReturnPositionFromJSON,
+            'pricelist': BatchResponseEntityPolymorphicPriceList.PriceListFromJSON,
+            'pricelistrow': BatchResponseEntityPolymorphicPriceListPosition.PriceListPositionFromJSON,
             'pricetype': BatchResponseEntityPolymorphicPriceType.PriceTypeFromJSON,
             'processing': BatchResponseEntityPolymorphicProcessing.ProcessingFromJSON,
             'processingorder': BatchResponseEntityPolymorphicProcessingOrder.ProcessingOrderFromJSON,
@@ -247,6 +257,7 @@ export function BatchResponseEntityToJSONTyped(value?: BatchResponseEntity | nul
             'consignment': BatchResponseEntityPolymorphicConsignment.ConsignmentToJSON,
             'contract': BatchResponseEntityPolymorphicContract.ContractToJSON,
             'counterparty': BatchResponseEntityPolymorphicCounterparty.CounterpartyToJSON,
+            'counterpartyadjustment': BatchResponseEntityPolymorphicCounterpartyAdjustment.CounterpartyAdjustmentToJSON,
             'country': BatchResponseEntityPolymorphicCountry.CountryToJSON,
             'currency': BatchResponseEntityPolymorphicCurrency.CurrencyToJSON,
             'customerorder': BatchResponseEntityPolymorphicCustomerOrder.CustomerOrderToJSON,
@@ -270,7 +281,11 @@ export function BatchResponseEntityToJSONTyped(value?: BatchResponseEntity | nul
             'organization': BatchResponseEntityPolymorphicOrganization.OrganizationToJSON,
             'paymentin': BatchResponseEntityPolymorphicPaymentIn.PaymentInToJSON,
             'paymentout': BatchResponseEntityPolymorphicPaymentOut.PaymentOutToJSON,
+            'payroll': BatchResponseEntityPolymorphicPayroll.PayrollToJSON,
+            'payrollposition': BatchResponseEntityPolymorphicPayrollPosition.PayrollPositionToJSON,
             'prepaymentreturnposition': BatchResponseEntityPolymorphicPrepaymentReturnPosition.PrepaymentReturnPositionToJSON,
+            'pricelist': BatchResponseEntityPolymorphicPriceList.PriceListToJSON,
+            'pricelistrow': BatchResponseEntityPolymorphicPriceListPosition.PriceListPositionToJSON,
             'pricetype': BatchResponseEntityPolymorphicPriceType.PriceTypeToJSON,
             'processing': BatchResponseEntityPolymorphicProcessing.ProcessingToJSON,
             'processingorder': BatchResponseEntityPolymorphicProcessingOrder.ProcessingOrderToJSON,

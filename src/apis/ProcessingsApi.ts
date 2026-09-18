@@ -288,6 +288,12 @@ export interface GetProcessingsRequest {
     acceptEncoding?: string;
 }
 
+export interface MoveProcessingToTrashRequest {
+    id: string;
+    accept?: MoveProcessingToTrashAcceptEnum;
+    acceptEncoding?: string;
+}
+
 export interface UpdateProcessingRequest {
     id: string;
     processing: Omit<Processing, 'id'|'accountId'|'created'|'deleted'|'updated'|'printed'|'published'>;
@@ -2238,6 +2244,61 @@ export class ProcessingsApi extends runtime.BaseAPI {
     }
 
     /**
+     * Удалить Processing в корзину
+     */
+    async moveProcessingToTrashRaw(requestParameters: MoveProcessingToTrashRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling moveProcessingToTrash().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (requestParameters['accept'] != null) {
+            headerParameters['accept'] = String(requestParameters['accept']);
+        }
+
+        if (requestParameters['acceptEncoding'] != null) {
+            headerParameters['Accept-Encoding'] = String(requestParameters['acceptEncoding']);
+        }
+
+        if (this.configuration && (this.configuration.username !== undefined || this.configuration.password !== undefined)) {
+            headerParameters["Authorization"] = "Basic " + btoa(this.configuration.username + ":" + this.configuration.password);
+        }
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearerAuth", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/entity/processing/{id}/trash`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Удалить Processing в корзину
+     */
+    async moveProcessingToTrash(requestParameters: MoveProcessingToTrashRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.moveProcessingToTrashRaw(requestParameters, initOverrides);
+    }
+
+    /**
      * Изменить Processing
      */
     async updateProcessingRaw(requestParameters: UpdateProcessingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Processing>> {
@@ -2941,6 +3002,14 @@ export const GetProcessingsAcceptEnum = {
     ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
 } as const;
 export type GetProcessingsAcceptEnum = typeof GetProcessingsAcceptEnum[keyof typeof GetProcessingsAcceptEnum];
+/**
+ * @export
+ */
+export const MoveProcessingToTrashAcceptEnum = {
+    ApplicationJson: 'application/json',
+    ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
+} as const;
+export type MoveProcessingToTrashAcceptEnum = typeof MoveProcessingToTrashAcceptEnum[keyof typeof MoveProcessingToTrashAcceptEnum];
 /**
  * @export
  */

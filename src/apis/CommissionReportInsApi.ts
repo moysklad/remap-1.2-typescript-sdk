@@ -276,6 +276,12 @@ export interface GetCommissionReportInReturnedPositionsRequest {
     contentType?: GetCommissionReportInReturnedPositionsContentTypeEnum;
 }
 
+export interface MoveCommissionReportInToTrashRequest {
+    id: string;
+    accept?: MoveCommissionReportInToTrashAcceptEnum;
+    acceptEncoding?: string;
+}
+
 export interface UpdateCommissionReportInRequest {
     id: string;
     commissionReportIn: Omit<CommissionReportIn, 'id'|'accountId'|'commitentSum'|'created'|'deleted'|'payedSum'|'printed'|'published'|'updated'>;
@@ -2036,6 +2042,61 @@ export class CommissionReportInsApi extends runtime.BaseAPI {
     }
 
     /**
+     * Удалить CommissionReportIn в корзину
+     */
+    async moveCommissionReportInToTrashRaw(requestParameters: MoveCommissionReportInToTrashRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling moveCommissionReportInToTrash().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (requestParameters['accept'] != null) {
+            headerParameters['accept'] = String(requestParameters['accept']);
+        }
+
+        if (requestParameters['acceptEncoding'] != null) {
+            headerParameters['Accept-Encoding'] = String(requestParameters['acceptEncoding']);
+        }
+
+        if (this.configuration && (this.configuration.username !== undefined || this.configuration.password !== undefined)) {
+            headerParameters["Authorization"] = "Basic " + btoa(this.configuration.username + ":" + this.configuration.password);
+        }
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearerAuth", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/entity/commissionreportin/{id}/trash`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Удалить CommissionReportIn в корзину
+     */
+    async moveCommissionReportInToTrash(requestParameters: MoveCommissionReportInToTrashRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.moveCommissionReportInToTrashRaw(requestParameters, initOverrides);
+    }
+
+    /**
      * Изменить CommissionReportIn
      */
     async updateCommissionReportInRaw(requestParameters: UpdateCommissionReportInRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CommissionReportIn>> {
@@ -2798,6 +2859,14 @@ export const GetCommissionReportInReturnedPositionsContentTypeEnum = {
     ApplicationJson: 'application/json'
 } as const;
 export type GetCommissionReportInReturnedPositionsContentTypeEnum = typeof GetCommissionReportInReturnedPositionsContentTypeEnum[keyof typeof GetCommissionReportInReturnedPositionsContentTypeEnum];
+/**
+ * @export
+ */
+export const MoveCommissionReportInToTrashAcceptEnum = {
+    ApplicationJson: 'application/json',
+    ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
+} as const;
+export type MoveCommissionReportInToTrashAcceptEnum = typeof MoveCommissionReportInToTrashAcceptEnum[keyof typeof MoveCommissionReportInToTrashAcceptEnum];
 /**
  * @export
  */

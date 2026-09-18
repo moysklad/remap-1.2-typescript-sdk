@@ -149,6 +149,12 @@ export interface GetPrepaymentReturnPositionsRequest {
     acceptEncoding?: string;
 }
 
+export interface MovePrepaymentReturnToTrashRequest {
+    id: string;
+    accept?: MovePrepaymentReturnToTrashAcceptEnum;
+    acceptEncoding?: string;
+}
+
 export interface UpdatePrepaymentReturnMetadataAttributeByIdRequest {
     id: string;
     attributeMetaInfo: AttributeMetaInfo;
@@ -1014,6 +1020,61 @@ export class PrepaymentReturnsApi extends runtime.BaseAPI {
     }
 
     /**
+     * Удалить Возврат предоплаты в корзину
+     */
+    async movePrepaymentReturnToTrashRaw(requestParameters: MovePrepaymentReturnToTrashRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling movePrepaymentReturnToTrash().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (requestParameters['accept'] != null) {
+            headerParameters['accept'] = String(requestParameters['accept']);
+        }
+
+        if (requestParameters['acceptEncoding'] != null) {
+            headerParameters['Accept-Encoding'] = String(requestParameters['acceptEncoding']);
+        }
+
+        if (this.configuration && (this.configuration.username !== undefined || this.configuration.password !== undefined)) {
+            headerParameters["Authorization"] = "Basic " + btoa(this.configuration.username + ":" + this.configuration.password);
+        }
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearerAuth", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/entity/prepaymentreturn/{id}/trash`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Удалить Возврат предоплаты в корзину
+     */
+    async movePrepaymentReturnToTrash(requestParameters: MovePrepaymentReturnToTrashRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.movePrepaymentReturnToTrashRaw(requestParameters, initOverrides);
+    }
+
+    /**
      * Обновить отдельное доп. поле Возврата предоплаты
      */
     async updatePrepaymentReturnMetadataAttributeByIdRaw(requestParameters: UpdatePrepaymentReturnMetadataAttributeByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AttributeMetaInfo>> {
@@ -1328,6 +1389,14 @@ export const GetPrepaymentReturnPositionsAcceptEnum = {
     ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
 } as const;
 export type GetPrepaymentReturnPositionsAcceptEnum = typeof GetPrepaymentReturnPositionsAcceptEnum[keyof typeof GetPrepaymentReturnPositionsAcceptEnum];
+/**
+ * @export
+ */
+export const MovePrepaymentReturnToTrashAcceptEnum = {
+    ApplicationJson: 'application/json',
+    ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
+} as const;
+export type MovePrepaymentReturnToTrashAcceptEnum = typeof MovePrepaymentReturnToTrashAcceptEnum[keyof typeof MovePrepaymentReturnToTrashAcceptEnum];
 /**
  * @export
  */

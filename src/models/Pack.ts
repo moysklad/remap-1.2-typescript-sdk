@@ -36,7 +36,7 @@ import {
 } from './Barcode.js';
 
 /**
- * Упаковка
+ * Упаковка товара
  * @export
  * @interface Pack
  */
@@ -48,7 +48,7 @@ export interface Pack {
      */
     meta?: Meta;
     /**
-     * ID упаковки
+     * ID упаковки товара. Обязательное при ответе
      * @type {string}
      * @memberof Pack
      */
@@ -60,13 +60,15 @@ export interface Pack {
      */
     uom?: Uom;
     /**
-     * Количество товаров в упаковке
+     * Количество товаров в упаковке. Обязательное при ответе
      * @type {number}
      * @memberof Pack
      */
     quantity?: number;
     /**
-     * Штрихкоды упаковки
+     * Штрихкоды упаковки (не более одного). Без штрихкода поле не выводится.
+     * При обновлении переданный массив полностью заменяет штрихкоды упаковки.
+     * 
      * @type {Array<Barcode>}
      * @memberof Pack
      */

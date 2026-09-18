@@ -1,6 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 export * from './AssortmentApi.js';
+export * from './AuditApi.js';
 export * from './BonusProgramsApi.js';
 export * from './BonusTransactionsApi.js';
 export * from './BundlesApi.js';
@@ -13,6 +14,7 @@ export * from './CompanySettingsApi.js';
 export * from './ConsignmentsApi.js';
 export * from './ContractsApi.js';
 export * from './CounterpartiesApi.js';
+export * from './CounterpartyAdjustmentsApi.js';
 export * from './CountriesApi.js';
 export * from './CurrenciesApi.js';
 export * from './CustomEntitiesApi.js';
@@ -39,8 +41,10 @@ export * from './NotificationsApi.js';
 export * from './OrganizationsApi.js';
 export * from './PaymentInsApi.js';
 export * from './PaymentOutsApi.js';
+export * from './PayrollsApi.js';
 export * from './PrepaymentReturnsApi.js';
 export * from './PrepaymentsApi.js';
+export * from './PriceListsApi.js';
 export * from './PriceTypesApi.js';
 export * from './ProcessingOrdersApi.js';
 export * from './ProcessingPlanFoldersApi.js';
@@ -60,6 +64,7 @@ export * from './ReportsByOperationsApi.js';
 export * from './ReportsStockAllApi.js';
 export * from './ReportsStockByOperationApi.js';
 export * from './ReportsStockByStoreApi.js';
+export * from './ReportsStockCurrentApi.js';
 export * from './RetailDemandsApi.js';
 export * from './RetailDrawerCashInsApi.js';
 export * from './RetailDrawerCashOutsApi.js';

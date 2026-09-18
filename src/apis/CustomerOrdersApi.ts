@@ -17,6 +17,7 @@ import * as runtime from '../runtime.js';
 import type {
   AttributeMetaInfo,
   AttributeMetaInfoList,
+  AuditEventList,
   BatchResponseEntity,
   CreateCustomerOrderPositions200ResponseInner,
   CustomerOrder,
@@ -39,6 +40,8 @@ import {
     AttributeMetaInfoToJSON,
     AttributeMetaInfoListFromJSON,
     AttributeMetaInfoListToJSON,
+    AuditEventListFromJSON,
+    AuditEventListToJSON,
     BatchResponseEntityFromJSON,
     BatchResponseEntityToJSON,
     CreateCustomerOrderPositions200ResponseInnerFromJSON,
@@ -118,6 +121,14 @@ export interface CreateCustomerOrderNoteRequest {
     contentType?: CreateCustomerOrderNoteContentTypeEnum;
 }
 
+export interface CreateCustomerOrderNotesBatchRequest {
+    id: string;
+    eventNote: Array<EventNote>;
+    accept?: CreateCustomerOrderNotesBatchAcceptEnum;
+    acceptEncoding?: string;
+    contentType?: CreateCustomerOrderNotesBatchContentTypeEnum;
+}
+
 export interface CreateCustomerOrderPositionRequest {
     id: string;
     customerOrderPosition: Omit<CustomerOrderPosition, 'accountId'|'shipped'>;
@@ -177,6 +188,14 @@ export interface DeleteCustomerOrderNoteRequest {
     noteId: string;
     accept?: DeleteCustomerOrderNoteAcceptEnum;
     acceptEncoding?: string;
+}
+
+export interface DeleteCustomerOrderNotesBatchRequest {
+    id: string;
+    eventNote: Array<EventNote>;
+    accept?: DeleteCustomerOrderNotesBatchAcceptEnum;
+    acceptEncoding?: string;
+    contentType?: DeleteCustomerOrderNotesBatchContentTypeEnum;
 }
 
 export interface DeleteCustomerOrderPositionRequest {
@@ -322,6 +341,12 @@ export interface GetCustomerOrderTemplateRequest {
     acceptEncoding?: string;
     contentType?: GetCustomerOrderTemplateContentTypeEnum;
     body?: object;
+}
+
+export interface MoveCustomerOrderToTrashRequest {
+    id: string;
+    accept?: MoveCustomerOrderToTrashAcceptEnum;
+    acceptEncoding?: string;
 }
 
 export interface UpdateCustomerOrderRequest {
@@ -762,6 +787,78 @@ export class CustomerOrdersApi extends runtime.BaseAPI {
      */
     async createCustomerOrderNote(requestParameters: CreateCustomerOrderNoteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<EventNote>> {
         const response = await this.createCustomerOrderNoteRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * В теле запроса передается массив Событий. Для создания События требуется description, для обновления — метаданные (meta). Для каждого документа можно создать не более 5000 Событий. Редактировать События может администратор или автор События с правом на просмотр документа.
+     * Массовое создание и обновление Событий Заказа покупателя
+     */
+    async createCustomerOrderNotesBatchRaw(requestParameters: CreateCustomerOrderNotesBatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<EventNote>>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling createCustomerOrderNotesBatch().'
+            );
+        }
+
+        if (requestParameters['eventNote'] == null) {
+            throw new runtime.RequiredError(
+                'eventNote',
+                'Required parameter "eventNote" was null or undefined when calling createCustomerOrderNotesBatch().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (requestParameters['accept'] != null) {
+            headerParameters['accept'] = String(requestParameters['accept']);
+        }
+
+        if (requestParameters['acceptEncoding'] != null) {
+            headerParameters['Accept-Encoding'] = String(requestParameters['acceptEncoding']);
+        }
+
+        if (requestParameters['contentType'] != null) {
+            headerParameters['Content-Type'] = String(requestParameters['contentType']);
+        }
+
+        if (this.configuration && (this.configuration.username !== undefined || this.configuration.password !== undefined)) {
+            headerParameters["Authorization"] = "Basic " + btoa(this.configuration.username + ":" + this.configuration.password);
+        }
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearerAuth", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/entity/customerorder/{id}/notes/batch`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['eventNote']!.map(EventNoteToJSON),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(EventNoteFromJSON));
+    }
+
+    /**
+     * В теле запроса передается массив Событий. Для создания События требуется description, для обновления — метаданные (meta). Для каждого документа можно создать не более 5000 Событий. Редактировать События может администратор или автор События с правом на просмотр документа.
+     * Массовое создание и обновление Событий Заказа покупателя
+     */
+    async createCustomerOrderNotesBatch(requestParameters: CreateCustomerOrderNotesBatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<EventNote>> {
+        const response = await this.createCustomerOrderNotesBatchRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -1290,6 +1387,77 @@ export class CustomerOrdersApi extends runtime.BaseAPI {
     }
 
     /**
+     * В теле запроса передается массив Событий с их метаданными (meta). Удалять События может администратор или автор События с правом на просмотр документа.
+     * Массовое удаление Событий Заказа покупателя
+     */
+    async deleteCustomerOrderNotesBatchRaw(requestParameters: DeleteCustomerOrderNotesBatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling deleteCustomerOrderNotesBatch().'
+            );
+        }
+
+        if (requestParameters['eventNote'] == null) {
+            throw new runtime.RequiredError(
+                'eventNote',
+                'Required parameter "eventNote" was null or undefined when calling deleteCustomerOrderNotesBatch().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (requestParameters['accept'] != null) {
+            headerParameters['accept'] = String(requestParameters['accept']);
+        }
+
+        if (requestParameters['acceptEncoding'] != null) {
+            headerParameters['Accept-Encoding'] = String(requestParameters['acceptEncoding']);
+        }
+
+        if (requestParameters['contentType'] != null) {
+            headerParameters['Content-Type'] = String(requestParameters['contentType']);
+        }
+
+        if (this.configuration && (this.configuration.username !== undefined || this.configuration.password !== undefined)) {
+            headerParameters["Authorization"] = "Basic " + btoa(this.configuration.username + ":" + this.configuration.password);
+        }
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearerAuth", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/entity/customerorder/{id}/notes/delete`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['eventNote']!.map(EventNoteToJSON),
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * В теле запроса передается массив Событий с их метаданными (meta). Удалять События может администратор или автор События с правом на просмотр документа.
+     * Массовое удаление Событий Заказа покупателя
+     */
+    async deleteCustomerOrderNotesBatch(requestParameters: DeleteCustomerOrderNotesBatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.deleteCustomerOrderNotesBatchRaw(requestParameters, initOverrides);
+    }
+
+    /**
      * Удалить позицию CustomerOrders
      */
     async deleteCustomerOrderPositionRaw(requestParameters: DeleteCustomerOrderPositionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
@@ -1570,7 +1738,7 @@ export class CustomerOrdersApi extends runtime.BaseAPI {
      * Возвращает список событий аудита для Заказа покупателя по его ID. 
      * Получить события аудита Заказа покупателя
      */
-    async getCustomerOrderAuditEventsRaw(requestParameters: GetCustomerOrderAuditEventsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<{ [key: string]: any; }>> {
+    async getCustomerOrderAuditEventsRaw(requestParameters: GetCustomerOrderAuditEventsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AuditEventList>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
@@ -1620,14 +1788,14 @@ export class CustomerOrdersApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse<any>(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => AuditEventListFromJSON(jsonValue));
     }
 
     /**
      * Возвращает список событий аудита для Заказа покупателя по его ID. 
      * Получить события аудита Заказа покупателя
      */
-    async getCustomerOrderAuditEvents(requestParameters: GetCustomerOrderAuditEventsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<{ [key: string]: any; }> {
+    async getCustomerOrderAuditEvents(requestParameters: GetCustomerOrderAuditEventsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AuditEventList> {
         const response = await this.getCustomerOrderAuditEventsRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -2472,6 +2640,61 @@ export class CustomerOrdersApi extends runtime.BaseAPI {
     }
 
     /**
+     * Удалить CustomerOrders в корзину
+     */
+    async moveCustomerOrderToTrashRaw(requestParameters: MoveCustomerOrderToTrashRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling moveCustomerOrderToTrash().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (requestParameters['accept'] != null) {
+            headerParameters['accept'] = String(requestParameters['accept']);
+        }
+
+        if (requestParameters['acceptEncoding'] != null) {
+            headerParameters['Accept-Encoding'] = String(requestParameters['acceptEncoding']);
+        }
+
+        if (this.configuration && (this.configuration.username !== undefined || this.configuration.password !== undefined)) {
+            headerParameters["Authorization"] = "Basic " + btoa(this.configuration.username + ":" + this.configuration.password);
+        }
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearerAuth", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/entity/customerorder/{id}/trash`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Удалить CustomerOrders в корзину
+     */
+    async moveCustomerOrderToTrash(requestParameters: MoveCustomerOrderToTrashRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.moveCustomerOrderToTrashRaw(requestParameters, initOverrides);
+    }
+
+    /**
      * Изменить CustomerOrders
      */
     async updateCustomerOrderRaw(requestParameters: UpdateCustomerOrderRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CustomerOrder>> {
@@ -2950,6 +3173,21 @@ export type CreateCustomerOrderNoteContentTypeEnum = typeof CreateCustomerOrderN
 /**
  * @export
  */
+export const CreateCustomerOrderNotesBatchAcceptEnum = {
+    ApplicationJson: 'application/json',
+    ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
+} as const;
+export type CreateCustomerOrderNotesBatchAcceptEnum = typeof CreateCustomerOrderNotesBatchAcceptEnum[keyof typeof CreateCustomerOrderNotesBatchAcceptEnum];
+/**
+ * @export
+ */
+export const CreateCustomerOrderNotesBatchContentTypeEnum = {
+    ApplicationJson: 'application/json'
+} as const;
+export type CreateCustomerOrderNotesBatchContentTypeEnum = typeof CreateCustomerOrderNotesBatchContentTypeEnum[keyof typeof CreateCustomerOrderNotesBatchContentTypeEnum];
+/**
+ * @export
+ */
 export const CreateCustomerOrderPositionAcceptEnum = {
     ApplicationJson: 'application/json',
     ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
@@ -3060,6 +3298,21 @@ export const DeleteCustomerOrderNoteAcceptEnum = {
     ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
 } as const;
 export type DeleteCustomerOrderNoteAcceptEnum = typeof DeleteCustomerOrderNoteAcceptEnum[keyof typeof DeleteCustomerOrderNoteAcceptEnum];
+/**
+ * @export
+ */
+export const DeleteCustomerOrderNotesBatchAcceptEnum = {
+    ApplicationJson: 'application/json',
+    ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
+} as const;
+export type DeleteCustomerOrderNotesBatchAcceptEnum = typeof DeleteCustomerOrderNotesBatchAcceptEnum[keyof typeof DeleteCustomerOrderNotesBatchAcceptEnum];
+/**
+ * @export
+ */
+export const DeleteCustomerOrderNotesBatchContentTypeEnum = {
+    ApplicationJson: 'application/json'
+} as const;
+export type DeleteCustomerOrderNotesBatchContentTypeEnum = typeof DeleteCustomerOrderNotesBatchContentTypeEnum[keyof typeof DeleteCustomerOrderNotesBatchContentTypeEnum];
 /**
  * @export
  */
@@ -3314,6 +3567,14 @@ export const GetCustomerOrderTemplateContentTypeEnum = {
     ApplicationJson: 'application/json'
 } as const;
 export type GetCustomerOrderTemplateContentTypeEnum = typeof GetCustomerOrderTemplateContentTypeEnum[keyof typeof GetCustomerOrderTemplateContentTypeEnum];
+/**
+ * @export
+ */
+export const MoveCustomerOrderToTrashAcceptEnum = {
+    ApplicationJson: 'application/json',
+    ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
+} as const;
+export type MoveCustomerOrderToTrashAcceptEnum = typeof MoveCustomerOrderToTrashAcceptEnum[keyof typeof MoveCustomerOrderToTrashAcceptEnum];
 /**
  * @export
  */

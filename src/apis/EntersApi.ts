@@ -247,6 +247,12 @@ export interface GetEnterTemplateRequest {
     body?: object;
 }
 
+export interface MoveEnterToTrashRequest {
+    id: string;
+    accept?: MoveEnterToTrashAcceptEnum;
+    acceptEncoding?: string;
+}
+
 export interface UpdateEnterRequest {
     id: string;
     enter: Omit<Enter, 'id'|'accountId'|'created'|'deleted'|'printed'|'published'|'sum'|'updated'>;
@@ -1854,6 +1860,61 @@ export class EntersApi extends runtime.BaseAPI {
     }
 
     /**
+     * Удалить Оприходование в корзину
+     */
+    async moveEnterToTrashRaw(requestParameters: MoveEnterToTrashRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling moveEnterToTrash().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (requestParameters['accept'] != null) {
+            headerParameters['accept'] = String(requestParameters['accept']);
+        }
+
+        if (requestParameters['acceptEncoding'] != null) {
+            headerParameters['Accept-Encoding'] = String(requestParameters['acceptEncoding']);
+        }
+
+        if (this.configuration && (this.configuration.username !== undefined || this.configuration.password !== undefined)) {
+            headerParameters["Authorization"] = "Basic " + btoa(this.configuration.username + ":" + this.configuration.password);
+        }
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearerAuth", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/entity/enter/{id}/trash`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Удалить Оприходование в корзину
+     */
+    async moveEnterToTrash(requestParameters: MoveEnterToTrashRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.moveEnterToTrashRaw(requestParameters, initOverrides);
+    }
+
+    /**
      * Изменить Оприходование
      */
     async updateEnterRaw(requestParameters: UpdateEnterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Enter>> {
@@ -2428,6 +2489,14 @@ export const GetEnterTemplateContentTypeEnum = {
     ApplicationJson: 'application/json'
 } as const;
 export type GetEnterTemplateContentTypeEnum = typeof GetEnterTemplateContentTypeEnum[keyof typeof GetEnterTemplateContentTypeEnum];
+/**
+ * @export
+ */
+export const MoveEnterToTrashAcceptEnum = {
+    ApplicationJson: 'application/json',
+    ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
+} as const;
+export type MoveEnterToTrashAcceptEnum = typeof MoveEnterToTrashAcceptEnum[keyof typeof MoveEnterToTrashAcceptEnum];
 /**
  * @export
  */

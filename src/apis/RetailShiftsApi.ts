@@ -118,6 +118,12 @@ export interface GetRetailShiftsRequest {
     acceptEncoding?: string;
 }
 
+export interface MoveRetailShiftToTrashRequest {
+    id: string;
+    accept?: MoveRetailShiftToTrashAcceptEnum;
+    acceptEncoding?: string;
+}
+
 export interface UpdateRetailShiftRequest {
     id: string;
     retailShift: Omit<RetailShift, 'id'|'accountId'|'agentAccount'|'contract'|'created'|'deleted'|'operations'|'paymentOperations'|'printed'|'proceedsCash'|'proceedsNoCash'|'published'|'receivedCash'|'receivedNoCash'|'updated'|'vatEnabled'>;
@@ -787,6 +793,61 @@ export class RetailShiftsApi extends runtime.BaseAPI {
     }
 
     /**
+     * Удалить Розничную смену в корзину
+     */
+    async moveRetailShiftToTrashRaw(requestParameters: MoveRetailShiftToTrashRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling moveRetailShiftToTrash().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (requestParameters['accept'] != null) {
+            headerParameters['accept'] = String(requestParameters['accept']);
+        }
+
+        if (requestParameters['acceptEncoding'] != null) {
+            headerParameters['Accept-Encoding'] = String(requestParameters['acceptEncoding']);
+        }
+
+        if (this.configuration && (this.configuration.username !== undefined || this.configuration.password !== undefined)) {
+            headerParameters["Authorization"] = "Basic " + btoa(this.configuration.username + ":" + this.configuration.password);
+        }
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearerAuth", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/entity/retailshift/{id}/trash`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Удалить Розничную смену в корзину
+     */
+    async moveRetailShiftToTrash(requestParameters: MoveRetailShiftToTrashRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.moveRetailShiftToTrashRaw(requestParameters, initOverrides);
+    }
+
+    /**
      * Изменить Розничную смену
      */
     async updateRetailShiftRaw(requestParameters: UpdateRetailShiftRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<RetailShift>> {
@@ -1048,6 +1109,14 @@ export const GetRetailShiftsAcceptEnum = {
     ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
 } as const;
 export type GetRetailShiftsAcceptEnum = typeof GetRetailShiftsAcceptEnum[keyof typeof GetRetailShiftsAcceptEnum];
+/**
+ * @export
+ */
+export const MoveRetailShiftToTrashAcceptEnum = {
+    ApplicationJson: 'application/json',
+    ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
+} as const;
+export type MoveRetailShiftToTrashAcceptEnum = typeof MoveRetailShiftToTrashAcceptEnum[keyof typeof MoveRetailShiftToTrashAcceptEnum];
 /**
  * @export
  */

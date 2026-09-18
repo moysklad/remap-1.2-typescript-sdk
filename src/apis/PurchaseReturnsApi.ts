@@ -123,6 +123,14 @@ export interface CreatePurchaseReturnNoteRequest {
     contentType?: CreatePurchaseReturnNoteContentTypeEnum;
 }
 
+export interface CreatePurchaseReturnNotesBatchRequest {
+    id: string;
+    eventNote: Array<EventNote>;
+    accept?: CreatePurchaseReturnNotesBatchAcceptEnum;
+    acceptEncoding?: string;
+    contentType?: CreatePurchaseReturnNotesBatchContentTypeEnum;
+}
+
 export interface CreatePurchaseReturnPositionRequest {
     id: string;
     purchaseReturnPosition: Omit<PurchaseReturnPosition, 'accountId'|'discount'>;
@@ -178,6 +186,14 @@ export interface DeletePurchaseReturnNoteRequest {
     noteId: string;
     accept?: DeletePurchaseReturnNoteAcceptEnum;
     acceptEncoding?: string;
+}
+
+export interface DeletePurchaseReturnNotesBatchRequest {
+    id: string;
+    eventNote: Array<EventNote>;
+    accept?: DeletePurchaseReturnNotesBatchAcceptEnum;
+    acceptEncoding?: string;
+    contentType?: DeletePurchaseReturnNotesBatchContentTypeEnum;
 }
 
 export interface DeletePurchaseReturnPositionRequest {
@@ -288,6 +304,12 @@ export interface GetPurchaseReturnTemplateRequest {
     acceptEncoding?: string;
     contentType?: GetPurchaseReturnTemplateContentTypeEnum;
     body?: object;
+}
+
+export interface MovePurchaseReturnToTrashRequest {
+    id: string;
+    accept?: MovePurchaseReturnToTrashAcceptEnum;
+    acceptEncoding?: string;
 }
 
 export interface UpdatePurchaseReturnRequest {
@@ -804,6 +826,78 @@ export class PurchaseReturnsApi extends runtime.BaseAPI {
     }
 
     /**
+     * В теле запроса передается массив Событий. Для создания События требуется description, для обновления — метаданные (meta). Для каждого документа можно создать не более 5000 Событий. Редактировать События может администратор или автор События с правом на просмотр документа.
+     * Массовое создание и обновление Событий Возврата поставщику
+     */
+    async createPurchaseReturnNotesBatchRaw(requestParameters: CreatePurchaseReturnNotesBatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<EventNote>>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling createPurchaseReturnNotesBatch().'
+            );
+        }
+
+        if (requestParameters['eventNote'] == null) {
+            throw new runtime.RequiredError(
+                'eventNote',
+                'Required parameter "eventNote" was null or undefined when calling createPurchaseReturnNotesBatch().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (requestParameters['accept'] != null) {
+            headerParameters['accept'] = String(requestParameters['accept']);
+        }
+
+        if (requestParameters['acceptEncoding'] != null) {
+            headerParameters['Accept-Encoding'] = String(requestParameters['acceptEncoding']);
+        }
+
+        if (requestParameters['contentType'] != null) {
+            headerParameters['Content-Type'] = String(requestParameters['contentType']);
+        }
+
+        if (this.configuration && (this.configuration.username !== undefined || this.configuration.password !== undefined)) {
+            headerParameters["Authorization"] = "Basic " + btoa(this.configuration.username + ":" + this.configuration.password);
+        }
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearerAuth", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/entity/purchasereturn/{id}/notes/batch`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['eventNote']!.map(EventNoteToJSON),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(EventNoteFromJSON));
+    }
+
+    /**
+     * В теле запроса передается массив Событий. Для создания События требуется description, для обновления — метаданные (meta). Для каждого документа можно создать не более 5000 Событий. Редактировать События может администратор или автор События с правом на просмотр документа.
+     * Массовое создание и обновление Событий Возврата поставщику
+     */
+    async createPurchaseReturnNotesBatch(requestParameters: CreatePurchaseReturnNotesBatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<EventNote>> {
+        const response = await this.createPurchaseReturnNotesBatchRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Создать и обновить позицию Возврата поставщику
      */
     async createPurchaseReturnPositionRaw(requestParameters: CreatePurchaseReturnPositionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<PurchaseReturnPosition>>> {
@@ -1306,6 +1400,77 @@ export class PurchaseReturnsApi extends runtime.BaseAPI {
      */
     async deletePurchaseReturnNote(requestParameters: DeletePurchaseReturnNoteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.deletePurchaseReturnNoteRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * В теле запроса передается массив Событий с их метаданными (meta). Удалять События может администратор или автор События с правом на просмотр документа.
+     * Массовое удаление Событий Возврата поставщику
+     */
+    async deletePurchaseReturnNotesBatchRaw(requestParameters: DeletePurchaseReturnNotesBatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling deletePurchaseReturnNotesBatch().'
+            );
+        }
+
+        if (requestParameters['eventNote'] == null) {
+            throw new runtime.RequiredError(
+                'eventNote',
+                'Required parameter "eventNote" was null or undefined when calling deletePurchaseReturnNotesBatch().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (requestParameters['accept'] != null) {
+            headerParameters['accept'] = String(requestParameters['accept']);
+        }
+
+        if (requestParameters['acceptEncoding'] != null) {
+            headerParameters['Accept-Encoding'] = String(requestParameters['acceptEncoding']);
+        }
+
+        if (requestParameters['contentType'] != null) {
+            headerParameters['Content-Type'] = String(requestParameters['contentType']);
+        }
+
+        if (this.configuration && (this.configuration.username !== undefined || this.configuration.password !== undefined)) {
+            headerParameters["Authorization"] = "Basic " + btoa(this.configuration.username + ":" + this.configuration.password);
+        }
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearerAuth", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/entity/purchasereturn/{id}/notes/delete`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['eventNote']!.map(EventNoteToJSON),
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * В теле запроса передается массив Событий с их метаданными (meta). Удалять События может администратор или автор События с правом на просмотр документа.
+     * Массовое удаление Событий Возврата поставщику
+     */
+    async deletePurchaseReturnNotesBatch(requestParameters: DeletePurchaseReturnNotesBatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.deletePurchaseReturnNotesBatchRaw(requestParameters, initOverrides);
     }
 
     /**
@@ -2205,6 +2370,61 @@ export class PurchaseReturnsApi extends runtime.BaseAPI {
     }
 
     /**
+     * Удалить Возврат поставщику в корзину
+     */
+    async movePurchaseReturnToTrashRaw(requestParameters: MovePurchaseReturnToTrashRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling movePurchaseReturnToTrash().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (requestParameters['accept'] != null) {
+            headerParameters['accept'] = String(requestParameters['accept']);
+        }
+
+        if (requestParameters['acceptEncoding'] != null) {
+            headerParameters['Accept-Encoding'] = String(requestParameters['acceptEncoding']);
+        }
+
+        if (this.configuration && (this.configuration.username !== undefined || this.configuration.password !== undefined)) {
+            headerParameters["Authorization"] = "Basic " + btoa(this.configuration.username + ":" + this.configuration.password);
+        }
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearerAuth", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/entity/purchasereturn/{id}/trash`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Удалить Возврат поставщику в корзину
+     */
+    async movePurchaseReturnToTrash(requestParameters: MovePurchaseReturnToTrashRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.movePurchaseReturnToTrashRaw(requestParameters, initOverrides);
+    }
+
+    /**
      * Изменить Возврат поставщику
      */
     async updatePurchaseReturnRaw(requestParameters: UpdatePurchaseReturnRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PurchaseReturn>> {
@@ -2698,6 +2918,21 @@ export type CreatePurchaseReturnNoteContentTypeEnum = typeof CreatePurchaseRetur
 /**
  * @export
  */
+export const CreatePurchaseReturnNotesBatchAcceptEnum = {
+    ApplicationJson: 'application/json',
+    ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
+} as const;
+export type CreatePurchaseReturnNotesBatchAcceptEnum = typeof CreatePurchaseReturnNotesBatchAcceptEnum[keyof typeof CreatePurchaseReturnNotesBatchAcceptEnum];
+/**
+ * @export
+ */
+export const CreatePurchaseReturnNotesBatchContentTypeEnum = {
+    ApplicationJson: 'application/json'
+} as const;
+export type CreatePurchaseReturnNotesBatchContentTypeEnum = typeof CreatePurchaseReturnNotesBatchContentTypeEnum[keyof typeof CreatePurchaseReturnNotesBatchContentTypeEnum];
+/**
+ * @export
+ */
 export const CreatePurchaseReturnPositionAcceptEnum = {
     ApplicationJson: 'application/json',
     ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
@@ -2780,6 +3015,21 @@ export const DeletePurchaseReturnNoteAcceptEnum = {
     ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
 } as const;
 export type DeletePurchaseReturnNoteAcceptEnum = typeof DeletePurchaseReturnNoteAcceptEnum[keyof typeof DeletePurchaseReturnNoteAcceptEnum];
+/**
+ * @export
+ */
+export const DeletePurchaseReturnNotesBatchAcceptEnum = {
+    ApplicationJson: 'application/json',
+    ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
+} as const;
+export type DeletePurchaseReturnNotesBatchAcceptEnum = typeof DeletePurchaseReturnNotesBatchAcceptEnum[keyof typeof DeletePurchaseReturnNotesBatchAcceptEnum];
+/**
+ * @export
+ */
+export const DeletePurchaseReturnNotesBatchContentTypeEnum = {
+    ApplicationJson: 'application/json'
+} as const;
+export type DeletePurchaseReturnNotesBatchContentTypeEnum = typeof DeletePurchaseReturnNotesBatchContentTypeEnum[keyof typeof DeletePurchaseReturnNotesBatchContentTypeEnum];
 /**
  * @export
  */
@@ -2953,6 +3203,14 @@ export const GetPurchaseReturnTemplateContentTypeEnum = {
     ApplicationJson: 'application/json'
 } as const;
 export type GetPurchaseReturnTemplateContentTypeEnum = typeof GetPurchaseReturnTemplateContentTypeEnum[keyof typeof GetPurchaseReturnTemplateContentTypeEnum];
+/**
+ * @export
+ */
+export const MovePurchaseReturnToTrashAcceptEnum = {
+    ApplicationJson: 'application/json',
+    ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
+} as const;
+export type MovePurchaseReturnToTrashAcceptEnum = typeof MovePurchaseReturnToTrashAcceptEnum[keyof typeof MovePurchaseReturnToTrashAcceptEnum];
 /**
  * @export
  */

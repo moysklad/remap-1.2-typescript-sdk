@@ -123,6 +123,14 @@ export interface CreateInvoiceInNoteRequest {
     contentType?: CreateInvoiceInNoteContentTypeEnum;
 }
 
+export interface CreateInvoiceInNotesBatchRequest {
+    id: string;
+    eventNote: Array<EventNote>;
+    accept?: CreateInvoiceInNotesBatchAcceptEnum;
+    acceptEncoding?: string;
+    contentType?: CreateInvoiceInNotesBatchContentTypeEnum;
+}
+
 export interface CreateInvoiceInPositionsRequest {
     id: string;
     invoiceInPosition: Omit<InvoiceInPosition, 'accountId'>;
@@ -181,6 +189,14 @@ export interface DeleteInvoiceInNoteRequest {
     noteId: string;
     accept?: DeleteInvoiceInNoteAcceptEnum;
     acceptEncoding?: string;
+}
+
+export interface DeleteInvoiceInNotesBatchRequest {
+    id: string;
+    eventNote: Array<EventNote>;
+    accept?: DeleteInvoiceInNotesBatchAcceptEnum;
+    acceptEncoding?: string;
+    contentType?: DeleteInvoiceInNotesBatchContentTypeEnum;
 }
 
 export interface DeleteInvoiceInPositionRequest {
@@ -303,6 +319,12 @@ export interface GetInvoiceInTemplateRequest {
     acceptEncoding?: string;
     contentType?: GetInvoiceInTemplateContentTypeEnum;
     body?: object;
+}
+
+export interface MoveInvoiceInToTrashRequest {
+    id: string;
+    accept?: MoveInvoiceInToTrashAcceptEnum;
+    acceptEncoding?: string;
 }
 
 export interface UpdateInvoiceInRequest {
@@ -815,6 +837,78 @@ export class InvoiceInsApi extends runtime.BaseAPI {
      */
     async createInvoiceInNote(requestParameters: CreateInvoiceInNoteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<EventNote>> {
         const response = await this.createInvoiceInNoteRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * В теле запроса передается массив Событий. Для создания События требуется description, для обновления — метаданные (meta). Для каждого документа можно создать не более 5000 Событий. Редактировать События может администратор или автор События с правом на просмотр документа.
+     * Массовое создание и обновление Событий Счета поставщику
+     */
+    async createInvoiceInNotesBatchRaw(requestParameters: CreateInvoiceInNotesBatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<EventNote>>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling createInvoiceInNotesBatch().'
+            );
+        }
+
+        if (requestParameters['eventNote'] == null) {
+            throw new runtime.RequiredError(
+                'eventNote',
+                'Required parameter "eventNote" was null or undefined when calling createInvoiceInNotesBatch().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (requestParameters['accept'] != null) {
+            headerParameters['accept'] = String(requestParameters['accept']);
+        }
+
+        if (requestParameters['acceptEncoding'] != null) {
+            headerParameters['Accept-Encoding'] = String(requestParameters['acceptEncoding']);
+        }
+
+        if (requestParameters['contentType'] != null) {
+            headerParameters['Content-Type'] = String(requestParameters['contentType']);
+        }
+
+        if (this.configuration && (this.configuration.username !== undefined || this.configuration.password !== undefined)) {
+            headerParameters["Authorization"] = "Basic " + btoa(this.configuration.username + ":" + this.configuration.password);
+        }
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearerAuth", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/entity/invoicein/{id}/notes/batch`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['eventNote']!.map(EventNoteToJSON),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(EventNoteFromJSON));
+    }
+
+    /**
+     * В теле запроса передается массив Событий. Для создания События требуется description, для обновления — метаданные (meta). Для каждого документа можно создать не более 5000 Событий. Редактировать События может администратор или автор События с правом на просмотр документа.
+     * Массовое создание и обновление Событий Счета поставщику
+     */
+    async createInvoiceInNotesBatch(requestParameters: CreateInvoiceInNotesBatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<EventNote>> {
+        const response = await this.createInvoiceInNotesBatchRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -1333,6 +1427,77 @@ export class InvoiceInsApi extends runtime.BaseAPI {
      */
     async deleteInvoiceInNote(requestParameters: DeleteInvoiceInNoteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.deleteInvoiceInNoteRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * В теле запроса передается массив Событий с их метаданными (meta). Удалять События может администратор или автор События с правом на просмотр документа.
+     * Массовое удаление Событий Счета поставщику
+     */
+    async deleteInvoiceInNotesBatchRaw(requestParameters: DeleteInvoiceInNotesBatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling deleteInvoiceInNotesBatch().'
+            );
+        }
+
+        if (requestParameters['eventNote'] == null) {
+            throw new runtime.RequiredError(
+                'eventNote',
+                'Required parameter "eventNote" was null or undefined when calling deleteInvoiceInNotesBatch().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (requestParameters['accept'] != null) {
+            headerParameters['accept'] = String(requestParameters['accept']);
+        }
+
+        if (requestParameters['acceptEncoding'] != null) {
+            headerParameters['Accept-Encoding'] = String(requestParameters['acceptEncoding']);
+        }
+
+        if (requestParameters['contentType'] != null) {
+            headerParameters['Content-Type'] = String(requestParameters['contentType']);
+        }
+
+        if (this.configuration && (this.configuration.username !== undefined || this.configuration.password !== undefined)) {
+            headerParameters["Authorization"] = "Basic " + btoa(this.configuration.username + ":" + this.configuration.password);
+        }
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearerAuth", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/entity/invoicein/{id}/notes/delete`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['eventNote']!.map(EventNoteToJSON),
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * В теле запроса передается массив Событий с их метаданными (meta). Удалять События может администратор или автор События с правом на просмотр документа.
+     * Массовое удаление Событий Счета поставщику
+     */
+    async deleteInvoiceInNotesBatch(requestParameters: DeleteInvoiceInNotesBatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.deleteInvoiceInNotesBatchRaw(requestParameters, initOverrides);
     }
 
     /**
@@ -2322,6 +2487,61 @@ export class InvoiceInsApi extends runtime.BaseAPI {
     }
 
     /**
+     * Удалить Счет поставщику в корзину
+     */
+    async moveInvoiceInToTrashRaw(requestParameters: MoveInvoiceInToTrashRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling moveInvoiceInToTrash().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (requestParameters['accept'] != null) {
+            headerParameters['accept'] = String(requestParameters['accept']);
+        }
+
+        if (requestParameters['acceptEncoding'] != null) {
+            headerParameters['Accept-Encoding'] = String(requestParameters['acceptEncoding']);
+        }
+
+        if (this.configuration && (this.configuration.username !== undefined || this.configuration.password !== undefined)) {
+            headerParameters["Authorization"] = "Basic " + btoa(this.configuration.username + ":" + this.configuration.password);
+        }
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearerAuth", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/entity/invoicein/{id}/trash`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Удалить Счет поставщику в корзину
+     */
+    async moveInvoiceInToTrash(requestParameters: MoveInvoiceInToTrashRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.moveInvoiceInToTrashRaw(requestParameters, initOverrides);
+    }
+
+    /**
      * Изменить Счет поставщику
      */
     async updateInvoiceInRaw(requestParameters: UpdateInvoiceInRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<InvoiceIn>> {
@@ -2815,6 +3035,21 @@ export type CreateInvoiceInNoteContentTypeEnum = typeof CreateInvoiceInNoteConte
 /**
  * @export
  */
+export const CreateInvoiceInNotesBatchAcceptEnum = {
+    ApplicationJson: 'application/json',
+    ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
+} as const;
+export type CreateInvoiceInNotesBatchAcceptEnum = typeof CreateInvoiceInNotesBatchAcceptEnum[keyof typeof CreateInvoiceInNotesBatchAcceptEnum];
+/**
+ * @export
+ */
+export const CreateInvoiceInNotesBatchContentTypeEnum = {
+    ApplicationJson: 'application/json'
+} as const;
+export type CreateInvoiceInNotesBatchContentTypeEnum = typeof CreateInvoiceInNotesBatchContentTypeEnum[keyof typeof CreateInvoiceInNotesBatchContentTypeEnum];
+/**
+ * @export
+ */
 export const CreateInvoiceInPositionsAcceptEnum = {
     ApplicationJson: 'application/json',
     ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
@@ -2918,6 +3153,21 @@ export const DeleteInvoiceInNoteAcceptEnum = {
     ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
 } as const;
 export type DeleteInvoiceInNoteAcceptEnum = typeof DeleteInvoiceInNoteAcceptEnum[keyof typeof DeleteInvoiceInNoteAcceptEnum];
+/**
+ * @export
+ */
+export const DeleteInvoiceInNotesBatchAcceptEnum = {
+    ApplicationJson: 'application/json',
+    ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
+} as const;
+export type DeleteInvoiceInNotesBatchAcceptEnum = typeof DeleteInvoiceInNotesBatchAcceptEnum[keyof typeof DeleteInvoiceInNotesBatchAcceptEnum];
+/**
+ * @export
+ */
+export const DeleteInvoiceInNotesBatchContentTypeEnum = {
+    ApplicationJson: 'application/json'
+} as const;
+export type DeleteInvoiceInNotesBatchContentTypeEnum = typeof DeleteInvoiceInNotesBatchContentTypeEnum[keyof typeof DeleteInvoiceInNotesBatchContentTypeEnum];
 /**
  * @export
  */
@@ -3141,6 +3391,14 @@ export const GetInvoiceInTemplateContentTypeEnum = {
     ApplicationJson: 'application/json'
 } as const;
 export type GetInvoiceInTemplateContentTypeEnum = typeof GetInvoiceInTemplateContentTypeEnum[keyof typeof GetInvoiceInTemplateContentTypeEnum];
+/**
+ * @export
+ */
+export const MoveInvoiceInToTrashAcceptEnum = {
+    ApplicationJson: 'application/json',
+    ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
+} as const;
+export type MoveInvoiceInToTrashAcceptEnum = typeof MoveInvoiceInToTrashAcceptEnum[keyof typeof MoveInvoiceInToTrashAcceptEnum];
 /**
  * @export
  */

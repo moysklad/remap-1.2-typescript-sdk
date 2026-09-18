@@ -167,6 +167,12 @@ export interface GetCashInTemplateRequest {
     body?: object;
 }
 
+export interface MoveCashInToTrashRequest {
+    id: string;
+    accept?: MoveCashInToTrashAcceptEnum;
+    acceptEncoding?: string;
+}
+
 export interface UpdateCashInRequest {
     id: string;
     cashIn: Omit<CashIn, 'id'|'accountId'|'created'|'deleted'|'updated'|'printed'|'published'|'shared'>;
@@ -1174,6 +1180,61 @@ export class CashInsApi extends runtime.BaseAPI {
     }
 
     /**
+     * Удалить CashIn в корзину
+     */
+    async moveCashInToTrashRaw(requestParameters: MoveCashInToTrashRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling moveCashInToTrash().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (requestParameters['accept'] != null) {
+            headerParameters['accept'] = String(requestParameters['accept']);
+        }
+
+        if (requestParameters['acceptEncoding'] != null) {
+            headerParameters['Accept-Encoding'] = String(requestParameters['acceptEncoding']);
+        }
+
+        if (this.configuration && (this.configuration.username !== undefined || this.configuration.password !== undefined)) {
+            headerParameters["Authorization"] = "Basic " + btoa(this.configuration.username + ":" + this.configuration.password);
+        }
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearerAuth", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/entity/cashin/{id}/trash`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Удалить CashIn в корзину
+     */
+    async moveCashInToTrash(requestParameters: MoveCashInToTrashRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.moveCashInToTrashRaw(requestParameters, initOverrides);
+    }
+
+    /**
      * Изменить CashIn
      */
     async updateCashInRaw(requestParameters: UpdateCashInRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CashIn>> {
@@ -1629,6 +1690,14 @@ export const GetCashInTemplateContentTypeEnum = {
     ApplicationJson: 'application/json'
 } as const;
 export type GetCashInTemplateContentTypeEnum = typeof GetCashInTemplateContentTypeEnum[keyof typeof GetCashInTemplateContentTypeEnum];
+/**
+ * @export
+ */
+export const MoveCashInToTrashAcceptEnum = {
+    ApplicationJson: 'application/json',
+    ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
+} as const;
+export type MoveCashInToTrashAcceptEnum = typeof MoveCashInToTrashAcceptEnum[keyof typeof MoveCashInToTrashAcceptEnum];
 /**
  * @export
  */

@@ -344,7 +344,9 @@ export interface ProductOwn {
      */
     barcodes?: Array<Barcode> | null;
     /**
-     * Упаковки товара
+     * Упаковки товара. При обновлении переданный массив полностью заменяет упаковки;
+     * пустой массив удаляет все. Для создания упаковки передайте uom и quantity.
+     * 
      * @type {Array<Pack>}
      * @memberof Product
      */

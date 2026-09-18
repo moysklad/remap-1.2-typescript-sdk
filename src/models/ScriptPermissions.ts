@@ -14,37 +14,40 @@
 
 import { mapValues } from '../runtime.js';
 /**
+ * Права на задачи. NO для view и done допустимо, только если остальные права равны NO.
+ * Если view отличается от NO, поле done обязательно и должно совпадать с view.
+ * Известные значения описаны в ScriptPermissionValue.
  * 
  * @export
  * @interface ScriptPermissions
  */
 export interface ScriptPermissions {
     /**
-     * Смотреть. Известные значения описаны в ScriptPermissionValue.
+     * Смотреть. Допустимые значения — NO, AUTHOR_OR_ASSIGNEE, ALL. Известные значения описаны в ScriptPermissionValue.
      * @type {string}
      * @memberof ScriptPermissions
      */
     view?: string;
     /**
-     * Создавать. Известные значения описаны в ScriptPermissionValue.
+     * Создавать. Допустимые значения — NO, ALL. Область действия не шире view; поле может отсутствовать. Известные значения описаны в ScriptPermissionValue.
      * @type {string}
      * @memberof ScriptPermissions
      */
     create?: string;
     /**
-     * Редактировать. Известные значения описаны в ScriptPermissionValue.
+     * Редактировать. Допустимые значения — NO, AUTHOR, AUTHOR_OR_ASSIGNEE, ALL. Область действия не шире view; поле может отсутствовать. Известные значения описаны в ScriptPermissionValue.
      * @type {string}
      * @memberof ScriptPermissions
      */
     update?: string;
     /**
-     * Удалять. Известные значения описаны в ScriptPermissionValue.
+     * Удалять. Допустимые значения — NO, AUTHOR, AUTHOR_OR_ASSIGNEE, ALL. Область действия не шире update; поле может отсутствовать. Известные значения описаны в ScriptPermissionValue.
      * @type {string}
      * @memberof ScriptPermissions
      */
     _delete?: string;
     /**
-     * Выполнять. Известные значения описаны в ScriptPermissionValue.
+     * Выполнять. Допустимые значения — NO, ASSIGNEE, AUTHOR_OR_ASSIGNEE, ALL. Область действия не шире view; при view, отличном от NO, обязательно и совпадает с view. Известные значения описаны в ScriptPermissionValue.
      * @type {string}
      * @memberof ScriptPermissions
      */

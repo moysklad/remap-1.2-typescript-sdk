@@ -117,6 +117,14 @@ export interface CreateCommissionReportOutNoteRequest {
     contentType?: CreateCommissionReportOutNoteContentTypeEnum;
 }
 
+export interface CreateCommissionReportOutNotesBatchRequest {
+    id: string;
+    eventNote: Array<EventNote>;
+    accept?: CreateCommissionReportOutNotesBatchAcceptEnum;
+    acceptEncoding?: string;
+    contentType?: CreateCommissionReportOutNotesBatchContentTypeEnum;
+}
+
 export interface CreateCommissionReportOutPositionRequest {
     id: string;
     commissionReportOutPosition: Omit<CommissionReportOutPosition, 'accountId'>;
@@ -175,6 +183,14 @@ export interface DeleteCommissionReportOutNoteRequest {
     noteId: string;
     accept?: DeleteCommissionReportOutNoteAcceptEnum;
     acceptEncoding?: string;
+}
+
+export interface DeleteCommissionReportOutNotesBatchRequest {
+    id: string;
+    eventNote: Array<EventNote>;
+    accept?: DeleteCommissionReportOutNotesBatchAcceptEnum;
+    acceptEncoding?: string;
+    contentType?: DeleteCommissionReportOutNotesBatchContentTypeEnum;
 }
 
 export interface DeleteCommissionReportOutPositionRequest {
@@ -281,6 +297,12 @@ export interface GetCommissionReportOutPositionsRequest {
     accept?: GetCommissionReportOutPositionsAcceptEnum;
     acceptEncoding?: string;
     contentType?: GetCommissionReportOutPositionsContentTypeEnum;
+}
+
+export interface MoveCommissionReportOutToTrashRequest {
+    id: string;
+    accept?: MoveCommissionReportOutToTrashAcceptEnum;
+    acceptEncoding?: string;
 }
 
 export interface UpdateCommissionReportOutRequest {
@@ -791,6 +813,78 @@ export class CommissionReportOutsApi extends runtime.BaseAPI {
      */
     async createCommissionReportOutNote(requestParameters: CreateCommissionReportOutNoteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<EventNote>> {
         const response = await this.createCommissionReportOutNoteRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * В теле запроса передается массив Событий. Для создания События требуется description, для обновления — метаданные (meta). Для каждого документа можно создать не более 5000 Событий. Редактировать События может администратор или автор События с правом на просмотр документа.
+     * Массовое создание и обновление Событий Выданного отчета комиссионера
+     */
+    async createCommissionReportOutNotesBatchRaw(requestParameters: CreateCommissionReportOutNotesBatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<EventNote>>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling createCommissionReportOutNotesBatch().'
+            );
+        }
+
+        if (requestParameters['eventNote'] == null) {
+            throw new runtime.RequiredError(
+                'eventNote',
+                'Required parameter "eventNote" was null or undefined when calling createCommissionReportOutNotesBatch().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (requestParameters['accept'] != null) {
+            headerParameters['accept'] = String(requestParameters['accept']);
+        }
+
+        if (requestParameters['acceptEncoding'] != null) {
+            headerParameters['Accept-Encoding'] = String(requestParameters['acceptEncoding']);
+        }
+
+        if (requestParameters['contentType'] != null) {
+            headerParameters['Content-Type'] = String(requestParameters['contentType']);
+        }
+
+        if (this.configuration && (this.configuration.username !== undefined || this.configuration.password !== undefined)) {
+            headerParameters["Authorization"] = "Basic " + btoa(this.configuration.username + ":" + this.configuration.password);
+        }
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearerAuth", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/entity/commissionreportout/{id}/notes/batch`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['eventNote']!.map(EventNoteToJSON),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(EventNoteFromJSON));
+    }
+
+    /**
+     * В теле запроса передается массив Событий. Для создания События требуется description, для обновления — метаданные (meta). Для каждого документа можно создать не более 5000 Событий. Редактировать События может администратор или автор События с правом на просмотр документа.
+     * Массовое создание и обновление Событий Выданного отчета комиссионера
+     */
+    async createCommissionReportOutNotesBatch(requestParameters: CreateCommissionReportOutNotesBatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<EventNote>> {
+        const response = await this.createCommissionReportOutNotesBatchRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -1309,6 +1403,77 @@ export class CommissionReportOutsApi extends runtime.BaseAPI {
      */
     async deleteCommissionReportOutNote(requestParameters: DeleteCommissionReportOutNoteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.deleteCommissionReportOutNoteRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * В теле запроса передается массив Событий с их метаданными (meta). Удалять События может администратор или автор События с правом на просмотр документа.
+     * Массовое удаление Событий Выданного отчета комиссионера
+     */
+    async deleteCommissionReportOutNotesBatchRaw(requestParameters: DeleteCommissionReportOutNotesBatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling deleteCommissionReportOutNotesBatch().'
+            );
+        }
+
+        if (requestParameters['eventNote'] == null) {
+            throw new runtime.RequiredError(
+                'eventNote',
+                'Required parameter "eventNote" was null or undefined when calling deleteCommissionReportOutNotesBatch().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (requestParameters['accept'] != null) {
+            headerParameters['accept'] = String(requestParameters['accept']);
+        }
+
+        if (requestParameters['acceptEncoding'] != null) {
+            headerParameters['Accept-Encoding'] = String(requestParameters['acceptEncoding']);
+        }
+
+        if (requestParameters['contentType'] != null) {
+            headerParameters['Content-Type'] = String(requestParameters['contentType']);
+        }
+
+        if (this.configuration && (this.configuration.username !== undefined || this.configuration.password !== undefined)) {
+            headerParameters["Authorization"] = "Basic " + btoa(this.configuration.username + ":" + this.configuration.password);
+        }
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearerAuth", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/entity/commissionreportout/{id}/notes/delete`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['eventNote']!.map(EventNoteToJSON),
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * В теле запроса передается массив Событий с их метаданными (meta). Удалять События может администратор или автор События с правом на просмотр документа.
+     * Массовое удаление Событий Выданного отчета комиссионера
+     */
+    async deleteCommissionReportOutNotesBatch(requestParameters: DeleteCommissionReportOutNotesBatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.deleteCommissionReportOutNotesBatchRaw(requestParameters, initOverrides);
     }
 
     /**
@@ -2163,6 +2328,61 @@ export class CommissionReportOutsApi extends runtime.BaseAPI {
     }
 
     /**
+     * Удалить CommissionReportOut в корзину
+     */
+    async moveCommissionReportOutToTrashRaw(requestParameters: MoveCommissionReportOutToTrashRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling moveCommissionReportOutToTrash().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (requestParameters['accept'] != null) {
+            headerParameters['accept'] = String(requestParameters['accept']);
+        }
+
+        if (requestParameters['acceptEncoding'] != null) {
+            headerParameters['Accept-Encoding'] = String(requestParameters['acceptEncoding']);
+        }
+
+        if (this.configuration && (this.configuration.username !== undefined || this.configuration.password !== undefined)) {
+            headerParameters["Authorization"] = "Basic " + btoa(this.configuration.username + ":" + this.configuration.password);
+        }
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearerAuth", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/entity/commissionreportout/{id}/trash`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Удалить CommissionReportOut в корзину
+     */
+    async moveCommissionReportOutToTrash(requestParameters: MoveCommissionReportOutToTrashRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.moveCommissionReportOutToTrashRaw(requestParameters, initOverrides);
+    }
+
+    /**
      * Изменить CommissionReportOut
      */
     async updateCommissionReportOutRaw(requestParameters: UpdateCommissionReportOutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CommissionReportOut>> {
@@ -2648,6 +2868,21 @@ export type CreateCommissionReportOutNoteContentTypeEnum = typeof CreateCommissi
 /**
  * @export
  */
+export const CreateCommissionReportOutNotesBatchAcceptEnum = {
+    ApplicationJson: 'application/json',
+    ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
+} as const;
+export type CreateCommissionReportOutNotesBatchAcceptEnum = typeof CreateCommissionReportOutNotesBatchAcceptEnum[keyof typeof CreateCommissionReportOutNotesBatchAcceptEnum];
+/**
+ * @export
+ */
+export const CreateCommissionReportOutNotesBatchContentTypeEnum = {
+    ApplicationJson: 'application/json'
+} as const;
+export type CreateCommissionReportOutNotesBatchContentTypeEnum = typeof CreateCommissionReportOutNotesBatchContentTypeEnum[keyof typeof CreateCommissionReportOutNotesBatchContentTypeEnum];
+/**
+ * @export
+ */
 export const CreateCommissionReportOutPositionAcceptEnum = {
     ApplicationJson: 'application/json',
     ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
@@ -2751,6 +2986,21 @@ export const DeleteCommissionReportOutNoteAcceptEnum = {
     ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
 } as const;
 export type DeleteCommissionReportOutNoteAcceptEnum = typeof DeleteCommissionReportOutNoteAcceptEnum[keyof typeof DeleteCommissionReportOutNoteAcceptEnum];
+/**
+ * @export
+ */
+export const DeleteCommissionReportOutNotesBatchAcceptEnum = {
+    ApplicationJson: 'application/json',
+    ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
+} as const;
+export type DeleteCommissionReportOutNotesBatchAcceptEnum = typeof DeleteCommissionReportOutNotesBatchAcceptEnum[keyof typeof DeleteCommissionReportOutNotesBatchAcceptEnum];
+/**
+ * @export
+ */
+export const DeleteCommissionReportOutNotesBatchContentTypeEnum = {
+    ApplicationJson: 'application/json'
+} as const;
+export type DeleteCommissionReportOutNotesBatchContentTypeEnum = typeof DeleteCommissionReportOutNotesBatchContentTypeEnum[keyof typeof DeleteCommissionReportOutNotesBatchContentTypeEnum];
 /**
  * @export
  */
@@ -2925,6 +3175,14 @@ export const GetCommissionReportOutPositionsContentTypeEnum = {
     ApplicationJson: 'application/json'
 } as const;
 export type GetCommissionReportOutPositionsContentTypeEnum = typeof GetCommissionReportOutPositionsContentTypeEnum[keyof typeof GetCommissionReportOutPositionsContentTypeEnum];
+/**
+ * @export
+ */
+export const MoveCommissionReportOutToTrashAcceptEnum = {
+    ApplicationJson: 'application/json',
+    ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
+} as const;
+export type MoveCommissionReportOutToTrashAcceptEnum = typeof MoveCommissionReportOutToTrashAcceptEnum[keyof typeof MoveCommissionReportOutToTrashAcceptEnum];
 /**
  * @export
  */

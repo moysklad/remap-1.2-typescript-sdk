@@ -188,6 +188,12 @@ export interface GetRetailDrawerCashInTemplateRequest {
     body?: object;
 }
 
+export interface MoveRetailDrawerCashInToTrashRequest {
+    id: string;
+    accept?: MoveRetailDrawerCashInToTrashAcceptEnum;
+    acceptEncoding?: string;
+}
+
 export interface UpdateRetailDrawerCashInRequest {
     id: string;
     retailDrawerCashIn: Omit<RetailDrawerCashIn, 'id'|'accountId'|'created'|'deleted'|'printed'|'published'|'updated'>;
@@ -1366,6 +1372,61 @@ export class RetailDrawerCashInsApi extends runtime.BaseAPI {
     }
 
     /**
+     * Удалить Внесение денег в корзину
+     */
+    async moveRetailDrawerCashInToTrashRaw(requestParameters: MoveRetailDrawerCashInToTrashRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling moveRetailDrawerCashInToTrash().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (requestParameters['accept'] != null) {
+            headerParameters['accept'] = String(requestParameters['accept']);
+        }
+
+        if (requestParameters['acceptEncoding'] != null) {
+            headerParameters['Accept-Encoding'] = String(requestParameters['acceptEncoding']);
+        }
+
+        if (this.configuration && (this.configuration.username !== undefined || this.configuration.password !== undefined)) {
+            headerParameters["Authorization"] = "Basic " + btoa(this.configuration.username + ":" + this.configuration.password);
+        }
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearerAuth", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/entity/retaildrawercashin/{id}/trash`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Удалить Внесение денег в корзину
+     */
+    async moveRetailDrawerCashInToTrash(requestParameters: MoveRetailDrawerCashInToTrashRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.moveRetailDrawerCashInToTrashRaw(requestParameters, initOverrides);
+    }
+
+    /**
      * Изменить Внесение денег
      */
     async updateRetailDrawerCashInRaw(requestParameters: UpdateRetailDrawerCashInRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<RetailDrawerCashIn>> {
@@ -1789,6 +1850,14 @@ export const GetRetailDrawerCashInTemplateContentTypeEnum = {
     ApplicationJson: 'application/json'
 } as const;
 export type GetRetailDrawerCashInTemplateContentTypeEnum = typeof GetRetailDrawerCashInTemplateContentTypeEnum[keyof typeof GetRetailDrawerCashInTemplateContentTypeEnum];
+/**
+ * @export
+ */
+export const MoveRetailDrawerCashInToTrashAcceptEnum = {
+    ApplicationJson: 'application/json',
+    ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
+} as const;
+export type MoveRetailDrawerCashInToTrashAcceptEnum = typeof MoveRetailDrawerCashInToTrashAcceptEnum[keyof typeof MoveRetailDrawerCashInToTrashAcceptEnum];
 /**
  * @export
  */

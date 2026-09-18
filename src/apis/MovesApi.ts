@@ -260,6 +260,12 @@ export interface GetMoveTemplateRequest {
     body?: object;
 }
 
+export interface MoveMoveToTrashRequest {
+    id: string;
+    accept?: MoveMoveToTrashAcceptEnum;
+    acceptEncoding?: string;
+}
+
 export interface UpdateMoveRequest {
     id: string;
     move: Omit<Move, 'id'|'accountId'|'created'|'deleted'|'updated'|'printed'|'published'|'sum'|'demand'|'supply'>;
@@ -1933,6 +1939,61 @@ export class MovesApi extends runtime.BaseAPI {
     }
 
     /**
+     * Удалить Перемещение в корзину
+     */
+    async moveMoveToTrashRaw(requestParameters: MoveMoveToTrashRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling moveMoveToTrash().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (requestParameters['accept'] != null) {
+            headerParameters['accept'] = String(requestParameters['accept']);
+        }
+
+        if (requestParameters['acceptEncoding'] != null) {
+            headerParameters['Accept-Encoding'] = String(requestParameters['acceptEncoding']);
+        }
+
+        if (this.configuration && (this.configuration.username !== undefined || this.configuration.password !== undefined)) {
+            headerParameters["Authorization"] = "Basic " + btoa(this.configuration.username + ":" + this.configuration.password);
+        }
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearerAuth", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/entity/move/{id}/trash`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Удалить Перемещение в корзину
+     */
+    async moveMoveToTrash(requestParameters: MoveMoveToTrashRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.moveMoveToTrashRaw(requestParameters, initOverrides);
+    }
+
+    /**
      * Изменить Перемещение
      */
     async updateMoveRaw(requestParameters: UpdateMoveRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Move>> {
@@ -2632,6 +2693,14 @@ export const GetMoveTemplateContentTypeEnum = {
     ApplicationJson: 'application/json'
 } as const;
 export type GetMoveTemplateContentTypeEnum = typeof GetMoveTemplateContentTypeEnum[keyof typeof GetMoveTemplateContentTypeEnum];
+/**
+ * @export
+ */
+export const MoveMoveToTrashAcceptEnum = {
+    ApplicationJson: 'application/json',
+    ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
+} as const;
+export type MoveMoveToTrashAcceptEnum = typeof MoveMoveToTrashAcceptEnum[keyof typeof MoveMoveToTrashAcceptEnum];
 /**
  * @export
  */

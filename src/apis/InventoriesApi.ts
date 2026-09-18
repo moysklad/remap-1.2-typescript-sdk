@@ -247,6 +247,12 @@ export interface GetInventoryTemplateRequest {
     body?: object;
 }
 
+export interface MoveInventoryToTrashRequest {
+    id: string;
+    accept?: MoveInventoryToTrashAcceptEnum;
+    acceptEncoding?: string;
+}
+
 export interface RecalculateInventoryCalculatedQuantityRequest {
     id: string;
     accept?: RecalculateInventoryCalculatedQuantityAcceptEnum;
@@ -1861,6 +1867,61 @@ export class InventoriesApi extends runtime.BaseAPI {
     }
 
     /**
+     * Удалить Инвентаризацию в корзину
+     */
+    async moveInventoryToTrashRaw(requestParameters: MoveInventoryToTrashRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling moveInventoryToTrash().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (requestParameters['accept'] != null) {
+            headerParameters['accept'] = String(requestParameters['accept']);
+        }
+
+        if (requestParameters['acceptEncoding'] != null) {
+            headerParameters['Accept-Encoding'] = String(requestParameters['acceptEncoding']);
+        }
+
+        if (this.configuration && (this.configuration.username !== undefined || this.configuration.password !== undefined)) {
+            headerParameters["Authorization"] = "Basic " + btoa(this.configuration.username + ":" + this.configuration.password);
+        }
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearerAuth", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/entity/inventory/{id}/trash`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Удалить Инвентаризацию в корзину
+     */
+    async moveInventoryToTrash(requestParameters: MoveInventoryToTrashRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.moveInventoryToTrashRaw(requestParameters, initOverrides);
+    }
+
+    /**
      * Пересчитать расчетный остаток в Инвентаризации
      */
     async recalculateInventoryCalculatedQuantityRaw(requestParameters: RecalculateInventoryCalculatedQuantityRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
@@ -2494,6 +2555,14 @@ export const GetInventoryTemplateContentTypeEnum = {
     ApplicationJson: 'application/json'
 } as const;
 export type GetInventoryTemplateContentTypeEnum = typeof GetInventoryTemplateContentTypeEnum[keyof typeof GetInventoryTemplateContentTypeEnum];
+/**
+ * @export
+ */
+export const MoveInventoryToTrashAcceptEnum = {
+    ApplicationJson: 'application/json',
+    ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
+} as const;
+export type MoveInventoryToTrashAcceptEnum = typeof MoveInventoryToTrashAcceptEnum[keyof typeof MoveInventoryToTrashAcceptEnum];
 /**
  * @export
  */
