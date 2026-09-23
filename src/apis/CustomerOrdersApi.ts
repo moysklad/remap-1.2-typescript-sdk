@@ -17,7 +17,6 @@ import * as runtime from '../runtime.js';
 import type {
   AttributeMetaInfo,
   AttributeMetaInfoList,
-  AuditEventList,
   BatchResponseEntity,
   CreateCustomerOrderPositions200ResponseInner,
   CustomerOrder,
@@ -40,8 +39,6 @@ import {
     AttributeMetaInfoToJSON,
     AttributeMetaInfoListFromJSON,
     AttributeMetaInfoListToJSON,
-    AuditEventListFromJSON,
-    AuditEventListToJSON,
     BatchResponseEntityFromJSON,
     BatchResponseEntityToJSON,
     CreateCustomerOrderPositions200ResponseInnerFromJSON,
@@ -228,14 +225,6 @@ export interface ExportCustomerOrderRequest {
     accept?: ExportCustomerOrderAcceptEnum;
     acceptEncoding?: string;
     contentType?: ExportCustomerOrderContentTypeEnum;
-}
-
-export interface GetCustomerOrderAuditEventsRequest {
-    id: string;
-    limit?: number;
-    offset?: number;
-    accept?: GetCustomerOrderAuditEventsAcceptEnum;
-    acceptEncoding?: string;
 }
 
 export interface GetCustomerOrderByIdRequest {
@@ -1732,72 +1721,6 @@ export class CustomerOrdersApi extends runtime.BaseAPI {
      */
     async exportCustomerOrder(requestParameters: ExportCustomerOrderRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.exportCustomerOrderRaw(requestParameters, initOverrides);
-    }
-
-    /**
-     * Возвращает список событий аудита для Заказа покупателя по его ID. 
-     * Получить события аудита Заказа покупателя
-     */
-    async getCustomerOrderAuditEventsRaw(requestParameters: GetCustomerOrderAuditEventsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AuditEventList>> {
-        if (requestParameters['id'] == null) {
-            throw new runtime.RequiredError(
-                'id',
-                'Required parameter "id" was null or undefined when calling getCustomerOrderAuditEvents().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        if (requestParameters['limit'] != null) {
-            queryParameters['limit'] = requestParameters['limit'];
-        }
-
-        if (requestParameters['offset'] != null) {
-            queryParameters['offset'] = requestParameters['offset'];
-        }
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (requestParameters['accept'] != null) {
-            headerParameters['accept'] = String(requestParameters['accept']);
-        }
-
-        if (requestParameters['acceptEncoding'] != null) {
-            headerParameters['Accept-Encoding'] = String(requestParameters['acceptEncoding']);
-        }
-
-        if (this.configuration && (this.configuration.username !== undefined || this.configuration.password !== undefined)) {
-            headerParameters["Authorization"] = "Basic " + btoa(this.configuration.username + ":" + this.configuration.password);
-        }
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearerAuth", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/entity/customerorder/{id}/audit`;
-        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => AuditEventListFromJSON(jsonValue));
-    }
-
-    /**
-     * Возвращает список событий аудита для Заказа покупателя по его ID. 
-     * Получить события аудита Заказа покупателя
-     */
-    async getCustomerOrderAuditEvents(requestParameters: GetCustomerOrderAuditEventsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AuditEventList> {
-        const response = await this.getCustomerOrderAuditEventsRaw(requestParameters, initOverrides);
-        return await response.value();
     }
 
     /**
@@ -3366,14 +3289,6 @@ export const ExportCustomerOrderContentTypeEnum = {
     ApplicationJson: 'application/json'
 } as const;
 export type ExportCustomerOrderContentTypeEnum = typeof ExportCustomerOrderContentTypeEnum[keyof typeof ExportCustomerOrderContentTypeEnum];
-/**
- * @export
- */
-export const GetCustomerOrderAuditEventsAcceptEnum = {
-    ApplicationJson: 'application/json',
-    ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
-} as const;
-export type GetCustomerOrderAuditEventsAcceptEnum = typeof GetCustomerOrderAuditEventsAcceptEnum[keyof typeof GetCustomerOrderAuditEventsAcceptEnum];
 /**
  * @export
  */

@@ -52,6 +52,15 @@ export interface GetAuditMetadataFiltersRequest {
     acceptEncoding?: string;
 }
 
+export interface GetEntityAuditEventsRequest {
+    type: string;
+    id: string;
+    limit?: number;
+    offset?: number;
+    accept?: GetEntityAuditEventsAcceptEnum;
+    acceptEncoding?: string;
+}
+
 /**
  * 
  */
@@ -235,6 +244,80 @@ export class AuditApi extends runtime.BaseAPI {
         return await response.value();
     }
 
+    /**
+     * Возвращает список событий аудита сущности указанного типа и ID.
+     * Получить события аудита сущности
+     */
+    async getEntityAuditEventsRaw(requestParameters: GetEntityAuditEventsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AuditEventList>> {
+        if (requestParameters['type'] == null) {
+            throw new runtime.RequiredError(
+                'type',
+                'Required parameter "type" was null or undefined when calling getEntityAuditEvents().'
+            );
+        }
+
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling getEntityAuditEvents().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters['limit'] != null) {
+            queryParameters['limit'] = requestParameters['limit'];
+        }
+
+        if (requestParameters['offset'] != null) {
+            queryParameters['offset'] = requestParameters['offset'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (requestParameters['accept'] != null) {
+            headerParameters['accept'] = String(requestParameters['accept']);
+        }
+
+        if (requestParameters['acceptEncoding'] != null) {
+            headerParameters['Accept-Encoding'] = String(requestParameters['acceptEncoding']);
+        }
+
+        if (this.configuration && (this.configuration.username !== undefined || this.configuration.password !== undefined)) {
+            headerParameters["Authorization"] = "Basic " + btoa(this.configuration.username + ":" + this.configuration.password);
+        }
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearerAuth", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/entity/{type}/{id}/audit`;
+        urlPath = urlPath.replace(`{${"type"}}`, encodeURIComponent(String(requestParameters['type'])));
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => AuditEventListFromJSON(jsonValue));
+    }
+
+    /**
+     * Возвращает список событий аудита сущности указанного типа и ID.
+     * Получить события аудита сущности
+     */
+    async getEntityAuditEvents(requestParameters: GetEntityAuditEventsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AuditEventList> {
+        const response = await this.getEntityAuditEventsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
 }
 
 /**
@@ -261,3 +344,11 @@ export const GetAuditMetadataFiltersAcceptEnum = {
     ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
 } as const;
 export type GetAuditMetadataFiltersAcceptEnum = typeof GetAuditMetadataFiltersAcceptEnum[keyof typeof GetAuditMetadataFiltersAcceptEnum];
+/**
+ * @export
+ */
+export const GetEntityAuditEventsAcceptEnum = {
+    ApplicationJson: 'application/json',
+    ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
+} as const;
+export type GetEntityAuditEventsAcceptEnum = typeof GetEntityAuditEventsAcceptEnum[keyof typeof GetEntityAuditEventsAcceptEnum];

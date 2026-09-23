@@ -18,7 +18,6 @@ import type {
   Account,
   AttributeMetaInfo,
   AttributeMetaInfoList,
-  AuditEventList,
   BatchResponseEntity,
   ContactPerson,
   Counterparty,
@@ -41,8 +40,6 @@ import {
     AttributeMetaInfoToJSON,
     AttributeMetaInfoListFromJSON,
     AttributeMetaInfoListToJSON,
-    AuditEventListFromJSON,
-    AuditEventListToJSON,
     BatchResponseEntityFromJSON,
     BatchResponseEntityToJSON,
     ContactPersonFromJSON,
@@ -211,14 +208,6 @@ export interface GetCounterpartyAccountsRequest {
     limit?: number;
     offset?: number;
     accept?: GetCounterpartyAccountsAcceptEnum;
-    acceptEncoding?: string;
-}
-
-export interface GetCounterpartyAuditEventsRequest {
-    id: string;
-    limit?: number;
-    offset?: number;
-    accept?: GetCounterpartyAuditEventsAcceptEnum;
     acceptEncoding?: string;
 }
 
@@ -1597,72 +1586,6 @@ export class CounterpartiesApi extends runtime.BaseAPI {
     }
 
     /**
-     * Возвращает список событий аудита для Контрагента по его ID. 
-     * Получить события аудита контрагента
-     */
-    async getCounterpartyAuditEventsRaw(requestParameters: GetCounterpartyAuditEventsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AuditEventList>> {
-        if (requestParameters['id'] == null) {
-            throw new runtime.RequiredError(
-                'id',
-                'Required parameter "id" was null or undefined when calling getCounterpartyAuditEvents().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        if (requestParameters['limit'] != null) {
-            queryParameters['limit'] = requestParameters['limit'];
-        }
-
-        if (requestParameters['offset'] != null) {
-            queryParameters['offset'] = requestParameters['offset'];
-        }
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (requestParameters['accept'] != null) {
-            headerParameters['accept'] = String(requestParameters['accept']);
-        }
-
-        if (requestParameters['acceptEncoding'] != null) {
-            headerParameters['Accept-Encoding'] = String(requestParameters['acceptEncoding']);
-        }
-
-        if (this.configuration && (this.configuration.username !== undefined || this.configuration.password !== undefined)) {
-            headerParameters["Authorization"] = "Basic " + btoa(this.configuration.username + ":" + this.configuration.password);
-        }
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearerAuth", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/entity/counterparty/{id}/audit`;
-        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => AuditEventListFromJSON(jsonValue));
-    }
-
-    /**
-     * Возвращает список событий аудита для Контрагента по его ID. 
-     * Получить события аудита контрагента
-     */
-    async getCounterpartyAuditEvents(requestParameters: GetCounterpartyAuditEventsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AuditEventList> {
-        const response = await this.getCounterpartyAuditEventsRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
      * Запрос на получение отдельного контрагента с указанным id
      * Получить контрагента по ID
      */
@@ -2953,14 +2876,6 @@ export const GetCounterpartyAccountsAcceptEnum = {
     ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
 } as const;
 export type GetCounterpartyAccountsAcceptEnum = typeof GetCounterpartyAccountsAcceptEnum[keyof typeof GetCounterpartyAccountsAcceptEnum];
-/**
- * @export
- */
-export const GetCounterpartyAuditEventsAcceptEnum = {
-    ApplicationJson: 'application/json',
-    ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
-} as const;
-export type GetCounterpartyAuditEventsAcceptEnum = typeof GetCounterpartyAuditEventsAcceptEnum[keyof typeof GetCounterpartyAuditEventsAcceptEnum];
 /**
  * @export
  */
