@@ -18,7 +18,6 @@ import type {
   AttributeMetaInfo,
   AttributeMetaInfoList,
   BatchResponseEntity,
-  CreateRetailDemandMetadataStateRequest,
   CreateRetailDemandPositions200ResponseInner,
   DeleteRowResult,
   DocumentMetadata,
@@ -28,6 +27,7 @@ import type {
   RetailDemandPosition,
   RetailDemandPositionList,
   State,
+  StateRowResult,
 } from '../models/index.js';
 import {
     AttributeMetaInfoFromJSON,
@@ -36,8 +36,6 @@ import {
     AttributeMetaInfoListToJSON,
     BatchResponseEntityFromJSON,
     BatchResponseEntityToJSON,
-    CreateRetailDemandMetadataStateRequestFromJSON,
-    CreateRetailDemandMetadataStateRequestToJSON,
     CreateRetailDemandPositions200ResponseInnerFromJSON,
     CreateRetailDemandPositions200ResponseInnerToJSON,
     DeleteRowResultFromJSON,
@@ -56,6 +54,8 @@ import {
     RetailDemandPositionListToJSON,
     StateFromJSON,
     StateToJSON,
+    StateRowResultFromJSON,
+    StateRowResultToJSON,
 } from '../models/index.js';
 
 export interface CreateRetailDemandRequest {
@@ -81,11 +81,18 @@ export interface CreateRetailDemandMetadataAttributeRequest {
     contentType?: CreateRetailDemandMetadataAttributeContentTypeEnum;
 }
 
-export interface CreateRetailDemandMetadataStateOperationRequest {
-    createRetailDemandMetadataStateRequest: CreateRetailDemandMetadataStateRequest;
-    accept?: CreateRetailDemandMetadataStateOperationAcceptEnum;
+export interface CreateRetailDemandMetadataStateRequest {
+    state: Omit<State, 'id'|'accountId'|'entityType'>;
+    accept?: CreateRetailDemandMetadataStateAcceptEnum;
     acceptEncoding?: string;
-    contentType?: CreateRetailDemandMetadataStateOperationContentTypeEnum;
+    contentType?: CreateRetailDemandMetadataStateContentTypeEnum;
+}
+
+export interface CreateRetailDemandMetadataStatesBatchRequest {
+    state: Array<State>;
+    accept?: CreateRetailDemandMetadataStatesBatchAcceptEnum;
+    acceptEncoding?: string;
+    contentType?: CreateRetailDemandMetadataStatesBatchContentTypeEnum;
 }
 
 export interface CreateRetailDemandPositionRequest {
@@ -470,11 +477,11 @@ export class RetailDemandsApi extends runtime.BaseAPI {
     /**
      * Создать статус Розничной продажи
      */
-    async createRetailDemandMetadataStateRaw(requestParameters: CreateRetailDemandMetadataStateOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CreateRetailDemandMetadataStateRequest>> {
-        if (requestParameters['createRetailDemandMetadataStateRequest'] == null) {
+    async createRetailDemandMetadataStateRaw(requestParameters: CreateRetailDemandMetadataStateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<State>> {
+        if (requestParameters['state'] == null) {
             throw new runtime.RequiredError(
-                'createRetailDemandMetadataStateRequest',
-                'Required parameter "createRetailDemandMetadataStateRequest" was null or undefined when calling createRetailDemandMetadataState().'
+                'state',
+                'Required parameter "state" was null or undefined when calling createRetailDemandMetadataState().'
             );
         }
 
@@ -515,17 +522,79 @@ export class RetailDemandsApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: CreateRetailDemandMetadataStateRequestToJSON(requestParameters['createRetailDemandMetadataStateRequest']),
+            body: StateToJSON(requestParameters['state']),
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => CreateRetailDemandMetadataStateRequestFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => StateFromJSON(jsonValue));
     }
 
     /**
      * Создать статус Розничной продажи
      */
-    async createRetailDemandMetadataState(requestParameters: CreateRetailDemandMetadataStateOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CreateRetailDemandMetadataStateRequest> {
+    async createRetailDemandMetadataState(requestParameters: CreateRetailDemandMetadataStateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<State> {
         const response = await this.createRetailDemandMetadataStateRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Массовое создание и обновление статусов Розничной продажи
+     */
+    async createRetailDemandMetadataStatesBatchRaw(requestParameters: CreateRetailDemandMetadataStatesBatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<StateRowResult>>> {
+        if (requestParameters['state'] == null) {
+            throw new runtime.RequiredError(
+                'state',
+                'Required parameter "state" was null or undefined when calling createRetailDemandMetadataStatesBatch().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (requestParameters['accept'] != null) {
+            headerParameters['accept'] = String(requestParameters['accept']);
+        }
+
+        if (requestParameters['acceptEncoding'] != null) {
+            headerParameters['Accept-Encoding'] = String(requestParameters['acceptEncoding']);
+        }
+
+        if (requestParameters['contentType'] != null) {
+            headerParameters['Content-Type'] = String(requestParameters['contentType']);
+        }
+
+        if (this.configuration && (this.configuration.username !== undefined || this.configuration.password !== undefined)) {
+            headerParameters["Authorization"] = "Basic " + btoa(this.configuration.username + ":" + this.configuration.password);
+        }
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearerAuth", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/entity/retaildemand/metadata/states/batch`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['state']!.map(StateToJSON),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(StateRowResultFromJSON));
+    }
+
+    /**
+     * Массовое создание и обновление статусов Розничной продажи
+     */
+    async createRetailDemandMetadataStatesBatch(requestParameters: CreateRetailDemandMetadataStatesBatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<StateRowResult>> {
+        const response = await this.createRetailDemandMetadataStatesBatchRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -2046,18 +2115,33 @@ export type CreateRetailDemandMetadataAttributeContentTypeEnum = typeof CreateRe
 /**
  * @export
  */
-export const CreateRetailDemandMetadataStateOperationAcceptEnum = {
+export const CreateRetailDemandMetadataStateAcceptEnum = {
     ApplicationJson: 'application/json',
     ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
 } as const;
-export type CreateRetailDemandMetadataStateOperationAcceptEnum = typeof CreateRetailDemandMetadataStateOperationAcceptEnum[keyof typeof CreateRetailDemandMetadataStateOperationAcceptEnum];
+export type CreateRetailDemandMetadataStateAcceptEnum = typeof CreateRetailDemandMetadataStateAcceptEnum[keyof typeof CreateRetailDemandMetadataStateAcceptEnum];
 /**
  * @export
  */
-export const CreateRetailDemandMetadataStateOperationContentTypeEnum = {
+export const CreateRetailDemandMetadataStateContentTypeEnum = {
     ApplicationJson: 'application/json'
 } as const;
-export type CreateRetailDemandMetadataStateOperationContentTypeEnum = typeof CreateRetailDemandMetadataStateOperationContentTypeEnum[keyof typeof CreateRetailDemandMetadataStateOperationContentTypeEnum];
+export type CreateRetailDemandMetadataStateContentTypeEnum = typeof CreateRetailDemandMetadataStateContentTypeEnum[keyof typeof CreateRetailDemandMetadataStateContentTypeEnum];
+/**
+ * @export
+ */
+export const CreateRetailDemandMetadataStatesBatchAcceptEnum = {
+    ApplicationJson: 'application/json',
+    ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
+} as const;
+export type CreateRetailDemandMetadataStatesBatchAcceptEnum = typeof CreateRetailDemandMetadataStatesBatchAcceptEnum[keyof typeof CreateRetailDemandMetadataStatesBatchAcceptEnum];
+/**
+ * @export
+ */
+export const CreateRetailDemandMetadataStatesBatchContentTypeEnum = {
+    ApplicationJson: 'application/json'
+} as const;
+export type CreateRetailDemandMetadataStatesBatchContentTypeEnum = typeof CreateRetailDemandMetadataStatesBatchContentTypeEnum[keyof typeof CreateRetailDemandMetadataStatesBatchContentTypeEnum];
 /**
  * @export
  */

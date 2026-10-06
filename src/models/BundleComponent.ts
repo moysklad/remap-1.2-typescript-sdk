@@ -28,12 +28,13 @@ import {
     AssortmentWithoutBundleToJSONTyped,
 } from './AssortmentWithoutBundle.js';
 
+import * as BundleComponentPolymorphicParent from './EntityWithMeta.js';
 /**
  * Компонент комплекта
  * @export
  * @interface BundleComponent
  */
-export interface BundleComponent {
+export interface BundleComponentOwn {
     /**
      * 
      * @type {Meta}
@@ -65,6 +66,7 @@ export interface BundleComponent {
      */
     assortment?: AssortmentWithoutBundle;
 }
+export type BundleComponent = BundleComponentOwn & BundleComponentPolymorphicParent.EntityWithMeta;
 
 
 /**
@@ -83,6 +85,7 @@ export function BundleComponentFromJSONTyped(json: any, ignoreDiscriminator: boo
         return json;
     }
     return {
+        ...BundleComponentPolymorphicParent.EntityWithMetaFromJSONTyped(json, true),
         'meta': json['meta'] == null ? undefined : MetaFromJSON(json['meta']),
         'id': json['id'] == null ? undefined : json['id'],
         'accountId': json['accountId'] == null ? undefined : json['accountId'],
@@ -100,6 +103,7 @@ export function BundleComponentToJSONTyped(value?: Omit<BundleComponent, 'id'|'a
         return value;
     }
     return {
+        ...BundleComponentPolymorphicParent.EntityWithMetaToJSONTyped(value as any, true),
         'meta': MetaToJSON(value['meta']),
         'quantity': value['quantity'],
         'assortment': AssortmentWithoutBundleToJSON(value['assortment']),

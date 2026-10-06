@@ -23,6 +23,7 @@ import {
 
 import * as EntityWithMetaPolymorphicParent from './BatchResponseEntity.js';
 import * as EntityWithMetaPolymorphicBundle from './Bundle.js';
+import * as EntityWithMetaPolymorphicBundleComponent from './BundleComponent.js';
 import * as EntityWithMetaPolymorphicCashIn from './CashIn.js';
 import * as EntityWithMetaPolymorphicCashOut from './CashOut.js';
 import * as EntityWithMetaPolymorphicCommissionReportIn from './CommissionReportIn.js';
@@ -85,7 +86,9 @@ import * as EntityWithMetaPolymorphicRetailStore from './RetailStore.js';
 import * as EntityWithMetaPolymorphicSalesChannel from './SalesChannel.js';
 import * as EntityWithMetaPolymorphicSalesReturn from './SalesReturn.js';
 import * as EntityWithMetaPolymorphicService from './Service.js';
+import * as EntityWithMetaPolymorphicStoreSlot from './StoreSlot.js';
 import * as EntityWithMetaPolymorphicStore from './Store.js';
+import * as EntityWithMetaPolymorphicStoreZone from './StoreZone.js';
 import * as EntityWithMetaPolymorphicSupply from './Supply.js';
 import * as EntityWithMetaPolymorphicSupplyPosition from './SupplyPosition.js';
 import * as EntityWithMetaPolymorphicTask from './Task.js';
@@ -146,6 +149,7 @@ export function EntityWithMetaFromJSONTyped(json: any, ignoreDiscriminator: bool
         const discriminator = readEntityWithMetaPolymorphicDiscriminator(json);
         const converters: Record<string, (value: any) => any> = {
             'bundle': EntityWithMetaPolymorphicBundle.BundleFromJSON,
+            'bundlecomponent': EntityWithMetaPolymorphicBundleComponent.BundleComponentFromJSON,
             'cashin': EntityWithMetaPolymorphicCashIn.CashInFromJSON,
             'cashout': EntityWithMetaPolymorphicCashOut.CashOutFromJSON,
             'commissionreportin': EntityWithMetaPolymorphicCommissionReportIn.CommissionReportInFromJSON,
@@ -208,7 +212,9 @@ export function EntityWithMetaFromJSONTyped(json: any, ignoreDiscriminator: bool
             'saleschannel': EntityWithMetaPolymorphicSalesChannel.SalesChannelFromJSON,
             'salesreturn': EntityWithMetaPolymorphicSalesReturn.SalesReturnFromJSON,
             'service': EntityWithMetaPolymorphicService.ServiceFromJSON,
+            'slot': EntityWithMetaPolymorphicStoreSlot.StoreSlotFromJSON,
             'store': EntityWithMetaPolymorphicStore.StoreFromJSON,
+            'storezone': EntityWithMetaPolymorphicStoreZone.StoreZoneFromJSON,
             'supply': EntityWithMetaPolymorphicSupply.SupplyFromJSON,
             'supplyposition': EntityWithMetaPolymorphicSupplyPosition.SupplyPositionFromJSON,
             'task': EntityWithMetaPolymorphicTask.TaskFromJSON,
@@ -244,6 +250,7 @@ export function EntityWithMetaToJSONTyped(value?: EntityWithMeta | null, ignoreD
         const discriminator = readEntityWithMetaPolymorphicDiscriminator(value);
         const converters: Record<string, (item: any) => any> = {
             'bundle': EntityWithMetaPolymorphicBundle.BundleToJSON,
+            'bundlecomponent': EntityWithMetaPolymorphicBundleComponent.BundleComponentToJSON,
             'cashin': EntityWithMetaPolymorphicCashIn.CashInToJSON,
             'cashout': EntityWithMetaPolymorphicCashOut.CashOutToJSON,
             'commissionreportin': EntityWithMetaPolymorphicCommissionReportIn.CommissionReportInToJSON,
@@ -306,7 +313,9 @@ export function EntityWithMetaToJSONTyped(value?: EntityWithMeta | null, ignoreD
             'saleschannel': EntityWithMetaPolymorphicSalesChannel.SalesChannelToJSON,
             'salesreturn': EntityWithMetaPolymorphicSalesReturn.SalesReturnToJSON,
             'service': EntityWithMetaPolymorphicService.ServiceToJSON,
+            'slot': EntityWithMetaPolymorphicStoreSlot.StoreSlotToJSON,
             'store': EntityWithMetaPolymorphicStore.StoreToJSON,
+            'storezone': EntityWithMetaPolymorphicStoreZone.StoreZoneToJSON,
             'supply': EntityWithMetaPolymorphicSupply.SupplyToJSON,
             'supplyposition': EntityWithMetaPolymorphicSupplyPosition.SupplyPositionToJSON,
             'task': EntityWithMetaPolymorphicTask.TaskToJSON,

@@ -14,6 +14,7 @@
 
 
 import * as runtime from '../runtime.js';
+import { LocationResponse } from '../LocationResponse.js';
 import type {
   Errors,
   LabelPrintRequest,
@@ -105,7 +106,17 @@ export class LabelsApi extends runtime.BaseAPI {
             headers: headerParameters,
             query: queryParameters,
             body: LabelPrintRequestToJSON(requestParameters['labelPrintRequest']),
-        }, initOverrides);
+        }, async (requestContext) => ({
+            ...(typeof initOverrides === 'function' ? await initOverrides(requestContext) : initOverrides),
+            // при автоматическом переходе Location ответа 3xx теряется
+            redirect: 'manual',
+        })).catch((error: unknown) => {
+            // request() считает ошибкой всё, кроме 2xx; для этой операции 303 - результат вызова
+            if (error instanceof runtime.ResponseError && error.response.status === 303) {
+                return error.response;
+            }
+            throw error;
+        });
 
         return new runtime.VoidApiResponse(response);
     }
@@ -114,8 +125,9 @@ export class LabelsApi extends runtime.BaseAPI {
      * Запрос на формирование печатной формы с этикетками и ценниками. В случае готовности сервер возвращает пустой ответ с кодом 303 и заголовком Location. 
      * Запрос на печать этикеток и ценников
      */
-    async printLabels(requestParameters: PrintLabelsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.printLabelsRaw(requestParameters, initOverrides);
+    async printLabels(requestParameters: PrintLabelsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LocationResponse> {
+        const response = await this.printLabelsRaw(requestParameters, initOverrides);
+        return LocationResponse.fromHeaders(response.raw.status, response.raw.headers);
     }
 
 }

@@ -24,8 +24,6 @@ import type {
   CommissionReportInPositionList,
   CommissionReportInReturnedPosition,
   CreateCommissionReportInPositions200ResponseInner,
-  CreateCommissionReportInReturnedPositions200ResponseInner,
-  CreateCommissionReportInReturnedPositionsRequest,
   DeleteRowResult,
   DocumentMetadata,
   Errors,
@@ -51,10 +49,6 @@ import {
     CommissionReportInReturnedPositionToJSON,
     CreateCommissionReportInPositions200ResponseInnerFromJSON,
     CreateCommissionReportInPositions200ResponseInnerToJSON,
-    CreateCommissionReportInReturnedPositions200ResponseInnerFromJSON,
-    CreateCommissionReportInReturnedPositions200ResponseInnerToJSON,
-    CreateCommissionReportInReturnedPositionsRequestFromJSON,
-    CreateCommissionReportInReturnedPositionsRequestToJSON,
     DeleteRowResultFromJSON,
     DeleteRowResultToJSON,
     DocumentMetadataFromJSON,
@@ -122,13 +116,22 @@ export interface CreateCommissionReportInPositionsRequest {
     contentType?: CreateCommissionReportInPositionsContentTypeEnum;
 }
 
-export interface CreateCommissionReportInReturnedPositionsOperationRequest {
+export interface CreateCommissionReportInReturnedPositionRequest {
     id: string;
-    createCommissionReportInReturnedPositionsRequest: CreateCommissionReportInReturnedPositionsRequest;
+    commissionReportInReturnedPosition: Omit<CommissionReportInReturnedPosition, 'id'|'accountId'>;
     expand?: string;
-    accept?: CreateCommissionReportInReturnedPositionsOperationAcceptEnum;
+    accept?: CreateCommissionReportInReturnedPositionAcceptEnum;
     acceptEncoding?: string;
-    contentType?: CreateCommissionReportInReturnedPositionsOperationContentTypeEnum;
+    contentType?: CreateCommissionReportInReturnedPositionContentTypeEnum;
+}
+
+export interface CreateCommissionReportInReturnedPositionsRequest {
+    id: string;
+    commissionReportInReturnedPosition: Array<CommissionReportInReturnedPosition>;
+    expand?: string;
+    accept?: CreateCommissionReportInReturnedPositionsAcceptEnum;
+    acceptEncoding?: string;
+    contentType?: CreateCommissionReportInReturnedPositionsContentTypeEnum;
 }
 
 export interface DeleteCommissionReportInRequest {
@@ -799,20 +802,20 @@ export class CommissionReportInsApi extends runtime.BaseAPI {
     }
 
     /**
-     * Создать позиции возврата на склад комиссионера
+     * Создать позицию возврата на склад комиссионера
      */
-    async createCommissionReportInReturnedPositionsRaw(requestParameters: CreateCommissionReportInReturnedPositionsOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<CreateCommissionReportInReturnedPositions200ResponseInner>>> {
+    async createCommissionReportInReturnedPositionRaw(requestParameters: CreateCommissionReportInReturnedPositionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<CommissionReportInReturnedPosition>>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
-                'Required parameter "id" was null or undefined when calling createCommissionReportInReturnedPositions().'
+                'Required parameter "id" was null or undefined when calling createCommissionReportInReturnedPosition().'
             );
         }
 
-        if (requestParameters['createCommissionReportInReturnedPositionsRequest'] == null) {
+        if (requestParameters['commissionReportInReturnedPosition'] == null) {
             throw new runtime.RequiredError(
-                'createCommissionReportInReturnedPositionsRequest',
-                'Required parameter "createCommissionReportInReturnedPositionsRequest" was null or undefined when calling createCommissionReportInReturnedPositions().'
+                'commissionReportInReturnedPosition',
+                'Required parameter "commissionReportInReturnedPosition" was null or undefined when calling createCommissionReportInReturnedPosition().'
             );
         }
 
@@ -858,16 +861,90 @@ export class CommissionReportInsApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: CreateCommissionReportInReturnedPositionsRequestToJSON(requestParameters['createCommissionReportInReturnedPositionsRequest']),
+            body: CommissionReportInReturnedPositionToJSON(requestParameters['commissionReportInReturnedPosition']),
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(CreateCommissionReportInReturnedPositions200ResponseInnerFromJSON));
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(CommissionReportInReturnedPositionFromJSON));
     }
 
     /**
-     * Создать позиции возврата на склад комиссионера
+     * Создать позицию возврата на склад комиссионера
      */
-    async createCommissionReportInReturnedPositions(requestParameters: CreateCommissionReportInReturnedPositionsOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<CreateCommissionReportInReturnedPositions200ResponseInner>> {
+    async createCommissionReportInReturnedPosition(requestParameters: CreateCommissionReportInReturnedPositionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<CommissionReportInReturnedPosition>> {
+        const response = await this.createCommissionReportInReturnedPositionRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Массовое создание и обновление позиций возврата на склад комиссионера
+     */
+    async createCommissionReportInReturnedPositionsRaw(requestParameters: CreateCommissionReportInReturnedPositionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<BatchResponseEntity>>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling createCommissionReportInReturnedPositions().'
+            );
+        }
+
+        if (requestParameters['commissionReportInReturnedPosition'] == null) {
+            throw new runtime.RequiredError(
+                'commissionReportInReturnedPosition',
+                'Required parameter "commissionReportInReturnedPosition" was null or undefined when calling createCommissionReportInReturnedPositions().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters['expand'] != null) {
+            queryParameters['expand'] = requestParameters['expand'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (requestParameters['accept'] != null) {
+            headerParameters['accept'] = String(requestParameters['accept']);
+        }
+
+        if (requestParameters['acceptEncoding'] != null) {
+            headerParameters['Accept-Encoding'] = String(requestParameters['acceptEncoding']);
+        }
+
+        if (requestParameters['contentType'] != null) {
+            headerParameters['Content-Type'] = String(requestParameters['contentType']);
+        }
+
+        if (this.configuration && (this.configuration.username !== undefined || this.configuration.password !== undefined)) {
+            headerParameters["Authorization"] = "Basic " + btoa(this.configuration.username + ":" + this.configuration.password);
+        }
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearerAuth", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/entity/commissionreportin/{id}/returntocommissionerpositions/batch`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['commissionReportInReturnedPosition']!.map(CommissionReportInReturnedPositionToJSON),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(BatchResponseEntityFromJSON));
+    }
+
+    /**
+     * Массовое создание и обновление позиций возврата на склад комиссионера
+     */
+    async createCommissionReportInReturnedPositions(requestParameters: CreateCommissionReportInReturnedPositionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<BatchResponseEntity>> {
         const response = await this.createCommissionReportInReturnedPositionsRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -2584,18 +2661,33 @@ export type CreateCommissionReportInPositionsContentTypeEnum = typeof CreateComm
 /**
  * @export
  */
-export const CreateCommissionReportInReturnedPositionsOperationAcceptEnum = {
+export const CreateCommissionReportInReturnedPositionAcceptEnum = {
     ApplicationJson: 'application/json',
     ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
 } as const;
-export type CreateCommissionReportInReturnedPositionsOperationAcceptEnum = typeof CreateCommissionReportInReturnedPositionsOperationAcceptEnum[keyof typeof CreateCommissionReportInReturnedPositionsOperationAcceptEnum];
+export type CreateCommissionReportInReturnedPositionAcceptEnum = typeof CreateCommissionReportInReturnedPositionAcceptEnum[keyof typeof CreateCommissionReportInReturnedPositionAcceptEnum];
 /**
  * @export
  */
-export const CreateCommissionReportInReturnedPositionsOperationContentTypeEnum = {
+export const CreateCommissionReportInReturnedPositionContentTypeEnum = {
     ApplicationJson: 'application/json'
 } as const;
-export type CreateCommissionReportInReturnedPositionsOperationContentTypeEnum = typeof CreateCommissionReportInReturnedPositionsOperationContentTypeEnum[keyof typeof CreateCommissionReportInReturnedPositionsOperationContentTypeEnum];
+export type CreateCommissionReportInReturnedPositionContentTypeEnum = typeof CreateCommissionReportInReturnedPositionContentTypeEnum[keyof typeof CreateCommissionReportInReturnedPositionContentTypeEnum];
+/**
+ * @export
+ */
+export const CreateCommissionReportInReturnedPositionsAcceptEnum = {
+    ApplicationJson: 'application/json',
+    ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
+} as const;
+export type CreateCommissionReportInReturnedPositionsAcceptEnum = typeof CreateCommissionReportInReturnedPositionsAcceptEnum[keyof typeof CreateCommissionReportInReturnedPositionsAcceptEnum];
+/**
+ * @export
+ */
+export const CreateCommissionReportInReturnedPositionsContentTypeEnum = {
+    ApplicationJson: 'application/json'
+} as const;
+export type CreateCommissionReportInReturnedPositionsContentTypeEnum = typeof CreateCommissionReportInReturnedPositionsContentTypeEnum[keyof typeof CreateCommissionReportInReturnedPositionsContentTypeEnum];
 /**
  * @export
  */

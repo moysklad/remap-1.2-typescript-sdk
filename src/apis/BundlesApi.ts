@@ -19,7 +19,6 @@ import type {
   Bundle,
   BundleComponent,
   BundleList,
-  CreateBundleComponentsRequest,
   DeleteRowResult,
   Errors,
 } from '../models/index.js';
@@ -32,8 +31,6 @@ import {
     BundleComponentToJSON,
     BundleListFromJSON,
     BundleListToJSON,
-    CreateBundleComponentsRequestFromJSON,
-    CreateBundleComponentsRequestToJSON,
     DeleteRowResultFromJSON,
     DeleteRowResultToJSON,
     ErrorsFromJSON,
@@ -48,13 +45,22 @@ export interface CreateBundleRequest {
     contentType?: CreateBundleContentTypeEnum;
 }
 
-export interface CreateBundleComponentsOperationRequest {
+export interface CreateBundleComponentRequest {
     id: string;
-    createBundleComponentsRequest: CreateBundleComponentsRequest;
-    accept?: CreateBundleComponentsOperationAcceptEnum;
+    bundleComponent: Omit<BundleComponent, 'id'|'accountId'>;
+    accept?: CreateBundleComponentAcceptEnum;
     acceptEncoding?: string;
     expand?: string;
-    contentType?: CreateBundleComponentsOperationContentTypeEnum;
+    contentType?: CreateBundleComponentContentTypeEnum;
+}
+
+export interface CreateBundleComponentsRequest {
+    id: string;
+    bundleComponent: Array<BundleComponent>;
+    accept?: CreateBundleComponentsAcceptEnum;
+    acceptEncoding?: string;
+    expand?: string;
+    contentType?: CreateBundleComponentsContentTypeEnum;
 }
 
 export interface CreateBundlesBatchRequest {
@@ -224,18 +230,18 @@ export class BundlesApi extends runtime.BaseAPI {
     /**
      * Добавить компонент Комплекта
      */
-    async createBundleComponentsRaw(requestParameters: CreateBundleComponentsOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<BundleComponent>>> {
+    async createBundleComponentRaw(requestParameters: CreateBundleComponentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<BundleComponent>>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
-                'Required parameter "id" was null or undefined when calling createBundleComponents().'
+                'Required parameter "id" was null or undefined when calling createBundleComponent().'
             );
         }
 
-        if (requestParameters['createBundleComponentsRequest'] == null) {
+        if (requestParameters['bundleComponent'] == null) {
             throw new runtime.RequiredError(
-                'createBundleComponentsRequest',
-                'Required parameter "createBundleComponentsRequest" was null or undefined when calling createBundleComponents().'
+                'bundleComponent',
+                'Required parameter "bundleComponent" was null or undefined when calling createBundleComponent().'
             );
         }
 
@@ -281,7 +287,7 @@ export class BundlesApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: CreateBundleComponentsRequestToJSON(requestParameters['createBundleComponentsRequest']),
+            body: BundleComponentToJSON(requestParameters['bundleComponent']),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(BundleComponentFromJSON));
@@ -290,7 +296,81 @@ export class BundlesApi extends runtime.BaseAPI {
     /**
      * Добавить компонент Комплекта
      */
-    async createBundleComponents(requestParameters: CreateBundleComponentsOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<BundleComponent>> {
+    async createBundleComponent(requestParameters: CreateBundleComponentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<BundleComponent>> {
+        const response = await this.createBundleComponentRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Массовое добавление и обновление компонентов Комплекта
+     */
+    async createBundleComponentsRaw(requestParameters: CreateBundleComponentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<BatchResponseEntity>>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling createBundleComponents().'
+            );
+        }
+
+        if (requestParameters['bundleComponent'] == null) {
+            throw new runtime.RequiredError(
+                'bundleComponent',
+                'Required parameter "bundleComponent" was null or undefined when calling createBundleComponents().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters['expand'] != null) {
+            queryParameters['expand'] = requestParameters['expand'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (requestParameters['accept'] != null) {
+            headerParameters['accept'] = String(requestParameters['accept']);
+        }
+
+        if (requestParameters['acceptEncoding'] != null) {
+            headerParameters['Accept-Encoding'] = String(requestParameters['acceptEncoding']);
+        }
+
+        if (requestParameters['contentType'] != null) {
+            headerParameters['Content-Type'] = String(requestParameters['contentType']);
+        }
+
+        if (this.configuration && (this.configuration.username !== undefined || this.configuration.password !== undefined)) {
+            headerParameters["Authorization"] = "Basic " + btoa(this.configuration.username + ":" + this.configuration.password);
+        }
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearerAuth", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/entity/bundle/{id}/components/batch`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['bundleComponent']!.map(BundleComponentToJSON),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(BatchResponseEntityFromJSON));
+    }
+
+    /**
+     * Массовое добавление и обновление компонентов Комплекта
+     */
+    async createBundleComponents(requestParameters: CreateBundleComponentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<BatchResponseEntity>> {
         const response = await this.createBundleComponentsRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -1066,18 +1146,33 @@ export type CreateBundleContentTypeEnum = typeof CreateBundleContentTypeEnum[key
 /**
  * @export
  */
-export const CreateBundleComponentsOperationAcceptEnum = {
+export const CreateBundleComponentAcceptEnum = {
     ApplicationJson: 'application/json',
     ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
 } as const;
-export type CreateBundleComponentsOperationAcceptEnum = typeof CreateBundleComponentsOperationAcceptEnum[keyof typeof CreateBundleComponentsOperationAcceptEnum];
+export type CreateBundleComponentAcceptEnum = typeof CreateBundleComponentAcceptEnum[keyof typeof CreateBundleComponentAcceptEnum];
 /**
  * @export
  */
-export const CreateBundleComponentsOperationContentTypeEnum = {
+export const CreateBundleComponentContentTypeEnum = {
     ApplicationJson: 'application/json'
 } as const;
-export type CreateBundleComponentsOperationContentTypeEnum = typeof CreateBundleComponentsOperationContentTypeEnum[keyof typeof CreateBundleComponentsOperationContentTypeEnum];
+export type CreateBundleComponentContentTypeEnum = typeof CreateBundleComponentContentTypeEnum[keyof typeof CreateBundleComponentContentTypeEnum];
+/**
+ * @export
+ */
+export const CreateBundleComponentsAcceptEnum = {
+    ApplicationJson: 'application/json',
+    ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
+} as const;
+export type CreateBundleComponentsAcceptEnum = typeof CreateBundleComponentsAcceptEnum[keyof typeof CreateBundleComponentsAcceptEnum];
+/**
+ * @export
+ */
+export const CreateBundleComponentsContentTypeEnum = {
+    ApplicationJson: 'application/json'
+} as const;
+export type CreateBundleComponentsContentTypeEnum = typeof CreateBundleComponentsContentTypeEnum[keyof typeof CreateBundleComponentsContentTypeEnum];
 /**
  * @export
  */

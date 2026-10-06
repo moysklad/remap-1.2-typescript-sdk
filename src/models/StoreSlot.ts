@@ -28,12 +28,13 @@ import {
     StoreZoneToJSONTyped,
 } from './StoreZone.js';
 
+import * as StoreSlotPolymorphicParent from './EntityWithMeta.js';
 /**
  * Ячейка склада
  * @export
  * @interface StoreSlot
  */
-export interface StoreSlot {
+export interface StoreSlotOwn {
     /**
      * 
      * @type {Meta}
@@ -83,6 +84,7 @@ export interface StoreSlot {
      */
     zone?: StoreZone;
 }
+export type StoreSlot = StoreSlotOwn & StoreSlotPolymorphicParent.EntityWithMeta;
 
 
 /**
@@ -101,6 +103,7 @@ export function StoreSlotFromJSONTyped(json: any, ignoreDiscriminator: boolean):
         return json;
     }
     return {
+        ...StoreSlotPolymorphicParent.EntityWithMetaFromJSONTyped(json, true),
         'meta': json['meta'] == null ? undefined : MetaFromJSON(json['meta']),
         'id': json['id'] == null ? undefined : json['id'],
         'accountId': json['accountId'] == null ? undefined : json['accountId'],
@@ -121,6 +124,7 @@ export function StoreSlotToJSONTyped(value?: Omit<StoreSlot, 'id'|'accountId'|'u
         return value;
     }
     return {
+        ...StoreSlotPolymorphicParent.EntityWithMetaToJSONTyped(value as any, true),
         'meta': MetaToJSON(value['meta']),
         'name': value['name'],
         'externalCode': value['externalCode'],

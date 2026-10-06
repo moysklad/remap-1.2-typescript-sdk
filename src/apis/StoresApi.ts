@@ -18,8 +18,6 @@ import type {
   AttributeMetaInfo,
   AttributeMetaInfoList,
   BatchResponseEntity,
-  CreateStoreSlotsRequest,
-  CreateStoreZonesRequest,
   DeleteRowResult,
   Errors,
   Store,
@@ -37,10 +35,6 @@ import {
     AttributeMetaInfoListToJSON,
     BatchResponseEntityFromJSON,
     BatchResponseEntityToJSON,
-    CreateStoreSlotsRequestFromJSON,
-    CreateStoreSlotsRequestToJSON,
-    CreateStoreZonesRequestFromJSON,
-    CreateStoreZonesRequestToJSON,
     DeleteRowResultFromJSON,
     DeleteRowResultToJSON,
     ErrorsFromJSON,
@@ -76,17 +70,31 @@ export interface CreateStoreMetadataAttributeRequest {
     contentType?: CreateStoreMetadataAttributeContentTypeEnum;
 }
 
-export interface CreateStoreSlotsOperationRequest {
+export interface CreateStoreSlotRequest {
     storeId: string;
-    createStoreSlotsRequest: CreateStoreSlotsRequest;
-    accept?: CreateStoreSlotsOperationAcceptEnum;
+    storeSlot: Omit<StoreSlot, 'id'|'accountId'|'updated'>;
+    accept?: CreateStoreSlotAcceptEnum;
     acceptEncoding?: string;
 }
 
-export interface CreateStoreZonesOperationRequest {
+export interface CreateStoreSlotsRequest {
     storeId: string;
-    createStoreZonesRequest: CreateStoreZonesRequest;
-    accept?: CreateStoreZonesOperationAcceptEnum;
+    storeSlot: Array<StoreSlot>;
+    accept?: CreateStoreSlotsAcceptEnum;
+    acceptEncoding?: string;
+}
+
+export interface CreateStoreZoneRequest {
+    storeId: string;
+    storeZone: Omit<StoreZone, 'id'|'accountId'|'updated'>;
+    accept?: CreateStoreZoneAcceptEnum;
+    acceptEncoding?: string;
+}
+
+export interface CreateStoreZonesRequest {
+    storeId: string;
+    storeZone: Array<StoreZone>;
+    accept?: CreateStoreZonesAcceptEnum;
     acceptEncoding?: string;
 }
 
@@ -366,18 +374,18 @@ export class StoresApi extends runtime.BaseAPI {
     /**
      * Создать ячейку склада
      */
-    async createStoreSlotsRaw(requestParameters: CreateStoreSlotsOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<StoreSlot>>> {
+    async createStoreSlotRaw(requestParameters: CreateStoreSlotRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<StoreSlot>>> {
         if (requestParameters['storeId'] == null) {
             throw new runtime.RequiredError(
                 'storeId',
-                'Required parameter "storeId" was null or undefined when calling createStoreSlots().'
+                'Required parameter "storeId" was null or undefined when calling createStoreSlot().'
             );
         }
 
-        if (requestParameters['createStoreSlotsRequest'] == null) {
+        if (requestParameters['storeSlot'] == null) {
             throw new runtime.RequiredError(
-                'createStoreSlotsRequest',
-                'Required parameter "createStoreSlotsRequest" was null or undefined when calling createStoreSlots().'
+                'storeSlot',
+                'Required parameter "storeSlot" was null or undefined when calling createStoreSlot().'
             );
         }
 
@@ -415,7 +423,7 @@ export class StoresApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: CreateStoreSlotsRequestToJSON(requestParameters['createStoreSlotsRequest']),
+            body: StoreSlotToJSON(requestParameters['storeSlot']),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(StoreSlotFromJSON));
@@ -424,7 +432,73 @@ export class StoresApi extends runtime.BaseAPI {
     /**
      * Создать ячейку склада
      */
-    async createStoreSlots(requestParameters: CreateStoreSlotsOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<StoreSlot>> {
+    async createStoreSlot(requestParameters: CreateStoreSlotRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<StoreSlot>> {
+        const response = await this.createStoreSlotRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Массовое создание и обновление ячеек склада
+     */
+    async createStoreSlotsRaw(requestParameters: CreateStoreSlotsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<BatchResponseEntity>>> {
+        if (requestParameters['storeId'] == null) {
+            throw new runtime.RequiredError(
+                'storeId',
+                'Required parameter "storeId" was null or undefined when calling createStoreSlots().'
+            );
+        }
+
+        if (requestParameters['storeSlot'] == null) {
+            throw new runtime.RequiredError(
+                'storeSlot',
+                'Required parameter "storeSlot" was null or undefined when calling createStoreSlots().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (requestParameters['accept'] != null) {
+            headerParameters['accept'] = String(requestParameters['accept']);
+        }
+
+        if (requestParameters['acceptEncoding'] != null) {
+            headerParameters['Accept-Encoding'] = String(requestParameters['acceptEncoding']);
+        }
+
+        if (this.configuration && (this.configuration.username !== undefined || this.configuration.password !== undefined)) {
+            headerParameters["Authorization"] = "Basic " + btoa(this.configuration.username + ":" + this.configuration.password);
+        }
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearerAuth", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/entity/store/{storeId}/slots/batch`;
+        urlPath = urlPath.replace(`{${"storeId"}}`, encodeURIComponent(String(requestParameters['storeId'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['storeSlot']!.map(StoreSlotToJSON),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(BatchResponseEntityFromJSON));
+    }
+
+    /**
+     * Массовое создание и обновление ячеек склада
+     */
+    async createStoreSlots(requestParameters: CreateStoreSlotsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<BatchResponseEntity>> {
         const response = await this.createStoreSlotsRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -432,18 +506,18 @@ export class StoresApi extends runtime.BaseAPI {
     /**
      * Создать зону склада
      */
-    async createStoreZonesRaw(requestParameters: CreateStoreZonesOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<StoreZone>>> {
+    async createStoreZoneRaw(requestParameters: CreateStoreZoneRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<StoreZone>>> {
         if (requestParameters['storeId'] == null) {
             throw new runtime.RequiredError(
                 'storeId',
-                'Required parameter "storeId" was null or undefined when calling createStoreZones().'
+                'Required parameter "storeId" was null or undefined when calling createStoreZone().'
             );
         }
 
-        if (requestParameters['createStoreZonesRequest'] == null) {
+        if (requestParameters['storeZone'] == null) {
             throw new runtime.RequiredError(
-                'createStoreZonesRequest',
-                'Required parameter "createStoreZonesRequest" was null or undefined when calling createStoreZones().'
+                'storeZone',
+                'Required parameter "storeZone" was null or undefined when calling createStoreZone().'
             );
         }
 
@@ -481,7 +555,7 @@ export class StoresApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: CreateStoreZonesRequestToJSON(requestParameters['createStoreZonesRequest']),
+            body: StoreZoneToJSON(requestParameters['storeZone']),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(StoreZoneFromJSON));
@@ -490,7 +564,73 @@ export class StoresApi extends runtime.BaseAPI {
     /**
      * Создать зону склада
      */
-    async createStoreZones(requestParameters: CreateStoreZonesOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<StoreZone>> {
+    async createStoreZone(requestParameters: CreateStoreZoneRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<StoreZone>> {
+        const response = await this.createStoreZoneRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Массовое создание и обновление зон склада
+     */
+    async createStoreZonesRaw(requestParameters: CreateStoreZonesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<BatchResponseEntity>>> {
+        if (requestParameters['storeId'] == null) {
+            throw new runtime.RequiredError(
+                'storeId',
+                'Required parameter "storeId" was null or undefined when calling createStoreZones().'
+            );
+        }
+
+        if (requestParameters['storeZone'] == null) {
+            throw new runtime.RequiredError(
+                'storeZone',
+                'Required parameter "storeZone" was null or undefined when calling createStoreZones().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (requestParameters['accept'] != null) {
+            headerParameters['accept'] = String(requestParameters['accept']);
+        }
+
+        if (requestParameters['acceptEncoding'] != null) {
+            headerParameters['Accept-Encoding'] = String(requestParameters['acceptEncoding']);
+        }
+
+        if (this.configuration && (this.configuration.username !== undefined || this.configuration.password !== undefined)) {
+            headerParameters["Authorization"] = "Basic " + btoa(this.configuration.username + ":" + this.configuration.password);
+        }
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearerAuth", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/entity/store/{storeId}/zones/batch`;
+        urlPath = urlPath.replace(`{${"storeId"}}`, encodeURIComponent(String(requestParameters['storeId'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['storeZone']!.map(StoreZoneToJSON),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(BatchResponseEntityFromJSON));
+    }
+
+    /**
+     * Массовое создание и обновление зон склада
+     */
+    async createStoreZones(requestParameters: CreateStoreZonesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<BatchResponseEntity>> {
         const response = await this.createStoreZonesRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -1739,19 +1879,35 @@ export type CreateStoreMetadataAttributeContentTypeEnum = typeof CreateStoreMeta
 /**
  * @export
  */
-export const CreateStoreSlotsOperationAcceptEnum = {
+export const CreateStoreSlotAcceptEnum = {
     ApplicationJson: 'application/json',
     ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
 } as const;
-export type CreateStoreSlotsOperationAcceptEnum = typeof CreateStoreSlotsOperationAcceptEnum[keyof typeof CreateStoreSlotsOperationAcceptEnum];
+export type CreateStoreSlotAcceptEnum = typeof CreateStoreSlotAcceptEnum[keyof typeof CreateStoreSlotAcceptEnum];
 /**
  * @export
  */
-export const CreateStoreZonesOperationAcceptEnum = {
+export const CreateStoreSlotsAcceptEnum = {
     ApplicationJson: 'application/json',
     ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
 } as const;
-export type CreateStoreZonesOperationAcceptEnum = typeof CreateStoreZonesOperationAcceptEnum[keyof typeof CreateStoreZonesOperationAcceptEnum];
+export type CreateStoreSlotsAcceptEnum = typeof CreateStoreSlotsAcceptEnum[keyof typeof CreateStoreSlotsAcceptEnum];
+/**
+ * @export
+ */
+export const CreateStoreZoneAcceptEnum = {
+    ApplicationJson: 'application/json',
+    ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
+} as const;
+export type CreateStoreZoneAcceptEnum = typeof CreateStoreZoneAcceptEnum[keyof typeof CreateStoreZoneAcceptEnum];
+/**
+ * @export
+ */
+export const CreateStoreZonesAcceptEnum = {
+    ApplicationJson: 'application/json',
+    ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
+} as const;
+export type CreateStoreZonesAcceptEnum = typeof CreateStoreZonesAcceptEnum[keyof typeof CreateStoreZonesAcceptEnum];
 /**
  * @export
  */

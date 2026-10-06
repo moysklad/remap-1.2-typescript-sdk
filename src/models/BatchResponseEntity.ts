@@ -22,6 +22,7 @@ import {
 } from './Meta.js';
 
 import * as BatchResponseEntityPolymorphicBundle from './Bundle.js';
+import * as BatchResponseEntityPolymorphicBundleComponent from './BundleComponent.js';
 import * as BatchResponseEntityPolymorphicCashIn from './CashIn.js';
 import * as BatchResponseEntityPolymorphicCashOut from './CashOut.js';
 import * as BatchResponseEntityPolymorphicCommissionReportIn from './CommissionReportIn.js';
@@ -84,7 +85,9 @@ import * as BatchResponseEntityPolymorphicRetailStore from './RetailStore.js';
 import * as BatchResponseEntityPolymorphicSalesChannel from './SalesChannel.js';
 import * as BatchResponseEntityPolymorphicSalesReturn from './SalesReturn.js';
 import * as BatchResponseEntityPolymorphicService from './Service.js';
+import * as BatchResponseEntityPolymorphicStoreSlot from './StoreSlot.js';
 import * as BatchResponseEntityPolymorphicStore from './Store.js';
+import * as BatchResponseEntityPolymorphicStoreZone from './StoreZone.js';
 import * as BatchResponseEntityPolymorphicSupply from './Supply.js';
 import * as BatchResponseEntityPolymorphicSupplyPosition from './SupplyPosition.js';
 import * as BatchResponseEntityPolymorphicTask from './Task.js';
@@ -147,6 +150,7 @@ export function BatchResponseEntityFromJSONTyped(json: any, ignoreDiscriminator:
         const discriminator = readBatchResponseEntityPolymorphicDiscriminator(json);
         const converters: Record<string, (value: any) => any> = {
             'bundle': BatchResponseEntityPolymorphicBundle.BundleFromJSON,
+            'bundlecomponent': BatchResponseEntityPolymorphicBundleComponent.BundleComponentFromJSON,
             'cashin': BatchResponseEntityPolymorphicCashIn.CashInFromJSON,
             'cashout': BatchResponseEntityPolymorphicCashOut.CashOutFromJSON,
             'commissionreportin': BatchResponseEntityPolymorphicCommissionReportIn.CommissionReportInFromJSON,
@@ -209,7 +213,9 @@ export function BatchResponseEntityFromJSONTyped(json: any, ignoreDiscriminator:
             'saleschannel': BatchResponseEntityPolymorphicSalesChannel.SalesChannelFromJSON,
             'salesreturn': BatchResponseEntityPolymorphicSalesReturn.SalesReturnFromJSON,
             'service': BatchResponseEntityPolymorphicService.ServiceFromJSON,
+            'slot': BatchResponseEntityPolymorphicStoreSlot.StoreSlotFromJSON,
             'store': BatchResponseEntityPolymorphicStore.StoreFromJSON,
+            'storezone': BatchResponseEntityPolymorphicStoreZone.StoreZoneFromJSON,
             'supply': BatchResponseEntityPolymorphicSupply.SupplyFromJSON,
             'supplyposition': BatchResponseEntityPolymorphicSupplyPosition.SupplyPositionFromJSON,
             'task': BatchResponseEntityPolymorphicTask.TaskFromJSON,
@@ -247,6 +253,7 @@ export function BatchResponseEntityToJSONTyped(value?: BatchResponseEntity | nul
         const discriminator = readBatchResponseEntityPolymorphicDiscriminator(value);
         const converters: Record<string, (item: any) => any> = {
             'bundle': BatchResponseEntityPolymorphicBundle.BundleToJSON,
+            'bundlecomponent': BatchResponseEntityPolymorphicBundleComponent.BundleComponentToJSON,
             'cashin': BatchResponseEntityPolymorphicCashIn.CashInToJSON,
             'cashout': BatchResponseEntityPolymorphicCashOut.CashOutToJSON,
             'commissionreportin': BatchResponseEntityPolymorphicCommissionReportIn.CommissionReportInToJSON,
@@ -309,7 +316,9 @@ export function BatchResponseEntityToJSONTyped(value?: BatchResponseEntity | nul
             'saleschannel': BatchResponseEntityPolymorphicSalesChannel.SalesChannelToJSON,
             'salesreturn': BatchResponseEntityPolymorphicSalesReturn.SalesReturnToJSON,
             'service': BatchResponseEntityPolymorphicService.ServiceToJSON,
+            'slot': BatchResponseEntityPolymorphicStoreSlot.StoreSlotToJSON,
             'store': BatchResponseEntityPolymorphicStore.StoreToJSON,
+            'storezone': BatchResponseEntityPolymorphicStoreZone.StoreZoneToJSON,
             'supply': BatchResponseEntityPolymorphicSupply.SupplyToJSON,
             'supplyposition': BatchResponseEntityPolymorphicSupplyPosition.SupplyPositionToJSON,
             'task': BatchResponseEntityPolymorphicTask.TaskToJSON,

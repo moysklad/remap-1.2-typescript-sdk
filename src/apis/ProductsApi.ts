@@ -15,7 +15,6 @@
 
 import * as runtime from '../runtime.js';
 import type {
-  AddProductImagesRequest,
   AttributeMetaInfo,
   AttributeMetaInfoList,
   BatchResponseEntity,
@@ -33,8 +32,6 @@ import type {
   StoreBalanceList,
 } from '../models/index.js';
 import {
-    AddProductImagesRequestFromJSON,
-    AddProductImagesRequestToJSON,
     AttributeMetaInfoFromJSON,
     AttributeMetaInfoToJSON,
     AttributeMetaInfoListFromJSON,
@@ -75,12 +72,20 @@ export interface AddProductFilesRequest {
     contentType?: AddProductFilesContentTypeEnum;
 }
 
-export interface AddProductImagesOperationRequest {
+export interface AddProductImageRequest {
     id: string;
-    addProductImagesRequest: AddProductImagesRequest;
-    accept?: AddProductImagesOperationAcceptEnum;
+    fileUpload: FileUpload;
+    accept?: AddProductImageAcceptEnum;
     acceptEncoding?: string;
-    contentType?: AddProductImagesOperationContentTypeEnum;
+    contentType?: AddProductImageContentTypeEnum;
+}
+
+export interface AddProductImagesRequest {
+    id: string;
+    fileUpload: Array<FileUpload>;
+    accept?: AddProductImagesAcceptEnum;
+    acceptEncoding?: string;
+    contentType?: AddProductImagesContentTypeEnum;
 }
 
 export interface CreateProductRequest {
@@ -344,21 +349,21 @@ export class ProductsApi extends runtime.BaseAPI {
     }
 
     /**
-     * Добавить новые Изображения к Товару или изменить список Изображений. В поле `content` нужно указать изображение, закодированное в Base64, в поле `filename` — имя файла с расширением. У Товара может быть не более 10 Изображений. 
-     * Добавить изображения к товару
+     * Добавить новое Изображение к Товару. В поле `content` нужно указать изображение, закодированное в Base64, в поле `filename` — имя файла с расширением. У Товара может быть не более 10 Изображений. 
+     * Добавить изображение к товару
      */
-    async addProductImagesRaw(requestParameters: AddProductImagesOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Image>>> {
+    async addProductImageRaw(requestParameters: AddProductImageRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Image>>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
-                'Required parameter "id" was null or undefined when calling addProductImages().'
+                'Required parameter "id" was null or undefined when calling addProductImage().'
             );
         }
 
-        if (requestParameters['addProductImagesRequest'] == null) {
+        if (requestParameters['fileUpload'] == null) {
             throw new runtime.RequiredError(
-                'addProductImagesRequest',
-                'Required parameter "addProductImagesRequest" was null or undefined when calling addProductImages().'
+                'fileUpload',
+                'Required parameter "fileUpload" was null or undefined when calling addProductImage().'
             );
         }
 
@@ -400,17 +405,89 @@ export class ProductsApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: AddProductImagesRequestToJSON(requestParameters['addProductImagesRequest']),
+            body: FileUploadToJSON(requestParameters['fileUpload']),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(ImageFromJSON));
     }
 
     /**
-     * Добавить новые Изображения к Товару или изменить список Изображений. В поле `content` нужно указать изображение, закодированное в Base64, в поле `filename` — имя файла с расширением. У Товара может быть не более 10 Изображений. 
-     * Добавить изображения к товару
+     * Добавить новое Изображение к Товару. В поле `content` нужно указать изображение, закодированное в Base64, в поле `filename` — имя файла с расширением. У Товара может быть не более 10 Изображений. 
+     * Добавить изображение к товару
      */
-    async addProductImages(requestParameters: AddProductImagesOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Image>> {
+    async addProductImage(requestParameters: AddProductImageRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Image>> {
+        const response = await this.addProductImageRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Установить список Изображений Товара. В теле запроса нужно передать массив Изображений, которые должны быть у Товара. Чтобы оставить существующие Изображения, передайте их метаданные. Для новых Изображений в поле `content` нужно указать изображение, закодированное в Base64, в поле `filename` — имя файла с расширением. У Товара может быть не более 10 Изображений. 
+     * Изменить список изображений товара
+     */
+    async addProductImagesRaw(requestParameters: AddProductImagesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Image>>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling addProductImages().'
+            );
+        }
+
+        if (requestParameters['fileUpload'] == null) {
+            throw new runtime.RequiredError(
+                'fileUpload',
+                'Required parameter "fileUpload" was null or undefined when calling addProductImages().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (requestParameters['accept'] != null) {
+            headerParameters['accept'] = String(requestParameters['accept']);
+        }
+
+        if (requestParameters['acceptEncoding'] != null) {
+            headerParameters['Accept-Encoding'] = String(requestParameters['acceptEncoding']);
+        }
+
+        if (requestParameters['contentType'] != null) {
+            headerParameters['Content-Type'] = String(requestParameters['contentType']);
+        }
+
+        if (this.configuration && (this.configuration.username !== undefined || this.configuration.password !== undefined)) {
+            headerParameters["Authorization"] = "Basic " + btoa(this.configuration.username + ":" + this.configuration.password);
+        }
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearerAuth", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/entity/product/{id}/images/batch`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['fileUpload']!.map(FileUploadToJSON),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(ImageFromJSON));
+    }
+
+    /**
+     * Установить список Изображений Товара. В теле запроса нужно передать массив Изображений, которые должны быть у Товара. Чтобы оставить существующие Изображения, передайте их метаданные. Для новых Изображений в поле `content` нужно указать изображение, закодированное в Base64, в поле `filename` — имя файла с расширением. У Товара может быть не более 10 Изображений. 
+     * Изменить список изображений товара
+     */
+    async addProductImages(requestParameters: AddProductImagesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Image>> {
         const response = await this.addProductImagesRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -2024,18 +2101,33 @@ export type AddProductFilesContentTypeEnum = typeof AddProductFilesContentTypeEn
 /**
  * @export
  */
-export const AddProductImagesOperationAcceptEnum = {
+export const AddProductImageAcceptEnum = {
     ApplicationJson: 'application/json',
     ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
 } as const;
-export type AddProductImagesOperationAcceptEnum = typeof AddProductImagesOperationAcceptEnum[keyof typeof AddProductImagesOperationAcceptEnum];
+export type AddProductImageAcceptEnum = typeof AddProductImageAcceptEnum[keyof typeof AddProductImageAcceptEnum];
 /**
  * @export
  */
-export const AddProductImagesOperationContentTypeEnum = {
+export const AddProductImageContentTypeEnum = {
     ApplicationJson: 'application/json'
 } as const;
-export type AddProductImagesOperationContentTypeEnum = typeof AddProductImagesOperationContentTypeEnum[keyof typeof AddProductImagesOperationContentTypeEnum];
+export type AddProductImageContentTypeEnum = typeof AddProductImageContentTypeEnum[keyof typeof AddProductImageContentTypeEnum];
+/**
+ * @export
+ */
+export const AddProductImagesAcceptEnum = {
+    ApplicationJson: 'application/json',
+    ApplicationJsoncharsetutf8: 'application/json;charset=utf-8'
+} as const;
+export type AddProductImagesAcceptEnum = typeof AddProductImagesAcceptEnum[keyof typeof AddProductImagesAcceptEnum];
+/**
+ * @export
+ */
+export const AddProductImagesContentTypeEnum = {
+    ApplicationJson: 'application/json'
+} as const;
+export type AddProductImagesContentTypeEnum = typeof AddProductImagesContentTypeEnum[keyof typeof AddProductImagesContentTypeEnum];
 /**
  * @export
  */
