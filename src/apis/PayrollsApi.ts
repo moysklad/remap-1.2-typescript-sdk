@@ -70,7 +70,7 @@ export interface AddPayrollFilesRequest {
 }
 
 export interface CreatePayrollRequest {
-    payroll: Omit<Payroll, 'id'|'accountId'|'created'|'printed'|'published'|'sum'|'updated'>;
+    payroll: Omit<Payroll, 'id'|'accountId'|'created'|'payments'|'printed'|'published'|'sum'|'updated'>;
     expand?: string;
     accept?: CreatePayrollAcceptEnum;
     acceptEncoding?: string;
@@ -262,7 +262,7 @@ export interface MovePayrollToTrashRequest {
 
 export interface UpdatePayrollRequest {
     id: string;
-    payroll: Omit<Payroll, 'id'|'accountId'|'created'|'printed'|'published'|'sum'|'updated'>;
+    payroll: Omit<Payroll, 'id'|'accountId'|'created'|'payments'|'printed'|'published'|'sum'|'updated'>;
     expand?: string;
     accept?: UpdatePayrollAcceptEnum;
     acceptEncoding?: string;

@@ -69,6 +69,13 @@ import {
     AttributeAbstractToJSON,
     AttributeAbstractToJSONTyped,
 } from './AttributeAbstract.js';
+import type { PayrollPaymentAbstract } from './PayrollPaymentAbstract.js';
+import {
+    PayrollPaymentAbstractFromJSON,
+    PayrollPaymentAbstractFromJSONTyped,
+    PayrollPaymentAbstractToJSON,
+    PayrollPaymentAbstractToJSONTyped,
+} from './PayrollPaymentAbstract.js';
 
 import * as PayrollPolymorphicParent from './EntityWithMeta.js';
 /**
@@ -170,6 +177,14 @@ export interface PayrollOwn {
      */
     owner?: Employee | null;
     /**
+     * Связанные платежи: Исходящий платеж (paymentout) и Расходный ордер (cashout).
+     * Каждый элемент содержит метаданные платежа и сумму оплаты `linkedSum`.
+     * 
+     * @type {Array<PayrollPaymentAbstract>}
+     * @memberof Payroll
+     */
+    readonly payments?: Array<PayrollPaymentAbstract>;
+    /**
      * 
      * @type {PayrollPositionList}
      * @memberof Payroll
@@ -261,6 +276,7 @@ export function PayrollFromJSONTyped(json: any, ignoreDiscriminator: boolean): P
         'name': json['name'] == null ? undefined : json['name'],
         'organization': json['organization'] == null ? undefined : OrganizationFromJSON(json['organization']),
         'owner': json['owner'] == null ? undefined : EmployeeFromJSON(json['owner']),
+        'payments': json['payments'] == null ? undefined : ((json['payments'] as Array<any>).map(PayrollPaymentAbstractFromJSON)),
         'positions': json['positions'] == null ? undefined : PayrollPositionListFromJSON(json['positions']),
         'printed': json['printed'] == null ? undefined : json['printed'],
         'published': json['published'] == null ? undefined : json['published'],
@@ -277,7 +293,7 @@ export function PayrollToJSON(json: any): Payroll {
     return PayrollToJSONTyped(json, false);
 }
 
-export function PayrollToJSONTyped(value?: Omit<Payroll, 'id'|'accountId'|'created'|'printed'|'published'|'sum'|'updated'> | null, ignoreDiscriminator: boolean = false): any {
+export function PayrollToJSONTyped(value?: Omit<Payroll, 'id'|'accountId'|'created'|'payments'|'printed'|'published'|'sum'|'updated'> | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

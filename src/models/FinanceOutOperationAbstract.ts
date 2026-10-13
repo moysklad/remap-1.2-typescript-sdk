@@ -18,11 +18,12 @@ import * as FinanceOutOperationAbstractPolymorphicFinanceOutOperationSupply from
 import * as FinanceOutOperationAbstractPolymorphicFinanceOutOperationInvoiceIn from './FinanceOutOperationInvoiceIn.js';
 import * as FinanceOutOperationAbstractPolymorphicFinanceOutOperationPurchaseOrder from './FinanceOutOperationPurchaseOrder.js';
 import * as FinanceOutOperationAbstractPolymorphicFinanceOutOperationCommissionReportOut from './FinanceOutOperationCommissionReportOut.js';
+import * as FinanceOutOperationAbstractPolymorphicFinanceOutOperationPayroll from './FinanceOutOperationPayroll.js';
 /**
  * Элемент массива `operations` расходного ордера / исходящего платежа: документ одного из
  * допустимых типов плюс обязательное поле `linkedSum`.
  * 
- * Допустимые `meta.type`: salesreturn, supply, invoicein, purchaseorder, commissionreportout.
+ * Допустимые `meta.type`: salesreturn, supply, invoicein, purchaseorder, commissionreportout, payroll.
  * 
  * @export
  * @interface FinanceOutOperationAbstract
@@ -75,6 +76,7 @@ export function FinanceOutOperationAbstractFromJSONTyped(json: any, ignoreDiscri
             'invoicein': FinanceOutOperationAbstractPolymorphicFinanceOutOperationInvoiceIn.FinanceOutOperationInvoiceInFromJSON,
             'purchaseorder': FinanceOutOperationAbstractPolymorphicFinanceOutOperationPurchaseOrder.FinanceOutOperationPurchaseOrderFromJSON,
             'commissionreportout': FinanceOutOperationAbstractPolymorphicFinanceOutOperationCommissionReportOut.FinanceOutOperationCommissionReportOutFromJSON,
+            'payroll': FinanceOutOperationAbstractPolymorphicFinanceOutOperationPayroll.FinanceOutOperationPayrollFromJSON,
         };
         const converter = typeof discriminator === 'string'
             ? converters[discriminator] ?? converters['undefined']
@@ -104,6 +106,7 @@ export function FinanceOutOperationAbstractToJSONTyped(value?: FinanceOutOperati
             'invoicein': FinanceOutOperationAbstractPolymorphicFinanceOutOperationInvoiceIn.FinanceOutOperationInvoiceInToJSON,
             'purchaseorder': FinanceOutOperationAbstractPolymorphicFinanceOutOperationPurchaseOrder.FinanceOutOperationPurchaseOrderToJSON,
             'commissionreportout': FinanceOutOperationAbstractPolymorphicFinanceOutOperationCommissionReportOut.FinanceOutOperationCommissionReportOutToJSON,
+            'payroll': FinanceOutOperationAbstractPolymorphicFinanceOutOperationPayroll.FinanceOutOperationPayrollToJSON,
         };
         const converter = typeof discriminator === 'string'
             ? converters[discriminator] ?? converters['undefined']

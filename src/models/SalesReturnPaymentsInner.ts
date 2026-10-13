@@ -358,7 +358,7 @@ export interface SalesReturnPaymentsInner {
     organizationAccount?: Account | null;
     /**
      * Связанные операции: полное тело документа плюс `linkedSum`. Допустимые типы по `meta.type`:
-     * salesreturn, supply, invoicein, purchaseorder, commissionreportout
+     * salesreturn, supply, invoicein, purchaseorder, commissionreportout, payroll
      * 
      * @type {Array<FinanceOutOperationAbstract>}
      * @memberof SalesReturnPaymentsInner
